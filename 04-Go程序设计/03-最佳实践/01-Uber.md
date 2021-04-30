@@ -73,15 +73,13 @@ func main() {
 
 ### 零值 Mutex 是有效的
 
-零值 `sync.Mutex` 和 `sync.RWMutex` 是有效的. 指向 mutex 的指针基本是不必要的
+> 零值 `sync.Mutex` 和 `sync.RWMutex` 是有效的. 指向 mutex 的指针基本是不必要的
 
-| Bad                   | Good              |
-| --------------------- | ----------------- |
+|          Bad          |       Good        |
+| :-------------------: | :---------------: |
 | mu := new(sync.Mutex) | var mu sync.Mutex |
 
-如果你使用结构体指针，mutex 可以非指针形式作为结构体的组成字段，或者更好的方式是直接嵌入到结构体中.  如果是私有结构体类型或是要实现 Mutex 接口的类型，我们可以使用嵌入 mutex 的方法：
-
-1.  为私有类型或需要实现互斥接口的类型嵌入
+1. 为私有类型或需要实现互斥接口的类型嵌入
 
 ~~~go
 type smap struct {  // 私有类型
@@ -104,8 +102,8 @@ func (m *smap) Get(k string) string {
 2.  对于导出的类型，使用专用字段
 
 ~~~go
-type SMap struct {  // 对于导出类型，请使用私有锁
-    mu sync.Mutex    
+type SMap struct {  
+    mu sync.Mutex    // 对于导出类型，请使用私有锁
     data map[string]string 
 } 
 func NewSMap() *SMap {  
@@ -126,14 +124,28 @@ slices 和 maps 包含了指向底层数据的指针，因此在需要复制它�
 
 #### 接收 Slices 和 Maps
 
-请记住，当 map 或 slice 作为函数参数传入时，如果存储了对它们的引用，则用户可以对其进行修改
+> 请记住，当 map 或 slice 作为函数参数传入时，如果存储了对它们的引用，则用户可以对其进行修改
 
 ~~~go
+// Bad
+func (d *Driver) SetTrips(trips []Trip) {
+  d.trips = trips
+}
+
+trips := ...
+d1.SetTrips(trips)
+// Did you mean to modify d1.trips?
+trips[0] = ...
+
+
+// Good
 func (d *Driver) SetTrips(trips []Trip) {  
     d.trips = make([]Trip, len(trips))  
     copy(d.trips, trips) 
 } 
-trips := ... d1.SetTrips(trips) // 这里我们修改 trips[0]，但不会影响到 d1.trips trips[0] = ... 
+trips := ... 
+d1.SetTrips(trips) 
+trips[0] = ...   // 这里我们修改 trips[0]，但不会影响到 d1.trips trips[0] = ... 
 ~~~
 
 #### 返回 slices 或 maps
@@ -141,6 +153,25 @@ trips := ... d1.SetTrips(trips) // 这里我们修改 trips[0]，但不会影响
 同样，请注意用户对暴露内部状态的 map 或 slice 的修改
 
 ~~~go
+// Bad
+type Stats struct {
+  sync.Mutex
+
+  counters map[string]int
+}
+
+// Snapshot 返回当前状态。
+func (s *Stats) Snapshot() map[string]int {
+  s.Lock()
+  defer s.Unlock()
+
+  return s.counters
+}
+
+// snapshot is no longer protected by the lock!
+snapshot := stats.Snapshot()
+
+// Good
 type Stats struct {  
     mu sync.Mutex   
     counters map[string]int 
@@ -159,9 +190,39 @@ func (s *Stats) Snapshot() map[string]int {
 
 ### 使用 defer 释放资源
 
-使用 defer 释放资源，诸如文件和锁
+> 使用 defer 释放资源，诸如文件和锁
 
 Defer 的开销非常小，只有在您可以证明函数执行时间处于纳秒级的程度时，才应避免这样做. 使用 defer 提升可读性是值得的，因为使用它们的成本微不足道. 尤其适用于那些不仅仅是简单内存访问的较大的方法，在这些方法中其他计算的资源消耗远超过 `defer`
+
+~~~go
+// Bad
+p.Lock()
+if p.count < 10 {
+  p.Unlock()
+  return p.count
+}
+
+p.count++
+newCount := p.count
+p.Unlock()
+
+return newCount
+// 当有多个 return 分支时，很容易遗忘 unlock
+
+
+// Good
+p.Lock()
+defer p.Unlock()
+
+if p.count < 10 {
+  return p.count
+}
+
+p.count++
+return p.count
+
+// 可读性越佳
+~~~
 
 ### Channel 的 size 要么是 1，要么是无缓冲的
 
@@ -170,14 +231,13 @@ channel 通常 size 应为 1 或是无缓冲的. 默认情况下，channel 是�
 ~~~go
 // 大小：1 
 c := make(chan int, 1) 
-// 或者 
-// 无缓冲 channel，大小为 0 
-c := make(chan int) 复制代码
+// 或者 无缓冲 channel，大小为 0 
+c := make(chan int) 
 ~~~
 
 ### 枚举从 1 开始
 
-在 Go 中引入枚举的标准方法是声明一个自定义类型和一个使用了 iota 的 const 组. 由于变量的默认值为 0，因此通常应以非零值开头枚举. 
+引入枚举的标准方法是声明一个自定义类型和一个使用了 iota 的 const 组. 由于变量的默认值为 0,因此通常应以非零值开头枚举. 
 
 ~~~go
 // Add=1, Subtract=2, Multiply=3
@@ -204,28 +264,50 @@ const (
 
 Go 中有多种声明错误（Error) 的选项：
 
--   [`errors.New`](https://golang.org/pkg/errors/#New) 对于简单静态字符串的错误
--   [`fmt.Errorf`](https://golang.org/pkg/fmt/#Errorf) 用于格式化的错误字符串
--   实现 `Error()` 方法的自定义类型
--   用 [`"pkg/errors".Wrap`](https://godoc.org/github.com/pkg/errors#Wrap) 的 Wrapped errors
+1. [`errors.New`](https://golang.org/pkg/errors/#New) 对于简单静态字符串的错误
+2. [`fmt.Errorf`](https://golang.org/pkg/fmt/#Errorf) 用于格式化的错误字符串
+3. 实现 `Error()` 方法的自定义类型
+4. 用 [`"pkg/errors".Wrap`](https://godoc.org/github.com/pkg/errors#Wrap) 的 Wrapped errors
 
-返回错误时，请考虑以下因素以确定最佳选择：
+返回错误时，请考虑以下因素以确定最佳选择
 
--   这是一个不需要额外信息的简单错误吗？如果是这样，[`errors.New`](https://golang.org/pkg/errors/#New) 足够了. 
--   客户需要检测并处理此错误吗？如果是这样，则应使用自定义类型并实现该 `Error()` 方法. 
--   您是否正在传播下游函数返回的错误？如果是这样，请查看本文后面有关错误包装 [section on error wrapping](#错误包装) 部分的内容. 
--   否则 [`fmt.Errorf`](https://golang.org/pkg/fmt/#Errorf) 就可以了. 
+1. 这是一个不需要额外信息的简单错误吗？如果是这样，[`errors.New`](https://golang.org/pkg/errors/#New) 足够了. 
+2. 客户需要检测并处理此错误吗？如果是这样，则应使用自定义类型并实现该 `Error()` 方法. 
+3. 您是否正在传播下游函数返回的错误？如果是这样，请查看本文后面有关错误包装 [section on error wrapping](#错误包装) 部分的内容. 
+4. 否则 [`fmt.Errorf`](https://golang.org/pkg/fmt/#Errorf) 就可以了. 
 
 如果客户端需要检测错误，并且您已使用创建了一个简单的错误 [`errors.New`](https://golang.org/pkg/errors/#New)，请使用一个错误变量. 
 
 ~~~go
-package foo 
+// Bad
+// package foo
+
+func Open() error {
+  return errors.New("could not open")
+}
+
+// package bar
+func use() {
+  if err := foo.Open(); err != nil {
+    if err.Error() == "could not open" {
+      // handle
+    } else {
+      panic("unknown error")
+    }
+  }
+}
+
+---------------------------------------------------------------------------------------------
+
+
+// Good
+//package foo 
 var ErrCouldNotOpen = errors.New("could not open") 
+
 func Open() error {  
     return ErrCouldNotOpen 
 } 
-
-package bar 
+//package bar 
 if err := foo.Open(); err != nil {  
     if err == foo.ErrCouldNotOpen {   
         // handle  
@@ -238,6 +320,22 @@ if err := foo.Open(); err != nil {
 如果您有可能需要客户端检测的错误，并且想向其中添加更多信息，则应使用自定义类型. 
 
 ~~~go
+// Bad
+func open(file string) error {
+  return fmt.Errorf("file %q not found", file)
+}
+
+func use() {
+  if err := open(); err != nil {
+    if strings.Contains(err.Error(), "not found") {
+      // handle
+    } else {
+      panic("unknown error")
+    }
+  }
+}
+
+// Good
 type errNotFound struct {  
     file string 
 } 
@@ -284,6 +382,18 @@ if err := foo.Open("foo"); err != nil {
   }
 }
 ```
+
+### 错误包装
+
+一个（函数 / 方法）调用失败时，有三种主要的错误传播方式：
+
+1. 如果没有要添加的其他上下文，并且您想要维护原始错误类型，则返回原始错误。
+
+2. 添加上下文，使用 "pkg/errors".Wrap 以便错误消息提供更多上下文，"pkg/errors".Cause 可用于提取原始错误。 Use fmt.Errorf if the callers do not need to detect or handle that specific error case.
+
+3. 如果调用者不需要检测或处理的特定错误情况，使用 fmt.Errorf。
+
+    建议在可能的地方添加上下文，以使您获得诸如 “调用服务 foo：连接被拒绝” 之类的更有用的错误，而不是诸如 “连接被拒绝” 之类的模糊错误
 
 ### 处理类型断言失败
 
@@ -440,8 +550,8 @@ func f() string {
 
 导入应该分为两组：
 
--   标准库
--   其他库
+1. 标准库
+2. 其他库
 
 默认情况下，这是 goimports 应用的分组. 
 
@@ -458,11 +568,11 @@ import (
 
 当命名包时，请按下面规则选择一个名称：
 
--   全部小写. 没有大写或下划线. 
--   大多数使用命名导入的情况下，不需要重命名. 
--   简短而简洁. 请记住，在每个使用的地方都完整标识了该名称. 
--   不用复数. 例如`net/url`，而不是`net/urls`. 
--   不要用“common”，“util”，“shared”或“lib”. 这些是不好的，信息量不足的名称. 
+1. 全部小写. 没有大写或下划线. 
+2. 大多数使用命名导入的情况下，不需要重命名. 
+3. 简短而简洁. 请记住，在每个使用的地方都完整标识了该名称. 
+4. 不用复数. 例如`net/url`，而不是`net/urls`. 
+5. 不要用“common”，“util”，“shared”或“lib”. 这些是不好的，信息量不足的名称. 
 
 ### 函数名
 
@@ -493,8 +603,9 @@ import (
 
 ### 函数分组与顺序
 
--   函数应按粗略的调用顺序排序
--   同一文件中的函数应按接收者分组
+1. 函数应按粗略的调用顺序排序
+
+2. 同一文件中的函数应按接收者分组
 
     因此，导出的函数应先出现在文件中，放在`struct`, `const`, `var`定义的后面
 
@@ -623,8 +734,8 @@ tests := []struct{
 
 如果将变量明确设置为某个值，则应使用短变量声明形式 (`:=`). 
 
-| Bad              | Good         |
-| ---------------- | ------------ |
+|       Bad        |     Good     |
+| :--------------: | :----------: |
 | `var s = "foo" ` | `s := "foo"` |
 
 但是，在某些情况下，`var` 使用关键字时默认值会更清晰. 例如，声明空切片. 
@@ -644,29 +755,29 @@ func f(list []int) {
 
 `nil` 是一个有效的长度为 0 的 slice，这意味着，
 
--   不应明确返回长度为零的切片. 应该返回`nil` 来代替. 
+1. 不应明确返回长度为零的切片. 应该返回`nil` 来代替. 
 
-    ~~~go
-    if x == "" {  return nil }
-    ~~~
+~~~go
+if x == "" {  return nil }
+~~~
 
--   要检查切片是否为空，请始终使用`len(s) == 0`. 而非 `nil`. 
+2. 要检查切片是否为空，请始终使用`len(s) == 0`. 而非 `nil`. 
 
-    ~~~go
-    func isEmpty(s []string) bool {  return len(s) == 0 }
-    ~~~
+~~~go
+func isEmpty(s []string) bool {  return len(s) == 0 }
+~~~
 
--   零值切片（用`var`声明的切片）可立即使用，无需调用`make()`创建. 
+3. 零值切片（用`var`声明的切片）可立即使用，无需调用`make()`创建. 
 
-    ~~~go
-    var nums []int 
-    if add1 { 
-        nums = append(nums, 1) 
-    } 
-    if add2 {  
-        nums = append(nums, 2) 
-    }
-    ~~~
+~~~go
+var nums []int 
+if add1 { 
+    nums = append(nums, 1) 
+} 
+if add2 {  
+    nums = append(nums, 2) 
+}
+~~~
 
 ### 小变量作用域
 
@@ -694,9 +805,8 @@ return nil
 
 ### 避免参数语义不明确
 
-1.  函数调用中的`意义不明确的参数`可能会损害可读性. 当参数名称的含义不明显时，
+1.  函数调用中的`意义不明确的参数`可能会损害可读性. 当参数名称的含义不明显时，请为参数添加 C 样式注释 (`/* ... */`)
 
-    请为参数添加 C 样式注释 (`/* ... */`)
 
 ~~~go
 func printInfo(name string, isLocal, done bool) 
@@ -845,6 +955,7 @@ type Option interface {
     apply(*options) 
 } 
 type optionFunc func(*options) 
+
 func (f optionFunc) apply(o *options) { 
     f(o) 
 } 
