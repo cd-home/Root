@@ -480,3 +480,33 @@ git push -u orgin master
 ~~~bash
 git rm -r --cached target # 直接删除
 ~~~
+
+#### 分支说明
+
+1. master || main 分支：存储正式发布的产品，`master || main` 分支上的产品要求随时处于可部署状态。`master || main` 分支只能通过与其他分支合并来更新内容，禁止直接在 `master || main` 分支进行修改。
+2. develop 分支：汇总开发者完成的工作成果，`develop` 分支上的产品可以是缺失功能模块的半成品，但是已有的功能模块不能是半成品。`develop` 分支只能通过与其他分支合并来更新内容，禁止直接在 `develop` 分支进行修改。
+3. feature 分支：当要开发新功能时，从 master 分支创建一个新的 `feature` 分支，并在 `feature` 分支上进行开发。开发完成后，需要将该 `feature` 分支合并到 `develop` 分支，最后删除该 `feature` 分支。
+4. release 分支：当 `develop` 分支上的项目准备发布时，从 `develop` 分支上创建一个新的 `release` 分支，新建的 `release` 分支只能进行质量测试、bug 修复、文档生成等面向发布的任务，不能再添加功能。这一系列发布任务完成后，需要将 `release` 分支合并到 `master` 分支上，并根据版本号为 `master` 分支添加 `tag`，然后将 `release` 分支创建以来的修改合并回 `develop` 分支，最后删除 `release` 分支。
+5. hotfix 分支：当 `master` 分支中的产品出现需要立即修复的 bug 时，从 `master` 分支上创建一个新的 `hotfix` 分支，并在 `hotfix` 分支上进行 BUG 修复。修复完成后，需要将 `hotfix` 分支合并到 `master` 分支和 `develop` 分支，并为 `master` 分支添加新的版本号 `tag`，最后删除 `hotfix` 分支。
+
+#### Commit Message
+
+> 提交信息规范
+>
+> 提交信息应该描述“做了什么”和“这么做的原因”，必要时还可以加上“造成的影响”，
+>
+> Header Header 部分只有 1 行，格式为`<type>(<scope>): <subject>`
+
+type 用于说明提交的类型，共有 8 个候选值
+
+1. feat：新功能（ feature ）
+2. fix：问题修复
+3. docs：文档
+4. style：调整格式（不影响代码运行）
+5. refactor：重构
+6. test：增加测试
+7. chore：构建过程或辅助工具的变动
+8. revert：撤销以前的提交
+9. scope 用于说明提交的影响范围，内容根据具体项目而定。
+
+subject 用于概括提交内容。
