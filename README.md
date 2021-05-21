@@ -1,4 +1,5 @@
 ### Prepare-For-Trouble
-> 未雨绸缪
+> 未雨绸缪，绝境面前依然保持优雅。
+>
+> 水深不语，人稳不言。优秀的人，懂得抛却浮华，从不张扬，从不嚣张。
 
-![95bbad6819f732fa4cb6a936d4572ed5](https://gitee.com/GodYao1995/resources/raw/master/images/95bbad6819f732fa4cb6a936d4572ed5.png)

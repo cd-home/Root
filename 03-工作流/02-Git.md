@@ -510,3 +510,13 @@ type 用于说明提交的类型，共有 8 个候选值
 9. scope 用于说明提交的影响范围，内容根据具体项目而定。
 
 subject 用于概括提交内容。
+
+### 其他
+
+提交敏感信息，强制回退服务器版本, 然后再次提交即可
+
+~~~
+ git reset --soft HEAD~i
+ git push origin master --force
+~~~
+
