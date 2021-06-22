@@ -5,13 +5,13 @@
 #### 基础知识
 
 - [x] 环境构建
-    - [x] 命令行
-        - [x] 编译
-        - [x] 打包
-    - [x] go mod
+    - [ ] 命令行
+        - [ ] 编译
+        - [ ] 打包
+    - [ ] go mod
 - [x] 语法
     - [ ] 包、注释
-    - [x] 数据类型
+    - [ ] 数据类型
     - [ ] 变量、常量
     - [ ] 数组、切片
     - [ ] Map
@@ -48,9 +48,10 @@
 
 #### Go Web
 
-- [x] HTTP、HTTPS、TCP
-- [ ] RESTAPI
+- [ ] TCP
+- [ ] HTTP、HTTPS
 - [ ] Cookie、Session、JWT、oAuth2
+- [ ] RESTAPI
 - [ ] ORM、Gin
 - [ ] MySQL、Redis
 - [ ] Zap
@@ -64,7 +65,7 @@
 
 #### 学习资源
 
-- [x] Go 程序设计语言
+- [ ] Go 程序设计语言
 - [ ] Go 语言并发之道
 - [ ] Go 学习笔记
 - [ ] Go 并发编程实战(极客时间)

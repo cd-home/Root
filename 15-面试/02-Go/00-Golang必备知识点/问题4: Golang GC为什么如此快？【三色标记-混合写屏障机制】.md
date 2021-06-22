@@ -29,7 +29,7 @@
 3.  清除会产生heap碎片
 4.  一点优化，将第四和第三换步骤，减少STW时间
 
-<img src=" ./images/GC-标记清楚.svg" alt="GC-标记清楚" style="zoom:150%;" />
+<img src="./images/GC-标记清楚.svg" alt="GC-标记清楚" style="zoom:150%;" />
 
 #### Go v1.5 （三色标记法）
 
