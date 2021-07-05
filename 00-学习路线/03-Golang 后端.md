@@ -1,6 +1,6 @@
 [TOC]
 
-### Golang 学习路线
+### Golang 后端学习路线
 
 #### 基础知识
 
@@ -8,8 +8,9 @@
     - [ ] 命令行
         - [ ] 编译
         - [ ] 打包
-    - [ ] go mod
-- [x] 语法
+    - [ ] Module
+    - [ ] 多版本管理gvm
+- [x] 基础语法
     - [ ] 包、注释
     - [ ] 数据类型
     - [ ] 变量、常量
@@ -26,14 +27,14 @@
     - [ ] defer
     - [ ] 错误处理
     - [ ] panic、Recover
-- [ ] Goroutine
+- [ ] 并发编程
     - [ ] GPM
+    
+    - [ ] CSP
+    - [ ] 编程范式
+    - [ ] g
     - [ ] channle
     - [ ] select
-- [ ] 并发编程
-    - [ ] CSP
-    - [ ] 同步
-    - [ ] 编程范式
 - [ ] 标准库
     - [ ] strings
     - [ ] strconv
@@ -53,15 +54,20 @@
 - [ ] Cookie、Session、JWT、oAuth2
 - [ ] RESTAPI
 - [ ] ORM、Gin
-- [ ] MySQL、Redis
 - [ ] Zap
 - [ ] Viper
 - [ ] Testify
 - [ ] GoMock
 - [ ] Jaeper
-- [ ] Promethous
+
+#### 组件
+
+- [ ] MySQL
+- [ ] Redis
 - [ ] traefik
 - [ ] Docker
+- [ ] gPRC
+- [ ] Promethous
 
 #### 学习资源
 

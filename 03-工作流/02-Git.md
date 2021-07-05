@@ -1,6 +1,8 @@
 [TOC]
 
-### GIT
+## Git
+
+### Git基础
 
 #### 前言
 
@@ -38,7 +40,7 @@ git add -h	[获取指定命令的帮助文档]
 # 本地初始化仓库
 mkdir testGit
 git init 
-# 拉去原创仓库
+# 拉取远程仓库
 git clone xx.git
 ~~~
 
@@ -164,8 +166,11 @@ git push origin --delete <tagname>
 git branch 				# 本地分支
 git branch -a 			# 远程分支
 git branch testing		# 创建
-git branch -b hotfix	# 创建并且切换
 git branch -d hotfix	# 删除分支
+
+git checkout hotfix		# 创建分支【如果有远程，那么会跟踪远程分支】
+git checkout -b hotfix	# 创建并且切换
+
 git merge dev 			# 合并分支
 ~~~
 
@@ -179,11 +184,11 @@ git merge dev 			# 合并分支
 
 
 
-但是合并iss53时，出现分叉，无法靠移动指针合并，找到各分支的位置，以及公共的祖先
+但是合并iss53时，出现分叉，无法靠移动指针合并，把两个分支的最新快照（`C4` 和 `C5`）以及二者最近的共同祖先（`C2`）进行三方合并，合并的结果是生成一个新的快照（并提交）
 
 ![basic-merging-1](images/basic-merging-1.png)
 
-生成一个新的快照，合并过程中可能有冲突出现，解决冲突，然后重新提交
+合并过程中可能有冲突出现，解决冲突，然后重新提交
 
 ![basic-merging-2](images/basic-merging-2.png)
 
@@ -199,52 +204,100 @@ git push <remote> <branch>:<remote-branch>
 git checkout -b serverfix origin/serverfix
 git checkout --track origin/serverfix
 
-# 实际上这个操作包含了前面两个，新建本地，跟踪远程
+# 实际上这个操作包含了前面两个，新建本地并且跟踪远程
 git checkout serverfix  
+# Branch 'serverfix' set up to track remote branch 'serverfix' from 'origin'.
 
 # 删除远程分支
 git push origin --delete serverfix
 ~~~
 
-#### 开发流程
+#### 变基
 
-##### 常用命令
+> 如果别人也在基于同样的分支进行操作，那么不要执行变基
 
->   默认分支在master，常见的分支命名: master dev bug hotfix feature
+正如前面合并，当分支可以直接移动指针合并时，说明没有分叉，可以快速合并。但是一旦当分叉，只能寻找共同祖先，合并当前最新的快照。这样的结果是，可以保存所有的分支信息。但是如果不想保留某些不必要的分支，那么可以进行变基操作
 
-0.  克隆
+![basic-rebase-1](images/basic-rebase-1.png)
+
+首先找到这两个分支（即当前分支 `experiment`、变基操作的目标基底分支 `master`） 的最近共同祖先 `C2`，然后对比当前分支相对于该祖先的历次提交，提取相应的修改并存为临时文件， 然后将当前分支指向目标基底 `C3`, 最后以此将之前另存为临时文件的修改依序应用, 通俗来讲就是将C4的变化在C上，重播一次
+
+![basic-rebase-3](images/basic-rebase-3.png)
+
+![basic-rebase-4](images/basic-rebase-4.png)
 
 ~~~bash
-git clone path.git
+$ git checkout experiment
+$ git rebase master
+$ git checkout master
+$ git merge experiment
 ~~~
 
-1.  查看分支
+跨分支变基操作
+
+![interesting-rebase-1](images/interesting-rebase-1.png)
+
+假设你希望将 `client` 中的修改合并到主分支并发布，但暂时并不想合并 `server` 中的修改
 
 ~~~bash
-git branch
-git branch -a # 查看远程分支
+git rebase --onto master server client
 ~~~
 
-2.  新建分支
+![interesting-rebase-2](images/interesting-rebase-2.png)
+
+~~~bash
+$ git checkout master
+$ git merge client
+~~~
+
+### Git开发流程
+
+#### 分支
+
+> 1. 通常情况下，远程master分支、dev分支
+> 2. master分支是最稳定的发布分支，经过严格的测试
+> 3. dev是次稳定的开发分支, 线上测试
+
+- [x] master
+- [x] dev
+- [ ] feature
+- [ ] bug
+- [ ] hotfix
+
+#### 开发
+
+1. 获取源代码
+
+~~~bash
+git clone examplepath.git
+~~~
+
+2. 查看分支情况
+
+~~~bash
+git branch	  			# 查看本地分支
+git branch -a 			# 查看远程分支
+~~~
+
+2.  新建本地分支
 
 ~~~bash
 git branch dev
-git checkout -b hotfix # 新建并且切换
+git checkout -b dev # 新建并且切换
+git checkout dev	# 如远程已经存在dev，那么就会新建本地dev，并且追踪远程dev
 ~~~
 
 3.  切换分支
 
 ~~~bash
-# 如果有远程分支，就会直接拉取，跟踪
 git checkout dev 
 ~~~
 
 4.  合并分支
 
 ~~~bash
-git checkout master
-git merge dev			   # 合并本地分支
-git merge origin/serverfix # 合并远程分支
+git checkout dev	# 通常情况下，是没有权限合并master分支的，只能进行CR后合并dev分支
+git merge feature	# 合并本地分支
 ~~~
 
 6.  删除分支
@@ -261,17 +314,23 @@ git push origin --delete serverfix  # 删除远程分支
 git push <远程仓库> <本地分支>:<远程分支>
 ~~~
 
-8. 更新
+8. 查看分支
+
+~~~bash
+git log
+git log --graph
+git log --graph --pretty=oneline --abbrev-commit
+~~~
+
+9. 更新
+
+    > 需要提交代码的时候，需要拉取远程服务器最新的代码
 
 ~~~bash
 # 当 git fetch 命令从服务器上抓取本地没有的数据时
 # 它并不会修改工作目录中的内容。 它只会获取数据然后让你自己合并 如需彻底更新需合并或使用git pull
 git fetch 
-~~~
 
-9. 拉取
-
-~~~bash
 # 拉取远程主机某分支的更新，再与本地的指定分支合并（相当与fetch加上了合并分支功能的操作）
 git pull 
 git pull --rebase
@@ -279,11 +338,31 @@ git pull --rebase
 # git pull --rebase = git fetch + git rebase
 ~~~
 
+10. 临时任务
+
+~~~bash
+# 当正在编写代码时，突然需要解决一个BUG，此时又不想提交代码，那么可以将工作区暂存
+git stash
+git checkout -b bug
+# 修复完成bug，然后提交，切换到master然后合并到bug，然后需要回到暂存的工作区
+git stash list
+# 恢复 方式一
+git stash apply  # stash内容并不删除
+git stash drop	 # 需要手动删除
+# 方式二
+git stash pop
+~~~
+
+11. 变基
+
+
+
 #### 冲突
 
-1. 冲突
+> 在merge合并的时候，可能会出现修改同一个地方导致冲突
 
-    > 不同的分支修改同样的地方，并且合并，此时合并回发生冲突
+1. 查看冲突
+
 
 ~~~bash
 git status # 查看冲突
@@ -293,47 +372,6 @@ git status # 查看冲突
 
     > 可以将提示的部分删除，然后再次提交
 
-3. 查看分支情况
-
-~~~bash
-git log
-git log --graph
-git log --graph --pretty=oneline --abbrev-commit
-~~~
-
-4.  当正在编写代码时，突然需要解决一个BUG，此时可以将工作区暂存
-
-~~~bash
-git stash
-git checkout -b bug
-~~~
-
-5. 查看暂存
-
-    > 修复完成bug，然后提交，切换到master然后合并到bug，然后需要回到暂存的工作区
-
-~~~bash
-git stash list
-~~~
-
-6.  恢复
-
-~~~bash
-# 方式一
-git stash apply  # stash内容并不删除
-git stash drop	 # 需要手动删除
-# 方式二
-git stash pop
-~~~
-
-#### GitFlow
-
-一般我们都会有master分支，dev分支，hotfix分支，feature分支
-
-1.  master/release分支上的代码最稳定的，一般不要轻易合并到它上，一定要严格测试，属于线上环境
-2.  dev分支是相对稳定的，属于线上测试
-3.  hotfix修复分支
-4.  feature新功能分支
 
 #### Tag
 
@@ -382,20 +420,18 @@ git push origin :refs/tags/v1.9
 
 #### 多人协作
 
-1.  SSH
-2.  用户
+1.  配置
 
 ~~~bash
 git config --global user.name "username"
 git config --global user.email "email"
 ~~~
 
-因此，多人协作的工作模式通常是这样
-
-1.  首先，可以试图用`git push origin <branch-name>`推送自己的修改
-2.  如果推送失败，则因为远程分支比你的本地更新，需要先用`git pull`试图合并
-3.  如果合并有冲突，则解决冲突，并在本地提交
-4.  没有冲突或者解决掉冲突后，再用`git push origin <branch-name>`推送就能成功
+2. 工作模式通常是这样
+    - [x] 首先，可以试图用`git push origin <branch-name>`推送自己的修改
+    - [ ] 如果推送失败，则因为远程分支比你的本地更新，需要先用`git pull`试图合并
+    - [ ] 如果合并有冲突，则解决冲突，并在本地提交
+    - [ ] 没有冲突或者解决掉冲突后，再用`git push origin <branch-name>`推送就能成功
 
 #### 常见问题
 
@@ -404,7 +440,7 @@ git config --global user.email "email"
 1.  改乱了工作区某个文件的内容，想直接丢弃工作区的修改时
 
 ~~~bash
-git checkout -- file
+git checkout -- [file]
 ~~~
 
 2.  改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，第一步用命令
@@ -412,8 +448,6 @@ git checkout -- file
 ~~~bash
 git reset HEAD file
 ~~~
-
-​	就回到了场景1，第二步按场景1操作
 
 3.  已经提交了不合适的修改到版本库时，想要撤销本次提交
 
@@ -438,8 +472,6 @@ git commit --amend --no-edit  # 表示提交消息不会更改，在 git 上仅�
 
 3. reset
 
-    > 提交错误文件，回退上个commit版本，再commit
-
 ~~~bash
 # 修改版本库，保留暂存区，保留工作区
 git reset --soft HEAD~1
@@ -451,9 +483,8 @@ git reset --hard commit_id
 
 4. git revert
 
-    > 通常使用revert
-
 ~~~bash
+# `git revert`是用一次新的commit来回滚之前的commit，`git reset`是直接删除指定的commit
 # 撤销前一次 commit
 git revert HEAD
 # 撤销前前一次 commit
@@ -462,142 +493,13 @@ git revert HEAD^
 git revert commit_id
 ~~~
 
-5. `git revert` 和 `git reset` 的区别
-
-    `git revert`是用一次新的commit来回滚之前的commit，`git reset`是直接删除指定的commit
-
-    `git revert`是用一次逆向的commit“中和”之前的提交，因此日后合并老的branch时，导致这部分改变不会再次出现，但是
-
-    `git reset`是之间把某些commit在某个branch上删除，因而和老的branch再次merge时,这些被回滚的commit应该还会被引入
-
-#### 例子
-
-0.  注册代码仓库用户
-
-~~~bash
-# 目前一般是gitlab
-~~~
-
-1.  拉取代码
-
-~~~bash
-git clone xx.git
-~~~
-
-2.  查看当前分支
-
-~~~bash
-git branch -a  # 查看分支, 默认位于master分支
-git remote -v  # 查看远程分支情况
-~~~
-
-3.  创建本地开发分支
-
-~~~bash
-git checkout dev
-git checkout -b dev # 创建并且切换
-git push origin dev # 创建远程分支
-~~~
-
-4.  开发
-
-~~~bash
-git add xx.go
-git status # 查看状态
-git commit -m "添加xx功能，完善测试" # 可能会多次commit
-~~~
-
-5.  合并推送
-
-~~~bash
-git checkout master
-git pull origin master  # 一般先拉去远程代码，有可能远程代码版本比当前新
-git checkout master     # 切换回master
-git merge dev           # 合并代码，可能有冲突
-git push origin master
-~~~
-
-6.  删除
-
-~~~bash
-git branch -D dev     // 删除本地
-git push origin :dev  // 删除远程
-~~~
-
-7.  版本回退
-
-~~~bash
-git reset --hard head^
-git log
-git relog
-git reset -- hard 44c2ec
-~~~
-
-8.  注意
-
->   上面情况只是基本流程，实际上master分支是不能随意合并的
->
->   通常master是最稳定分支，所有开发全部在远程dev分支上面，本地也是需要新建local-dev分支
-
-~~~bash
-git push origin dev:dev   # 推送本地分支到远程
-~~~
-
-9.  优化
-
->   合并代码的时候，本地可能进行多次commit，可以优化
-
-~~~bash
-git checkout master
-git pull origin master
-git checkout dev     
-git rebase -i  HEAD~2 # 将2个提交合并为一个
-git rebase master     # 将master最新的分支同步到本地,需要解决冲突
-git checkout master
-git merge dev
-git push origin master
-~~~
-
-10.  总结
-
->   1.  git rebase操作实际上是将当前执行rebase分支的所有基于原分支提交点之后的commit打散成一个一个的patch，并重新生成一个新的commit hash值，再次基于原分支目前最新的commit点上进行提交，并不根据两个分支上实际的每次提交的时间点排序，rebase完成后，切到基分支进行合并另一个分支时也不会生成一个新的commit点，可以保持整个分支树的完美线性
->   2.  当开发一个功能时，可能会在本地有无数次commit，而实际上在你的master分支上只想显示每一个功能测试完成后的一次完整提交记录就好了，其他的提交记录并不想将来全部保留在master分支上，rebase可以在rebase时将本地多次的commit合并成一个commit，还可以修改commit的描述
-
-#### 问题
-
-1.  关于Git用户配置
-
-~~~go
-git config --local user.name "li yao"
-git config --local user.email"liyaoo1995@gmail.com"
-git config --global user.name "li yao"
-git config --global user.email "liyaoo1995@gmail.com"
-~~~
-
-2.  关于Push需要输入用户名和密码问题
-
->   由于的HTTPS的方式，所以每次需要输入账户密码，可以该用SSH形式
-
-~~~bash
-git remote -v
-git remote rm origin
-git remote add orgin git@xx.git
-git push -u orgin master
-~~~
-
-3.  上传错文件
-
-~~~bash
-git rm -r --cached target # 直接删除
-~~~
-
 #### 分支说明
 
-1. master || main 分支：存储正式发布的产品，`master || main` 分支上的产品要求随时处于可部署状态。`master || main` 分支只能通过与其他分支合并来更新内容，禁止直接在 `master || main` 分支进行修改。
-2. develop 分支：汇总开发者完成的工作成果，`develop` 分支上的产品可以是缺失功能模块的半成品，但是已有的功能模块不能是半成品。`develop` 分支只能通过与其他分支合并来更新内容，禁止直接在 `develop` 分支进行修改。
-3. feature 分支：当要开发新功能时，从 master 分支创建一个新的 `feature` 分支，并在 `feature` 分支上进行开发。开发完成后，需要将该 `feature` 分支合并到 `develop` 分支，最后删除该 `feature` 分支。
-4. release 分支：当 `develop` 分支上的项目准备发布时，从 `develop` 分支上创建一个新的 `release` 分支，新建的 `release` 分支只能进行质量测试、bug 修复、文档生成等面向发布的任务，不能再添加功能。这一系列发布任务完成后，需要将 `release` 分支合并到 `master` 分支上，并根据版本号为 `master` 分支添加 `tag`，然后将 `release` 分支创建以来的修改合并回 `develop` 分支，最后删除 `release` 分支。
-5. hotfix 分支：当 `master` 分支中的产品出现需要立即修复的 bug 时，从 `master` 分支上创建一个新的 `hotfix` 分支，并在 `hotfix` 分支上进行 BUG 修复。修复完成后，需要将 `hotfix` 分支合并到 `master` 分支和 `develop` 分支，并为 `master` 分支添加新的版本号 `tag`，最后删除 `hotfix` 分支。
+1. master || main 分支：存储正式发布的产品，`master || main` 分支上的产品要求随时处于可部署状态。`master || main` 分支只能通过与其他分支合并来更新内容，禁止直接在 `master || main` 分支进行修改
+2. develop 分支：汇总开发者完成的工作成果，`develop` 分支上的产品可以是缺失功能模块的半成品，但是已有的功能模块不能是半成品。`develop` 分支只能通过与其他分支合并来更新内容，禁止直接在 `develop` 分支进行修改
+3. feature 分支：当要开发新功能时，从 master 分支创建一个新的 `feature` 分支，并在 `feature` 分支上进行开发。开发完成后，需要将该 `feature` 分支合并到 `develop` 分支，最后删除该 `feature` 分支
+4. release 分支：当 `develop` 分支上的项目准备发布时，从 `develop` 分支上创建一个新的 `release` 分支，新建的 `release` 分支只能进行质量测试、bug 修复、文档生成等面向发布的任务，不能再添加功能。这一系列发布任务完成后，需要将 `release` 分支合并到 `master` 分支上，并根据版本号为 `master` 分支添加 `tag`，然后将 `release` 分支创建以来的修改合并回 `develop` 分支，最后删除 `release` 分支
+5. hotfix 分支：当 `master` 分支中的产品出现需要立即修复的 bug 时，从 `master` 分支上创建一个新的 `hotfix` 分支，并在 `hotfix` 分支上进行 BUG 修复。修复完成后，需要将 `hotfix` 分支合并到 `master` 分支和 `develop` 分支，并为 `master` 分支添加新的版本号 `tag`，最后删除 `hotfix` 分支
 
 #### Commit Message
 
@@ -617,16 +519,5 @@ type 用于说明提交的类型，共有 8 个候选值
 6. test：增加测试
 7. chore：构建过程或辅助工具的变动
 8. revert：撤销以前的提交
-9. scope 用于说明提交的影响范围，内容根据具体项目而定。
-
-subject 用于概括提交内容。
-
-### 其他
-
-提交敏感信息，强制回退服务器版本, 然后再次提交即可
-
-~~~
- git reset --soft HEAD~i
- git push origin master --force
-~~~
-
+9. scope 用于说明提交的影响范围，内容根据具体项目而定
+10. subject 用于概括提交内容
