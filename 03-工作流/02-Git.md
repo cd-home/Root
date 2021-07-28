@@ -176,8 +176,6 @@ git merge dev 			# 合并分支
 
 试图合并两个分支时， 如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者的时候， 只会简单的将指针向前推进（指针右移）因为这种情况下的合并操作没有需要解决的分歧——这就叫做 “快进（fast-forward）”
 
-![basic-branching-4](images/basic-branching-4.png)
-
 直接移动指针即可
 
 ![basic-branching-5](images/basic-branching-6.png)
