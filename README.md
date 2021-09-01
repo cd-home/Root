@@ -24,3 +24,4 @@
 | DEBUG  |                     Dlv                      |   了解    |  ❌   |
 | Golang |                   基础语法                   |   熟练    |  ✅   |
 | Golang |                最佳实践与规范                |   熟练    |  ✅   |
+|  SQL   |         SQL DDL数据库操作 DML表操作          |   熟练    |  ✅   |
