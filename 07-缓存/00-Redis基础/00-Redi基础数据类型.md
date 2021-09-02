@@ -125,38 +125,45 @@ brpop list 2
 
 #### Hash
 
-1. 无序字典, 字典的key只能是字符串
+> 无序字典, 字典的key只能是字符串, 值是一个键值对的对象
 
-2. 内部实现, 数组 + 链表二维结构. 第一维 hash 的数组位置碰撞时, 就会将碰撞的元素使用链表串接起来
+常用命令
 
-    第一维是数组, 第二维是链表, hash的内容key和value存放在链表中, 数组里存放的是链表的头指针,通过key查找元素时, 先计算key的hashcode, 然后用hashcode对数组的长度进行取模定位到链表的表头, 再对链表进行遍历获取到相应的value值, 链表的作用就是用来将产生了「hash碰撞」的元素串起来
+```mysql
+hset uid:100 name liyao age 25
+hget uid:100 name
+hget uid:100 age
+ 
+# 单个设置
+hset K k1 v1
+# 多个设置
+hset K k2 v2 k3 v3
+hmset K k1 v1 k2 v2 k3 v3
 
-1. rehash
+# 获取
+hkeys K 		# 获取K的所有Field
+hvals K			# 获取K的所有Field的Vlaue
+hget K k1
+hgetall K
+hmget K k1 k2
+hlen K
 
-    为了让哈希表的负载因子维持在一个合理的范围之内,  当哈希表保存的键值对数量太多或者太少时,  程序需要对哈希表的大小进行相应的扩展或者收缩.Redis 为了高性能, 不能堵塞服务, 所以采用了渐进式 rehash 策略
+# 删除
+hdel K k1
 
-2. 当hash的最后一个元素被移除, 该内存被回收
+# 存在
+hexists K k1
 
-3. hash的存储空间消耗同等情况下要高于字符串
+# 存在即不设置
+hsetnx K k1 v1
+```
 
-4. 常用命令
+同字符串对象一样, hash 结构中的单个子 key 也可以进行计数, 它对应的指令是 `hincrby`
 
-    ```
-     hset K k1 v1
-     hset K k2 v2
-     hset K k3 v3
-     hgetall K
-     hlen K
-     hget K k1
-     hset K k2 Newv2
-     hmset K k1 v1 k2 v2 k3 v3
-    ```
-
-    同字符串对象一样, hash 结构中的单个子 key 也可以进行计数, 它对应的指令是 `hincrby`
-
-    ```
-     hincrby K k1 1
-    ```
+```
+hincrby K k1 1
+hincrbyfloat K k1 1
+```
 
 #### Set
 
