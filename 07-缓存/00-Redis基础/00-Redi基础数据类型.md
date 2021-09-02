@@ -135,54 +135,50 @@ hget uid:100 name
 hget uid:100 age
  
 # 单个设置
-hset K k1 v1
+hset K Field1 Value1
 # 多个设置
-hset K k2 v2 k3 v3
-hmset K k1 v1 k2 v2 k3 v3
+hset K Field1 Value1 Field2 Value2
+hmset K Field1 Value1 Field2 Value2
 
 # 获取
 hkeys K 		# 获取K的所有Field
 hvals K			# 获取K的所有Field的Vlaue
-hget K k1
+hget K Field1
 hgetall K
-hmget K k1 k2
+hmget K Field1 Field2
 hlen K
 
 # 删除
 hdel K k1
 
 # 存在
-hexists K k1
+hexists K Field1
 
 # 存在即不设置
-hsetnx K k1 v1
+hsetnx K Field1 Value2
 ```
 
 同字符串对象一样, hash 结构中的单个子 key 也可以进行计数, 它对应的指令是 `hincrby`
 
 ```
-hincrby K k1 1
-hincrbyfloat K k1 1
+hincrby K Field2 1
+hincrbyfloat K Field1 1.2
 ```
 
 #### Set
 
-1. 内部的键值对是无序的唯一的
+内部的键值对是无序的唯一的
 
-2. 内部实现相当于一个特殊的字典, 字典中所有的 value 都是一个值`NULL`
+常用命令
 
-3. 当集合中最后一个元素移除之后, 数据结构自动删除, 内存被回收
-
-4. 常用命令
-
-    ```
-     sadd k v1
-     sadd k v2 v3
-     smembers k     # 获取所有
-     sismember k v1 # 查询是否有
-     scard k        # 获取长度
-     spop k         # 弹出一个
-    ```
+```
+sadd k v1
+sadd k v2 v3
+smembers k     # 获取所有
+sismember k v1 # 查询是否有
+scard k        # 获取长度
+spop k         # 弹出一个
+```
 
 #### zset
 
