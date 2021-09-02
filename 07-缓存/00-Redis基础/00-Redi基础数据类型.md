@@ -80,42 +80,50 @@ setex k 5 v		 # SET 同时设置过期时间
 
 #### List
 
-1. Redis中的列表是链表, 插入删除非常快O(1)
+> 列表是Linked List 实现，也就是链表, 头尾插入删除非常快O(1)
 
-2. pop出来的数据被自动删除, 内存被回收
+当我们向一个聚合数据类型中添加元素时，如果目标键不存在，就在添加元素前创建空的聚合数据类型。
 
-3. Redis的List通常被用做异步队列使用, 将需要延后处理的任务结构体序列化成字符串塞进Redis的列表, 然后消费
+当我们从聚合数据类型中移除元素时，如果值仍然是空的，键自动被销毁。
 
-4. 常见命令
+常见命令
 
-    - 队列
+队列
 
-    ```
-     rpush k v1 v2 v3
-     llen k
-     lpop k
-    ```
+```mysql
+ rpush k v1 v2 v3	 # 可以设置单个、多个 
+ llen k
+ lpop k				 # pop出来的数据被自动删除, 内存被回收
+```
 
-    - 栈
+栈
 
-    ```
-     rpush k v1 v2 v3
-     rpop k
-    ```
+```mysql
+ rpush k v1 v2 v3
+ rpop k
+```
 
-    - 慢操作
+操作
 
-    ```
-     rpush k v1 v2 v3
-     lindex k 1   # O(n) 获取索引位置的value
-     lindex k -1  # 倒数第一个
-     ltrim k i j  # 保留区间, 其他删除
-     lrange k i j # O(n)获取区间value
-     lset k i v
-     lrem k i v
-    ```
+```mysql
+ rpush k v1 v2 v3
+ lindex k 1   		# O(n) 获取索引位置的value
+ lindex k -1  		# 倒数第一个
+ ltrim k i j  		# 保留区间, 其他删除
+ lrange k i j 		# O(n)获取区间value i 从0开始，j可以为负数，最后一个从-1开始（分页案例）
+ lset k i v
+ lrem k i v
+```
 
-#### hash
+生产消费模式
+
+> 如果使用lpush 和 pop 做这种模式，列表为空，那么rpop就会空轮训, brpop设置超时时间
+
+~~~mysql
+brpop list 2
+~~~
+
+#### Hash
 
 1. 无序字典, 字典的key只能是字符串
 
