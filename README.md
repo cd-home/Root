@@ -24,5 +24,6 @@
 | DEBUG  |                     Dlv                      |   了解    |  ❌   |
 | Golang |                   基础语法                   |   熟练    |  ✅   |
 | Golang |                最佳实践与规范                |   熟练    |  ✅   |
-|  SQL   |         SQL DDL数据库操作 DML表操作          |   熟练    |  ✅   |
-| Redis  |        Redis基本数据结构以及应用场景         |   熟练    |  ✅   |
+|  SQL   |                 SQL DDL DML                  |   熟练    |  ✅   |
+| Redis  |           基本数据结构以及应用场景           |   熟练    |  ✅   |
+| Python |                   基础语法                   |   熟练    |  ✅   |
