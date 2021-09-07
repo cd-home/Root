@@ -547,3 +547,64 @@ HTTP/1.1 303 See Other
 ~~~
 HTTP/1.1 304 Not Modified
 ~~~
+
+##### 4xx
+
+> 客户端响应
+
+###### 400
+
+> 语意有误，当前请求服务器无法理解；请求参数有误；
+
+~~~
+HTTP/1.1 400 Bad Request 
+~~~
+
+###### 401
+
+> 当前请求需要验证, 客户端缺乏资源要求的身份凭证，通常客户端需要包含一个Authorization 头
+
+~~~
+HTTP/1.1 401 Unauthorized
+~~~
+
+###### 403
+
+> 服务器可以处理该请求，但是拒绝授权访问
+
+~~~
+HTTP/1.1 403 Forbidden
+~~~
+
+###### 404
+
+> 请求失败，服务器无该资源, 具体应用中通常定义错误页面
+
+~~~
+HTTP/1.1 404 Not Found
+~~~
+
+###### 405
+
+> HTTP方法不被允许
+
+~~~
+HTTP/1.1 405 Method Not Allowed
+~~~
+
+###### 417
+
+> 服务器无法满足Expect首部
+
+~~~
+HTTP/1.1 417 Expectation Failed
+~~~
+
+###### 429
+
+> 请求频率太高, 可以在响应中包含Retry-After 提示用户
+
+~~~
+HTTP/1.1 429 Too Many Requests
+~~~
+
