@@ -435,3 +435,72 @@ Upgrade: websocket
 Connection: Upgrade
 ~~~
 
+##### 200
+
+> 200 OK， 表示请求成功, 含义取决于HTTP动词的行为
+
+~~~
+HTTP/1.1 200 OK
+~~~
+
+##### 201
+
+> 请求成功，并且创建了一个新的资源，通常是POST请求，或者PUT请求
+
+~~~
+HTTP/1.1 201 Created
+~~~
+
+##### 202
+
+> 服务器已经收到请求消息，但是尚未进行处理
+
+~~~
+HTTP/1.1 202 Accepted
+~~~
+
+##### 204
+
+> 请求成功，但是无实体返回；通常PUT修改资源，但是不需要改变当前的展示给用户
+>
+> 默认情况下，204响应是可缓存的，包含Etag标头响应中
+
+~~~
+HTTP/1.1 204 No Content
+~~~
+
+##### 206
+
+> 请求成功，返回主体包含请求的数据区间，数据区间在Range请求首部指定；
+>
+> 响应首部还需要包含 `Content-Type` `Content-Range`
+
+~~~
+HTTP/1.1 206 Partial Content
+Content-Range: bytes 21010-47021/47022
+Content-Length: 26012
+Content-Type: image/gif
+
+... 26012 bytes of partial image data ...
+~~~
+
+亦可包含多个数据区间的响应[待验证]
+
+~~~
+HTTP/1.1 206 Partial Content
+Content-Length: 1741
+Content-Type: multipart/byteranges; boundary=String_separator
+
+--String_separator
+Content-Type: application/pdf
+Content-Range: bytes 234-639/8000
+
+...the first range...
+--String_separator
+Content-Type: application/pdf
+Content-Range: bytes 4590-7999/8000
+
+...the second range
+--String_separator--
+~~~
+
