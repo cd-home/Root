@@ -548,9 +548,7 @@ HTTP/1.1 303 See Other
 HTTP/1.1 304 Not Modified
 ~~~
 
-##### 4xx
-
-> 客户端响应
+##### 4xx: 客户端响应
 
 ###### 400
 
@@ -606,5 +604,23 @@ HTTP/1.1 417 Expectation Failed
 
 ~~~
 HTTP/1.1 429 Too Many Requests
+~~~
+
+##### 5xx: 服务端响应
+
+###### 500
+
+> 服务器错误, 请求的服务器遇到意外的情况并阻止其执行请求
+
+~~~
+HTTP/1.1 500 Internal Server Error
+~~~
+
+###### 502
+
+> 网关错误
+
+~~~
+HTTP/1.1 502 Bad Gateway
 ~~~
 
