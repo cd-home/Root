@@ -112,7 +112,7 @@ Cache-control: s-maxage=<seconds>		# 覆盖max-age 或者 Expired 仅仅适用�
 ~~~
 Connection: keep-alive	# HTTP/1.1 默认使用持久连接(和第一个实体代理连接，并且被代理移除)
 Connection: close	    # HTTP/1.0 默认使用短连接
-
+# 协议升级
 Connection: Upgrade
 ~~~
 
@@ -405,6 +405,17 @@ Range: bytes=500-1500
 ##### OPTIONS
 
 > 描述资源的通信选项，预检
+>
+> 当前真实请求是非简单请求且跨域的情况下会发起OPTIONS预检请求
+
+- [x] 简单请求【同时满足以下项】
+    - [x] HTTP方法为 GET、POST、HEAD
+    - [x] Content-Type仅仅限于application/x-www-form-urlencoded、multipart/form-data、text/plain
+    - [x] 不可自定义请求头
+- [x] 复杂请求【满足以下任意一项即为复杂请求】
+    - [x] 请求方法为PUT、DELETE
+    - [ ] Content-Type 为 application/json
+    - [ ] 自定义的Header
 
 ##### PATCH
 
@@ -623,4 +634,3 @@ HTTP/1.1 500 Internal Server Error
 ~~~
 HTTP/1.1 502 Bad Gateway
 ~~~
-
