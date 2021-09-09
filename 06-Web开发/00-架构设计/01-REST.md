@@ -43,7 +43,7 @@ https://api.example.com/v1/
 ##### URL设计: 以资源为中心的
 
 - [x] 资源尽量采用名词复数
-- [ ] 尽量使用小写
+- [x] 使用小写
 
 ~~~
 https://api.example.com/v1/zoos

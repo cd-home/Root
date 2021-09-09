@@ -2,50 +2,53 @@
 
 ### Golang 后端学习路线
 
-#### 基础知识
+#### 语言基础
 
 - [x] 环境构建
     - [x] 命令行
         - [x] 编译
         - [x] 打包
-    - [x] Module
+    - [x] Go Module
     - [x] 多版本管理gvm
 - [x] 基础语法
-    - [ ] 包、注释
-    - [ ] 数据类型
-    - [ ] 变量、常量
-    - [ ] 数组、切片
+    - [x] 包、注释
+    - [x] 数据类型
+    - [x] 变量、常量
+    - [x] 数组、切片
     - [x] Map
-    - [ ] 运算符
-    - [ ] 流程控制
+    - [x] 运算符
+    - [x] 流程控制
     - [x] 函数
     - [x] 指针
     - [x] 结构体
     - [x] 方法
     - [x] 接口
-    - [ ] 反射
+    - [x] 反射
     - [x] defer
     - [x] error
-    - [ ] panic、Recover
-- [ ] 并发编程
-    - [x] GPM
-    
-    - [x] CSP
-    - [x] 编程范式
-    - [ ] g
-    - [ ] channle
-    - [ ] select
-- [ ] 标准库
-    - [ ] strings
-    - [ ] strconv
-    - [ ] io
-    - [ ] os
-    - [ ] net
-    - [ ] time
-    - [ ] errors
-    - [ ] reflect
-    - [ ] sync
-    - [ ] path
+    - [x] panic、Recover
+
+#### 并发编程
+
+- [x] GPM
+- [x] CSP
+- [ ] Goroutine
+- [ ] channle
+- [ ] select
+- [ ] 编程范式
+
+#### 标准库
+
+- [ ] strings
+- [ ] strconv
+- [ ] io
+- [ ] os
+- [ ] net
+- [ ] time
+- [ ] errors
+- [ ] reflect
+- [ ] sync
+- [ ] path
 
 #### Web
 
@@ -62,16 +65,19 @@
 
 #### 组件
 
-- [ ] MySQL
-- [ ] Redis
+- [ ] **MySQL**
+- [ ] **Redis**
 - [ ] traefik
-- [ ] Docker
-- [ ] gPRC
+- [x] **Docker**
+- [ ] **RPC【gPRC】**
 - [ ] Promethous
 
-#### 工具
+#### 工具链
 
 - [x] dlv 调试工具
+- [x] 性能监控
+
+#### 最佳实践
 
 #### 学习资源
 
