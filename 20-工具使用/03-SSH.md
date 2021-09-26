@@ -5,7 +5,7 @@
 1. 本地生成公钥
 
 ~~~bash
-ssh key ssh-keygen -t rsa -C liyaoo1995@gmail.com # 提示可以设置密码
+ssh-keygen -t rsa -C liyaoo1995@gmail.com # 提示可以设置密码
 ~~~
 
 2. .ssh

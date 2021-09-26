@@ -6,10 +6,8 @@
 
 - [x] 环境构建
     - [x] 命令行
-        - [x] 编译
-        - [x] 打包
     - [x] Go Module
-    - [x] 多版本管理gvm
+    - [x] 多版本管理
 - [x] 基础语法
     - [x] 包、注释
     - [x] 数据类型
@@ -27,15 +25,10 @@
     - [x] defer
     - [x] error
     - [x] panic、Recover
-
-#### 并发编程
-
-- [x] GPM
-- [x] CSP
-- [ ] Goroutine
-- [ ] channle
-- [ ] select
-- [ ] 编程范式
+    - [ ] 范性
+    - [ ] Goroutine
+    - [ ] channle
+    - [ ] select
 
 #### 标准库
 
@@ -62,6 +55,7 @@
 - [ ] Testify
 - [ ] GoMock
 - [ ] Jaeper
+- [ ] gRPC
 
 #### 组件
 
