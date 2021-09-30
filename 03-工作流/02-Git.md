@@ -18,6 +18,8 @@
 3.  本地仓库【已提交，永久存储到git目录】
 4.  远程仓库
 
+#### 图解
+
 ![git流程](./images/git.svg)
 
 #### 安装配置
@@ -27,7 +29,6 @@ $ sudo apt install git-all
 $ git config --global [--local] user.name "God Yao"      		
 $ git config --global [--local] user.email "mike@example.com"	
 $ git config --list
-$ git add -h	[获取指定命令的帮助文档]
 ~~~
 
 #### 基础命令
@@ -72,12 +73,12 @@ git diff --staged  # 暂存区和最后一次提交的差异
 
 ~~~bash
 git log
-git log -p    # 显示提交差异
-git log -p -2 # 两次提交
+git log -p    	   # 显示提交差异
+git log -p -2 	   # 两次提交
 git log --stat
 git log --pretty=oneline
 git log --pretty=format:"%h %an %ae %s" --graph [hash author email commitmessage]
-git reflog    # 查看所有的版本
+git reflog    	   # 查看所有的版本
 ~~~
 
 7. 暂存区回到工作区
@@ -116,8 +117,9 @@ git remote add [仓库名字] xx.git
 git remote rename [仓库原名] [仓库新名]
 git remote remove|[rm] [仓库名]
 
-git fetch [仓库名字]   # 不会自动合并
-#自动设置本地 master 分支跟踪克隆的远程仓库的 master 分支（或其它名字的默认分支）
+ # 不会自动合并
+git fetch [仓库名字]  
+# 自动设置本地 master 分支跟踪克隆的远程仓库的 master 分支（或其它名字的默认分支）
 git clone xx.git 
 # 从最初克隆的服务器上抓取数据并自动尝试合并到当前所在的分支
 git pull 
@@ -206,46 +208,4 @@ $ git checkout experiment
 $ git rebase master
 $ git checkout master
 $ git merge experiment
-~~~
-
-#### Tag
-
-1. tag用于发布一次较稳定版本
-
-
-~~~bash
-git tag v1.0   # 默认标签是打在最新提交的commit上的【标签总是和某个commit挂钩】
-~~~
-
-2.  指定在某个commit上tag
-
-~~~bash
- git tag v1.1 f52c633
-~~~
-
-3.  tag也可以说明
-
-~~~bash
-git tag -a v0.1 -m "version 0.1 released" 1094adb
-~~~
-
-4.  查看
-
-~~~bash
-git show v1.1
-~~~
-
-5.  默认tag是在本地，可以推送到远程
-
-~~~bash
-git push origin v1.1
-git push origin --tags # 全部推送
-~~~
-
-6.  删除tag
-
-~~~bash
-git tag -d v1.1 # 本地
-git tag -d v1.1 # 推送到远程，需要删除，先删本地，在删除远程
-git push origin :refs/tags/v1.1
 ~~~
