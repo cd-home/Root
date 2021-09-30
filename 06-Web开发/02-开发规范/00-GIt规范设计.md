@@ -171,16 +171,7 @@ git log --graph --pretty=oneline --abbrev-commit
 
 
 ~~~bash
-# 只会获取数据 如需彻底更新需合并或使用git pull
-git fetch 
-
-# 拉取远程主机某分支的更新，再与本地的指定分支合并（相当与fetch加上了合并分支功能的操作）
-# 注意：需要提交代码的时候，需要拉取远程服务器最新的代码
 git pull 
-
-# git pull = git fetch + git merge 通常显式使用 git fetch + git merge 比较好
-# git pull --rebase = git fetch + git rebase
-git pull --rebase
 ~~~
 
 10. 临时任务
