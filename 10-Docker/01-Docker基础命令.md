@@ -2,105 +2,97 @@
 
 ### Docker命令
 
-加速
-
-~~~
-/etc/docker/daemon.json 文件中添加以下参数（没有该文件则新建）：阿里镜像加速
-{
-  "registry-mirrors": ["https://9cpn8tt6.mirror.aliyuncs.com"]
-}
-~~~
-
 #### 镜像
 
-0.  搜索
+##### 搜索
 
 ~~~bash
-docker search <image-name>
+$ docker search <image-name>:<tag>
 ~~~
 
-1. 获取镜像
+##### 拉取
+
+>  tag 可选, 默认latest
 
 ```bash
-docker image pull <image-name>
-# 使用加载已经下载好的镜像
-docker load -i [path.tar]
-docker load < [path.tar]
-docker load --input [path.tar]
+$ docker image pull <image-name>[:tag] 
 ```
 
-2. 查看所有镜像
+##### 查看
+
+> IMAGE ID 或者 REPOSITORY:TAG 标示唯一镜像， 以下使用IMAGE ID表示
 
 ```bash
-docker image ls
-docker images
+$ docker images
+$ docker image ls
+REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
 ```
 
-3. 删除镜像
+##### 删除
 
 ```bash
-docker image rm <image-name>:tag
-docker image rm IMAGEID
-docker rmi <image-name>:tag
-docker rmi IMAGEID
+$ docker image rm <image-name>:tag
+$ docker image rm IMAGEID
+# 简写
+$ docker rmi <image-name>:tag
+$ docker rmi IMAGEID
 ```
 
-4.  镜像备份
+##### 保存
 
 ```bash
-docker save -o [path.tar] <image-name>:tag
-docker save -o <image-name>:tag > xxx_images.tar
+$ docker save IMAGEID -o xxx_images.tar
 ```
 
-5.  重命名
-
-~~~
-docker tab <image-name>:latest <image-name>:v1
-~~~
-
-6.  查看历史
+##### 重命名
 
 ~~~bash
-docker history <image-id>
+$ docker tag IMAGEID <image-name>:v1
 ~~~
 
-7.  详细信息
+##### 查看历史
 
 ~~~bash
-docker inspect	<image-id>
+$ docker history IMAGEID
 ~~~
 
-8.  打标签
+##### 详细信息
 
 ~~~bash
-docker tag <new-image-name>:tag
-docker tag dcoekr.com.cn/xxproject:xxtag
+$ docker inspect IMAGEID
 ~~~
 
-9.  推送镜像
+##### 标签
+
+~~~bash
+$ docker tag <new-image-name>:tag
+$ docker tag demo.docker.com/demo-project:tag
+~~~
+
+##### 推送仓库
 
 >   需要特定的标签[地址]才可以推送
 
 ~~~bash
-docker login -u xxx -p xxx
-docker push dcoekr.com.cn/xxproject:xxtag
+$ docker login -u xxx -p xxx
+$ docker push demo.docker.com/demo-project:tag
 ~~~
 
-10.  查看端口
+##### 查看端口
 
 ~~~bash
-docker port <image-id>
+$ docker port IMAGEID
 ~~~
 
 #### 容器
 
-0.  创建
+##### 创建
 
 ~~~bash
-docker create -it --name <container-name> <image-name>:tag
+$ docker create -it --name <container-name> <image-name>:tag
 ~~~
 
-1. 创建运行容器
+##### 创建&运行
 
 ```bash
 docker run [options] <image-name>:tag [向启动容器中传入的命令]
