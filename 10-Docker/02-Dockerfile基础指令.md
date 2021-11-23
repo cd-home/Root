@@ -10,7 +10,7 @@
 
 #### FROM
 
-> 指定基础镜像, 注意只能FROM开头，指令大写
+> 指定基础镜像, 注意只能FROM开头，指令大写； 推荐使用alpine镜像；
 
 ~~~dockerfile
 FROM alpine
@@ -18,9 +18,13 @@ FROM alpine
 
 一些经典的镜像：nginx、ubuntu、alpine(linux)、scratch(虚拟空白镜像)、golang
 
+#### LABEL
+
+> 添加标签、记录信息
+
 #### WORKDIR
 
-> 指定工作目录
+> 指定工作目录， 通常使用绝对路径
 
 ~~~dockerfile
 WORKDIR /app/build/
@@ -43,12 +47,14 @@ WORKDIR /app/build/
 > 容器启动命令以及参数, docker run 最后指定的命令即是此， 由此可以通过其覆盖
 
 ~~~dockerfile
-CMD ["./app", "param1", "param2"]
+CMD ["executable", "param1", "param2"...]
 ~~~
 
 #### ENTRYPOINT
 
 > 容器入口点，指定容器启动以及参数(可通过--entrypoint覆盖)，如果设置了该指令，那么CMD的指令即会作为ENTRYPOINT的参数
+>
+> 一般认为ENTRYPOINT是主要命令
 
 ~~~dockerfile
 ENTRYPOINT ["./app", "param1", "param2"]
@@ -97,3 +103,12 @@ COPY --from=Builder /app/build/app /app/release/
 EXPOSE 8999
 ENTRYPOINT ["./app"]
 ~~~
+
+#### 最佳实践
+
+- [x] .dockerignore
+- [ ] 可读性、注释、分行
+- [ ] 选择合适的基础镜像，避免安装不需要的包
+- [ ] 多阶段构建，减少容器体积
+- [ ] 一个容器允许一个进程
+- [ ] 镜像层数尽量少
