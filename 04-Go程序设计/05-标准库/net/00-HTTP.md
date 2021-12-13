@@ -6,7 +6,7 @@
 
 > HTTP Server
 
-##### 流程图
+##### 核心流程图
 
 ![HTTP](images/HTTP.svg)
 
