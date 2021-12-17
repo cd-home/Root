@@ -2,11 +2,6 @@
 
 ### Git协作规范
 
-#### 目标
-
-- [x] 多人协作
-- [x] 版本控制
-
 #### 分支
 
 |  分支   |     名称     | 描述                             | 可访问 | 权限 |
@@ -21,7 +16,7 @@
 
 1. master分支
     * 存储正式发布的系统，`master` 分支要求随时处于可部署状态 
-    * `master ` 分支只能通过与其他分支合并来更新内容，禁止直接在 `master` 分支进行修改
+    * **`master ` 分支只能通过与其他分支合并来更新内容，禁止直接在 `master` 分支进行修改**
 2. develop
     * 汇总开发者完成的工作成果，`develop` 分支上的产品可以是缺失功能模块的半成品，但是已有的功能模块不能是半成品
     * `develop` 分支只能通过与其他分支合并来更新内容，禁止直接在 `develop` 分支进行修改
@@ -31,15 +26,15 @@
 4. release 
     * 当 `develop` 分支上的项目准备发布时，从 `develop` 分支上创建一个新的 `release` 分支，新建的 `release` 分支只能进行质量测试、bug 修复、文档生成等面向发布的任务，不能再添加功能
     * 这一系列发布任务完成后，需要将 `release` 分支合并到 `master` 分支上，并根据版本号为 `master` 分支添加 `tag`，然后将 `release` 分支创建以来的修改合并回 `develop` 分支，最后删除 `release` 分支
-5. hotfix 
+5. hotfix(bug) 
     * 当 `master` 分支中的产品出现需要立即修复的 bug 时，从 `master` 分支上创建一个新的 `hotfix` 分支，并在 `hotfix` 分支上进行 BUG 修复
     * 修复完成后，需要将 `hotfix` 分支合并到 `master` 分支和 `develop` 分支，并为 `master` 分支添加新的版本号 `tag`，最后删除 `hotfix` 分支
+6. issue
+    * 某些非紧急问题
 
 #### Commit Message
 
-> 提交信息规范
->
-> 提交信息应该描述“做了什么”和“这么做的原因”，必要时还可以加上“造成的影响”
+> 提交信息应该描述「做了什么」和「这么做的原因」，必要时还可以加上「造成的影响」
 >
 
 **日志**
@@ -83,113 +78,112 @@ type 用于说明提交的类型，共有 8 个候选值
 
 ##### 配置
 
-- [x] Gitlab Account
-- [x] SSH 本地生成以及Gitlab配置
+- [x] gitlab (或其他服务器) Account
+- [x] SSH 本地生成以及$ gitlab配置
 
 ##### 正常开发
 
 1. 获取源代码
 
 ~~~bash
-git clone examplepath.git
+$ git clone examplepath.git
 ~~~
 
 2. 配置提交者信息
 
 ~~~bash
-git config --local user.name "GodYao"
-git config --local user.email "li@gmail.com"
+$ git config --local user.name "GodYao"
+$ git config --local user.email "li@gmail.com"
 ~~~
 
 3. 查看分支情况
 
 ~~~bash
 # 查看本地分支
-git branch	
+$ git branch	
 
 # 查看远程分支
-git branch -a 			
+$ git branch -a 			
 ~~~
 
-2.  新建本地分支
+2.  新建本地分支(检测并且追踪远程分支)
 
 ~~~bash
-# 新建分支
-git branch dev
+# 远程已经存在dev，就会新建本地dev，并且追踪远程dev，通常采用此方法
+$ git branch dev
 
 # 新建并且切换
-git checkout -b dev 
-
-# 远程已经存在dev，就会新建本地dev，并且追踪远程dev，通常采用此方法
-git checkout dev		
+$ git checkout -b dev 	
 ~~~
 
 3.  切换分支
 
 ~~~bash
-git checkout dev 
+$ git checkout dev 
 ~~~
 
 4.  合并分支
 
 ~~~bash
 # 通常情况下，是没有权限合并master分支的，只能进行CR后合并dev分支
-git checkout dev	
+$ git checkout dev	
 
 # 合并feature to dev本地分支
-git merge feature		
+$ git merge feature		
 ~~~
 
 6.  删除分支
 
 ~~~bash
 # 删除本地分支
-git branch -d dev
+$ git branch -d dev
 
 # 强行删除没有合并的分支
-git branch -D feature 	
+$ git branch -D feature 	
 
 # 删除远程分支
-git push origin --delete serverfix  
+$ git push origin --delete serverfix  
 ~~~
 
 7. 推送到远程分支
 
 ~~~bash
-git push origin <本地分支>:<远程分支>
+$ git push origin <本地分支>:<远程分支>
 ~~~
 
 8. 查看分支
 
 ~~~bash
-git log
-git log --graph
-git log --graph --pretty=oneline --abbrev-commit
+$ git log
+$ git log --graph
+$ git log --graph --pretty=oneline --abbrev-commit
 ~~~
 
 9. 更新
 
 
 ~~~bash
-git pull 
+# 默认拉去当前分支，并且合并
+$ git pull 
 ~~~
 
 10. 临时任务
 
 ~~~bash
 # 当正在编写代码时，突然需要解决一个BUG，此时又不想提交代码，那么可以将工作区暂存
-git stash
-git checkout -b bug
+$ git stash
+$ git checkout -b hotgix
 
 # 修复完成bug，然后提交，切换到master然后合并到bug，然后需要回到暂存的工作区
-git stash list
+$ git stash list
 
 # 恢复 方式一
-git stash apply  # stash内容并不删除
-git stash drop	 # 需要手动删除
+$ git stash apply  
+# stash内容并不删除 需要手动删除
+$ git stash drop	 
 
 # 方式二
-git stash pop
+$ git stash pop
 ~~~
 
 ##### 解决冲突
@@ -200,7 +194,7 @@ git stash pop
 
 
 ~~~bash
-git status      # 查看冲突
+$ git status  
 ~~~
 
 2. 解决: 可以将提示的部分删除，然后再次提交
@@ -209,22 +203,22 @@ git status      # 查看冲突
 
 **提交暂存区出错**
 
-1.  改乱了工作区某个文件的内容，想直接丢弃工作区的修改时
+1.  改乱了工作区某个文件的内容，想直接丢弃工作区的修改时「危险操作，丢失修改」
 
 ~~~bash
-git checkout -- [file]
+$ git checkout -- [file]	
 ~~~
 
 2.  改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改
 
 ~~~bash
-git reset HEAD file
+$ git reset HEAD file
 ~~~
 
 3.  已经提交了不合适的修改到版本库时，想要撤销本次提交
 
 ~~~bash
-git reset –hard 版本号
+$ git reset –hard "版本号"
 ~~~
 
 **提交本地仓库出错**
@@ -232,42 +226,42 @@ git reset –hard 版本号
 1.  提交信息出错
 
 ~~~bash
-git commit --amend -m "新提交的信息"
+$ git commit --amend -m "新提交的信息"
 ~~~
 
 2.  漏提交
 
 ~~~bash
 # missed-file 为遗漏提交文件
-git add missed-file 	
+$ git add missed-file 	
 
 # 表示提交消息不会更改，在 git 上仅为一次提交
-git commit --amend --no-edit  
+$ git commit --amend --no-edit  
 ~~~
 
 3. reset
 
 ~~~bash
 # 修改版本库，保留暂存区，保留工作区
-git reset --soft HEAD~1
+$ git reset --soft HEAD~1
 
 # 修改版本库，修改暂存区，修改工作区
-git reset --hard HEAD~1
+$ git reset --hard HEAD~1
 
-# 回退到特定的版本，可以通过git log查看提交历史，以便确定要回退到哪个版本
-git reset --hard commit_id 
+# 回退到特定的版本，可以通过 git log查看提交历史，以便确定要回退到哪个版本
+$ git reset --hard commit_id 
 ~~~
 
-4. git revert
+4. $ git revert
 
 ~~~bash
 # git revert 是用一次新的commit来回滚之前的commit，git reset 是直接删除指定的commit
 # 撤销前一次 commit
-git revert HEAD	 	
+$ git revert HEAD	 	
 
 # 撤销前前一次 commit
-git revert HEAD^ 
+$ git revert HEAD^ 
 
 # 撤销制定版本
-git revert commit_id	
+$ git revert commit_id	
 ~~~
