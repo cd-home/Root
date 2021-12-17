@@ -19,8 +19,8 @@ $ whereis [command]
 ~~~bash
 $ mkdir testdir
 $ mkdir -p testPdir/testCdir
-
-$ find ./ | wc -l. # 查看当前目录下文件个数
+# 查看当前目录下文件个数
+$ find ./ | wc -l. 
 
 $ rm file
 $ rm -rf noEmptyDir
@@ -28,10 +28,9 @@ $ rm *log
 
 $ mv file/Dir toPath
 
+# 说明: -r 一般是递归、-f是强制
 $ cp -r sourceDir destDir
 ~~~
-
-说明: -r 一般是递归、-f是强制
 
 2. 切换
 
@@ -39,7 +38,7 @@ $ cp -r sourceDir destDir
 $ cd path
 $ cd -
 $ cd or cd ~
-$ cd ..  # 上级目录
+$ cd ..  	  # 上级目录
 $ pwd
 ~~~
 
@@ -50,7 +49,7 @@ $ ls
 $ ls -l.      # 权限
 $ ls -rlt     # 按照时间排序
 $ ls | cat -n # 添加行号
-$ ls -a		# 隐藏文件
+$ ls -a		  # 隐藏文件
 $ ls -lh      # 文件详细大小等 
 ~~~
 
@@ -128,7 +127,7 @@ $ find . ! -name "*.pdf"
 $ ps -ef
 $ top
 $ lsof -i:3306
-$ kill pid # kill -9 pid
+$ kill pid 	   # kill -9 pid
 $ pmap pid
 ~~~
 
@@ -163,3 +162,4 @@ $ size a.out
 ~~~
 
 #### 性能优化
+
