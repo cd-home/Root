@@ -113,10 +113,12 @@ $ docker run [options] <image-name>:tag [向启动容器中传入的命令]
 |      -d      |   --detach=false    | 创建一个守护式容器在后台运行 |              |      |
 |      -p      |    --publish=[]     |      端口映射, 可以多个      | -p 8080:8080 |      |
 |      -P      | --publish-all=false |           暴露端口           |              |      |
-|      -e      |      --env=[]       |      为容器设置环境变量      |              |      |
+|      -e      |        --env        |      为容器设置环境变量      |     k=v      |      |
 |     --rm     |     --rm=false      |     退出删除, 一次性容器     |              |      |
 | --entrypoint |   --entrypoint=""   |        覆盖容器入口点        |              |      |
-|  --env-file  |    --env-file=[]    |         环境变量文件         |              |      |
+|  --env-file  |     --env-file      |         环境变量文件         |              |      |
+
+注意：env-file使用key=value解析，不能使用引号
 
 ##### 进入容器
 

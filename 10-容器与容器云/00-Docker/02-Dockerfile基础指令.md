@@ -30,23 +30,65 @@ FROM alpine
 WORKDIR /app/build/
 ~~~
 
+#### ENV
+
+> 设置环境变量，容器运行时可用
+
+~~~dockerfile
+ENV Key Value
+# 以下方式可设置多个
+ENV Key=Value Key1=Value1
+~~~
+
+#### AGR
+
+> 构建时变量(会有FROM作用域), 第一种形式需要在build的时候传入
+
+~~~dockerfile
+ARG Key
+# 以下方式可设置多个
+ARG Key=Value Key1=Value1
+~~~
+
+#### EXPOSE
+
+> 暴露端口, 只是一个申明
+
+~~~dockerfile
+EXPOSE 80
+~~~
+
 #### RUN
 
 > 执行Shell命令，注意每一个RUN都会建立镜像层，所以RUN命令尽量写在一起，减少构建的层
+
+~~~dockerfile
+# 通常使用第一种形式，可以复合 && 执行多条 \ 可换行
+RUN command			
+RUN ['executable', 'param1', 'param1']
+~~~
 
 #### COPY
 
 > 构建上下文原因，原文件命令使用的是相对路径(基于上下文)
 
+~~~dockerfile
+COPY . .
+# 多阶段构建使用，参考下文
+COPY --from=Builder /app/build/app /app/release/
+~~~
+
 #### ADD
 
-> 基本作用和COPY一致，但是多了解压功能，但是不推荐使用ADD
+> 基本作用和COPY一致，但是多了URL下载功能、解压功能，下载的在后面不能删除，基本上不推荐使用ADD
 
 #### CMD
 
-> 容器启动命令以及参数, docker run 最后指定的命令即是此， 由此可以通过其覆盖
+> 容器启动命令以及参数, docker run 最后指定的命令即是此， 并且run可以覆盖CMD
 
 ~~~dockerfile
+CMD command param1 param2
+# 推荐第二种形式
 CMD ["executable", "param1", "param2"...]
 ~~~
 
@@ -58,23 +100,21 @@ CMD ["executable", "param1", "param2"...]
 
 ~~~dockerfile
 ENTRYPOINT ["./app", "param1", "param2"]
+# 同时存在的情况下
+ENTRYPOINT CMD
 ~~~
 
-#### ENV
+docker-entrypoint.sh
 
-> 设置环境变量
+> 
 
-~~~dockerfile
-ENV Key Value
-ENV Key=Value
-~~~
+#### VOLUME
 
-#### EXPOSE
-
-> 暴露端口, 只是一个申明
+> 数据卷挂载, 避免容器存储层发生写操作
 
 ~~~dockerfile
-EXPOSE 80
+VOLUME /data /data
+VOLUME ['/data', '/data']
 ~~~
 
 #### 多阶段构建
