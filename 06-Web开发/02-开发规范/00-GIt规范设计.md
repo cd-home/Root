@@ -234,7 +234,6 @@ $ git commit --amend -m "新提交的信息"
 ~~~bash
 # missed-file 为遗漏提交文件
 $ git add missed-file 	
-
 # 表示提交消息不会更改，在 git 上仅为一次提交
 $ git commit --amend --no-edit  
 ~~~
