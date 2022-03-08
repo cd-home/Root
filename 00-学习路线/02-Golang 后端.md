@@ -5,70 +5,61 @@
 #### 语言基础
 
 - [x] 环境构建
-    - [x] 命令行
-    - [x] Go Module
-    - [x] 多版本管理
 - [x] 基础语法
-    - [x] 包、注释
-    - [x] 数据类型
-    - [x] 变量、常量
-    - [x] 数组、切片
-    - [x] Map
-    - [x] 运算符
-    - [x] 流程控制
-    - [x] 函数
-    - [x] 指针
-    - [x] 结构体
-    - [x] 方法
-    - [x] 接口
-    - [x] 反射
-    - [x] defer
-    - [x] error
-    - [x] panic、Recover
-    - [ ] 范性
-    - [ ] Goroutine
-    - [ ] channle
-    - [ ] select
+- [x] 数据结构
+- [x] 编程范式
+- [x] 依赖管理
 
 #### 标准库
 
-- [ ] strings
-- [ ] strconv
+- [x] flag 【命令行参数解析】
+- [ ] bytes
+- [ ] bufio
+- [ ] database【数据库】
 - [ ] io
-- [ ] os
-- [ ] net
-- [ ] time
-- [ ] errors
+- [ ] net/http
+- [ ] os【系统接口】
+- [ ] encoding/json
 - [ ] reflect
-- [ ] sync
-- [ ] path
+- [ ] strconv
+- [ ] strings
+- [ ] sync【同步】
+- [ ] context【状态传播、超时控制取消】
+- [ ] testing【测试】
 
-#### Web
+#### Web编程理论
 
-- [ ] TCP
-- [ ] HTTP、HTTPS
-- [ ] Cookie、Session、JWT、oAuth2
-- [ ] RESTAPI
-- [ ] ORM、Gin
-- [ ] Zap
-- [ ] Viper
-- [ ] Testify
-- [ ] GoMock
-- [ ] Jaeper
-- [ ] gRPC
+- [x] TCP
+- [x] HTTP、HTTPS
+- [x] Cookie、Session、JWT、oAuth2
+- [x] RESTAPI
 
-#### 组件
+#### 第三方库
 
-- [ ] **MySQL**
-- [ ] **Redis**
+- [ ] Gin【路由框架】
+- [ ] Zap【日志】
+- [ ] Viper【配置】
+- [ ] Testify【测试】
+- [ ] GoMock 【测试】
+- [ ] Jaeper【链路追踪】
+- [ ] RPC
+- [ ] ORM
+- [ ] SQLX
+- [ ] FX【依赖注入】
+
+#### 后端组件
+
+- [x] **MySQL**
+- [x] **Redis**
 - [ ] traefik
 - [x] **Docker**
-- [ ] **RPC【gPRC】**
+- [x] **RPC【gPRC】**
 - [ ] Promethous
+- [x] ELK
 
 #### 工具链
 
-- [x] dlv 调试工具
+- [x] dlv调试工具
 - [x] 性能监控
 
 #### 最佳实践
