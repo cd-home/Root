@@ -259,3 +259,9 @@ Don’t design with interfaces, discover them
 
 不要用接口进行设计，要发现它们
 
+#### 5.3 Composition 组合
+
+The best way to take advantage of embedding is through the **compositional design pattern**. The idea is to compose larger types from smaller types and focus on the composition of behavior.
+
+利用嵌入的最佳方式是通过**组合设计模式**。 这个想法是从较小的类型组合更大的类型，并专注于行为的组合。
+
