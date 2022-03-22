@@ -219,5 +219,43 @@ Guidelines around declaring types: 关于声明类型的指南
 
 7. Question types whose sole purpose is to share common state
 
+#### 5.2 Don’t Design With Interfaces 不要使用接口进行设计
 
+Unfortunately, too many developers attempt to solve problems in the abstract first. They focus on interfaces right away and this leads to interface pollution. As a developer, I exist in one of two modes: a **programmer** and then an **engineer**.
+
+不幸的是，太多的开发人员试图先抽象地解决问题。 他们立即关注接口，这会导致接口污染。 作为开发人员，我存在两种模式之一：**程序员**，然后是**工程师**。
+
+When I am programming, I am focused on getting a piece of code to work. Trying to solve the problem and break down walls. Prove that my initial ideas work. That is all I care about. This programming must be done in the concrete and is never production ready.
+
+**当我编程时，我专注于让一段代码工作。 试图解决问题。 证明我最初的想法是可行的。 这就是我所关心的。 这种编程必须具体完成，并且永远不会为生产做好准备**。
+
+Once I have a prototype of code that solves the problem, then I need to switch to engineering mode. I need to focus on how to write the code at a **micro-level for my data semantics**, **macro-level for mental models**, readability, and maintainability. I need to think about errors and fail states. So much more.
+
+一旦我有了解决问题的代码原型，我就需要切换到工程模式。 我需要专注于如何在**微观层面**为我的数据语义编写代码，在**宏观层面**为心智模型、可读性和可维护性编写代码。 我需要考虑错误和失败状态。 等。
+
+This work is done in a cycle of **refactoring**. Refactoring for readability, efficiency, abstraction, and for testability. Abstracting is one of a few refactors that need to be performed. This works best when I start with a piece of **concrete** code and then DISCOVER the interfaces that are needed. Don’t apply abstractions unless they are absolutely necessary.
+
+这项工作是在一个**重构**周期中完成的。 为可读性、效率、抽象和可测试性进行重构。 抽象是需要执行的少数重构之一。 当我从一段**具体**代码开始，然后发现所需的接口时，这种方法效果最好。 除非绝对必要，否则不要应用抽象。
+
+Every problem I solve with code is a data problem requiring me to write data transformations. If I don’t understand the data, I don’t understand the problem. If I don’t understand the problem, I can’t write any code. **Starting with a concrete solution that is based on the concrete data structures is critical.**
+
+我用代码解决的每个问题都是需要我编写数据转换。 如果我不了解数据，我就不了解问题所在。 如果我不理解问题，我就无法编写任何代码。 从基于具体数据结构的具体解决方案开始至关重要。
+
+As Rob Pike said,
+
+"Data dominates. If you've chosen the right data structures and organized things well, the algorithms will almost always be self-evident"
+
+数据占主导地位。如果你选择了正确的数据结构，并且组织得很好，那么算法几乎总是不言而喻的
+
+When is abstraction necessary? When I see a place in the code where the data could change and I want to **minimize the cascading code effects** that would result. I might use abstraction to help make code testable but I should try to avoid this if possible. The best testable functions are functions that take raw data in and send raw data out. It shouldn’t matter where the data is coming from or going.
+
+什么时候需要抽象？当我看到代码中某个地方的数据可能会发生变化，我想尽量减少可能产生的级联代码效应。我可能会使用抽象来帮助代码可测试，但如果可能的话，我应该尽量避免这种情况。最好的可测试函数是接收原始数据并发送原始数据的函数。数据从哪里来或去哪里都不重要。
+
+In the end, start with a concrete solution to every problem. Even if the bulk of that is just programming. Then discover the interfaces that are absolutely required for the code today.
+
+最后，从每个问题的具体解决方案开始。 即使其中大部分只是编程。 然后发现今天的代码绝对需要的接口。
+
+Don’t design with interfaces, discover them
+
+不要用接口进行设计，要发现它们
 
