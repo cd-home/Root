@@ -42,10 +42,11 @@
 - [ ] Testify【测试】
 - [ ] GoMock 【测试】
 - [ ] Jaeper【链路追踪】
-- [ ] RPC
-- [ ] ORM
-- [ ] SQLX
+- [ ] gRPC【RPC框架】
+- [ ] GORM【ORM框架】
+- [ ] SQLX【SQL】
 - [ ] FX【依赖注入】
+- [ ] machinery【异步任务队列】
 
 #### 后端组件
 
@@ -53,7 +54,6 @@
 - [x] **Redis**
 - [ ] traefik
 - [x] **Docker**
-- [x] **RPC【gPRC】**
 - [ ] Promethous
 - [x] ELK
 
@@ -70,3 +70,4 @@
 - [ ] Go 语言并发之道
 - [ ] Go 学习笔记
 - [x] **Go 并发编程实战(极客时间)**
+- [ ] The Ultimate Go Notebook
