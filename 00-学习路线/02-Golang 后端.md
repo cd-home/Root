@@ -47,6 +47,7 @@
 - [ ] SQLX【SQL】
 - [ ] FX【依赖注入】
 - [ ] machinery【异步任务队列】
+- [ ] resty【HTTP请求库】
 
 #### 后端组件
 

@@ -19,4 +19,5 @@
 |  权限库  |  Casbin   |        Rab模式         |   了解    |  ✅   |
 |  配置库  |   Viper   |     FIle、Env模式      |   熟练    |  ✅   |
 |   缓存   |   Redis   |      基本数据结构      |   熟练    |  ✅   |
+|   文档   |    API    |        Swagger         |   了解    |  ✅   |
 
