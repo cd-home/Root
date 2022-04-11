@@ -9,7 +9,8 @@
 | 编程语言 |  Golang   |       HTTP标准库       |   熟练    |  ✅   |
 | 编程语言 |  Python   |        基础语法        |   熟练    |  ✅   |
 |  数据库  |   MySQL   |        基础SQL         |   熟练    |  ✅   |
-|  容器云  |  Docker   |     基础Docker命令     |   熟练    |  ✅   |
+|   容器   |  Docker   |     基础Docker命令     |   熟练    |  ✅   |
+|   容器   |   Docer   |     Dockerfil命令      |   熟练    |  ✅   |
 | 版本工具 |    Git    |     Git基础、分支      |   熟练    |  ✅   |
 |  数据库  |   MySQL   |          事务          |   了解    |  ✅   |
 |  数据库  |   MySQL   |           锁           |   了解    |  ✅   |
