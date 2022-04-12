@@ -2,34 +2,25 @@
 
 ### git
 
+> 学习资源 https://git-scm.com/book/en/v2 基本安装见文档即可
+
 #### 前言
 
 >   分布式版本控制 Distributed Version Control System
 
 1. 本地完全克隆代码仓库
-2. $ git 保存的不是文件的变化或者差异，而是一系列不同时刻的 **快照**
+2. git 保存的不是文件的变化或者差异，而是一系列不同时刻的 **快照**
 3. 几乎所有操作都在本地，只是最后提交到远程仓库
-4. $ git保证数据完整性[sha-1散列 基于目录或文件内容]
+4. git保证数据完整性[sha-1散列 基于目录或文件内容]
 
 #### 概念
 
-1.  工作区【已修改】
-2.  暂存区【已暂存，保留下次要提交的文件信息】
+1.  工作区    【已修改】
+2.  暂存区    【已暂存，保留下次要提交的文件信息】
 3.  本地仓库【已提交，永久存储到$ git目录】
 4.  远程仓库
 
-#### 图解
-
 <img src="./images/git.svg" alt="git流程"  />
-
-#### 安装配置
-
-~~~bash
-$ sudo apt install $ git-all
-$ git config --global [--local] user.name "God Yao"      		
-$ git config --global [--local] user.email "mike@example.com"	
-$ git config --list
-~~~
 
 #### 基础命令
 
@@ -44,7 +35,7 @@ $ git init
 $ git clone xx.$ git [localProjectName]	
 ~~~
 
-2.  查看文件状态
+2.  工作区状态
 
 ~~~bash
 $ git status  
@@ -85,19 +76,19 @@ $ git diff --staged
 
 ~~~bash
 $ git log [-n]	   	   # 显示n条	[--since, --after, --author, --grep]
-$ git log --stat	   # 显示提交的简略信息
-$ git log -p    	   # 显示提交差异
-$ git log -p -2 	   # 显示提交差异，两次提交
+$ git log --stat	     # 显示提交的简略信息
+$ git log -p    	     # 显示提交差异
+$ git log -p -2 	     # 显示提交差异，两次提交
 $ git log --pretty=oneline
 $ git log --pretty=format:"%h %an %cn %ae %s" --graph 
-$ git reflog    	   # 查看所有的提交记录
+$ git reflog    	     # 查看所有的提交记录
 ~~~
 
 7. 暂存区回到工作区
 
 ~~~bash
-$ git reset head [file]		# 回到工作区，保留修改
-$ git checkout -- [file] 	# 回到工作区，不保留修改，会退到最后一次提交【危险命令】
+$ git reset head  [file]		# 回到工作区，保留修改
+$ git checkout -- [file] 	  # 回到工作区，不保留修改，会退到最后一次提交【危险命令】
 ~~~
 
 8. 本地仓库版本回退
@@ -112,9 +103,9 @@ $ git reset --hard HEAD~10
 9. 忽略文件.$ gitignore
 
 ~~~bash
-*.a 			# 忽略所有的 .a 文件
-!lib.a 			# 但跟踪所有的 lib.a，即便你在前面忽略了 .a 文件
-/TODO   		# 只忽略当前目录下的 TODO 文件，而不忽略 subdir/TODO
+*.a 					# 忽略所有的 .a 文件
+!lib.a 				# 但跟踪所有的 lib.a，即便你在前面忽略了 .a 文件
+/TODO   			# 只忽略当前目录下的 TODO 文件，而不忽略 subdir/TODO
 doc/**/*.pdf 	# 忽略 doc/ 目录及其所有子目录下的 .pdf 文件
 ~~~
 
@@ -145,34 +136,33 @@ $ git push origin master
 $ git tag -l [--list]
 $ git tag -a v1.0.0 -m "tag message"
 $ git show v1.0.0
-$ git tag -a v0.0.8 [commit-hash] 	# 对过去的提交打标签
-$ git push origin v1.0.0			# 必须显式的推送标签 --tags
-$ git tag -d <tagname>				# 删除标签
-$ git push origin --delete <tagname>
+$ git tag -a v0.0.8 [commit-hash] 		# 对过去的提交打标签
+$ git push origin v1.0.0							# 必须显式的推送标签 --tags
+$ git tag -d <tagname>								# 删除标签
+$ git push origin --delete <tagname> 	# 删除远程标签
 ~~~
 
 #### 分支
 
-> $ git 的分支，其实本质上仅仅是指向提交对象的可变指针
+> git 的分支，其实本质上仅仅是指向提交对象的可变指针(特殊的HEAD 指针，指向当前分支)
 >
-> 特殊的HEAD 指针，指向当前分支
 
 基本操作
 
 ~~~bash
-$ git branch 				# 本地分支
+$ git branch 							# 本地分支
 
-$ git branch -v				# 分支以及最后一次提交
-$ git branch -v				# 所有的追踪分支
+$ git branch -v						# 分支以及最后一次提交
+$ git branch -v						# 所有的追踪分支
 
-$ git branch -a 			# 远程分支
-$ git branch testing		# 创建
+$ git branch -a 					# 远程分支
+$ git branch testing			# 创建
 $ git branch -d hotfix		# 删除分支
 
-$ git checkout hotfix		# 创建分支【如果有远程，那么会跟踪远程分支】
+$ git checkout hotfix			# 创建分支【如果有远程，那么会跟踪远程分支】
 $ git checkout -b hotfix	# 创建并且切换
 
-$ git merge dev 			# 合并分支
+$ git merge dev 					# 合并分支
 
 # 查看分支情况
 $ git log --oneline --decorate --graph --all	
@@ -228,4 +218,13 @@ $ git checkout iss-1
 $ git rebase master
 $ git checkout master
 $ git merge iss-1
+~~~
+
+#### 配置
+
+~~~bash
+$ sudo apt install git-all
+$ git config --global [--local] user.name "God Yao"      		
+$ git config --global [--local] user.email "mike@example.com"	
+$ git config --list
 ~~~
