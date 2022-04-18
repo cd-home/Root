@@ -8,8 +8,8 @@
 
 >   分布式版本控制 Distributed Version Control System
 
-1. 本地完全克隆代码仓库
-2. git 保存的不是文件的变化或者差异，而是一系列不同时刻的 **快照**
+1. 本地完全克隆代码仓库(本地拥有完整的代码)
+2. git 保存的不是文件的变化或者差异，而是一系列不同时刻(commit)的 **快照**
 3. 几乎所有操作都在本地，只是最后提交到远程仓库
 4. git保证数据完整性[sha-1散列 基于目录或文件内容]
 
@@ -40,7 +40,7 @@ $ git clone xx.$ git [localProjectName]
 ~~~bash
 $ git status  
 
-# 1. Untracked  2. new file  3. modified
+# status 1. Untracked  2. new file  3. modified
 $ git status -s 		
 ~~~
 
@@ -75,7 +75,7 @@ $ git diff --staged
 
 
 ~~~bash
-$ git log [-n]	   	   # 显示n条	[--since, --after, --author, --grep]
+$ git log [-n]	   	   	 # 显示n条	[--since, --after, --author, --grep]
 $ git log --stat	     # 显示提交的简略信息
 $ git log -p    	     # 显示提交差异
 $ git log -p -2 	     # 显示提交差异，两次提交
@@ -87,7 +87,7 @@ $ git reflog    	     # 查看所有的提交记录
 7. 暂存区回到工作区
 
 ~~~bash
-$ git reset head  [file]		# 回到工作区，保留修改
+$ git reset head  [file]	  # 回到工作区，保留修改
 $ git checkout -- [file] 	  # 回到工作区，不保留修改，会退到最后一次提交【危险命令】
 ~~~
 
@@ -100,30 +100,33 @@ $ git reset --hard HEAD~1
 $ git reset --hard HEAD~10
 ~~~
 
-9. 忽略文件.$ gitignore
+9. 忽略文件.gitignore
 
 ~~~bash
-*.a 					# 忽略所有的 .a 文件
+*.a 				# 忽略所有的 .a 文件
 !lib.a 				# 但跟踪所有的 lib.a，即便你在前面忽略了 .a 文件
 /TODO   			# 只忽略当前目录下的 TODO 文件，而不忽略 subdir/TODO
-doc/**/*.pdf 	# 忽略 doc/ 目录及其所有子目录下的 .pdf 文件
+doc/**/*.pdf 		# 忽略 doc/ 目录及其所有子目录下的 .pdf 文件
 ~~~
 
-10. 远程仓库
+10. 远程仓库（此时默认一个分支master）
 
 ~~~bash
 $ git remote -v
 # 查看远程分支的详细信息
 $ git remote show origin 
-$ git remote add [仓库名字] xx.$ git
+$ git remote add [仓库名字] xx.git 
 
+# 重命名远程仓库
 $ git remote rename [仓库原名] [仓库新名]
+# 移除远程仓库
 $ git remote remove|[rm] [仓库名]
 
- # 不会自动合并
-$ git fetch [仓库名字]  
+# 如果使用 `clone` 命令克隆了一个仓库，命令会自动将其添加为远程仓库并默认以 “origin” 为简写
+# 不会自动合并
+$ git fetch origin  
 # 自动设置本地 master 分支跟踪克隆的远程仓库的 master 分支（或其它名字的默认分支）
-$ git clone xx.$ git 
+$ git clone xx.git 
 # 从最初克隆的服务器上抓取数据并自动尝试合并到当前所在的分支
 $ git pull 
 # 推送，推送之前需要pull，因为别人可能已经推送过 
@@ -137,8 +140,8 @@ $ git tag -l [--list]
 $ git tag -a v1.0.0 -m "tag message"
 $ git show v1.0.0
 $ git tag -a v0.0.8 [commit-hash] 		# 对过去的提交打标签
-$ git push origin v1.0.0							# 必须显式的推送标签 --tags
-$ git tag -d <tagname>								# 删除标签
+$ git push origin v1.0.0			    # 必须显式的推送标签 --tags
+$ git tag -d <tagname>				    # 删除标签
 $ git push origin --delete <tagname> 	# 删除远程标签
 ~~~
 
@@ -150,17 +153,17 @@ $ git push origin --delete <tagname> 	# 删除远程标签
 基本操作
 
 ~~~bash
-$ git branch 							# 本地分支
+$ git branch 					    # 本地分支
 
 $ git branch -v						# 分支以及最后一次提交
 $ git branch -v						# 所有的追踪分支
 
 $ git branch -a 					# 远程分支
-$ git branch testing			# 创建
-$ git branch -d hotfix		# 删除分支
+$ git branch testing				# 创建
+$ git branch -d hotfix				# 删除分支
 
-$ git checkout hotfix			# 创建分支【如果有远程，那么会跟踪远程分支】
-$ git checkout -b hotfix	# 创建并且切换
+$ git checkout hotfix				# 创建分支【如果有远程，那么会跟踪远程分支】
+$ git checkout -b hotfix			# 创建并且切换
 
 $ git merge dev 					# 合并分支
 
