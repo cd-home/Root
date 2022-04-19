@@ -4,37 +4,49 @@
 
 #### 分支
 
-|  分支   |     名称     | 描述                             | 可访问 | 权限 |
-| :-----: | :----------: | -------------------------------- | :----: | :--: |
-| master  |    主分支    | 最稳定的发布分支，经过严格的测试 |   是   |  高  |
-| release |  预上线分支  | 预发布、仿真环境测试             |   是   |  高  |
-| hotfix  | 紧急修复分支 |                                  |   否   |      |
-| develop |   测试分支   | 次稳定的开发分支, 线上测试       |   是   |      |
-| feature | 需求开发分支 |                                  |   否   |      |
+|  分支   |     名称     | 描述                             | 环境可访问 | 权限 |
+| :-----: | :----------: | -------------------------------- | :--------: | :--: |
+| master  |    主分支    | 最稳定的发布分支，经过严格的测试 |     是     |  高  |
+| release |  预上线分支  | 预发布、仿真环境测试             |     是     |  高  |
+| hotfix  | 紧急修复分支 |                                  |     否     |      |
+| develop |   测试分支   | 次稳定的开发分支, 线上测试       |     是     |      |
+| feature | 需求开发分支 |                                  |     否     |      |
 
 #### 分支说明
 
-1. master分支
-    * 存储正式发布的系统，`master` 分支要求随时处于可部署状态 
-    * **`master ` 分支只能通过与其他分支合并来更新内容，禁止直接在 `master` 分支进行修改**
-2. develop
-    * 汇总开发者完成的工作成果，`develop` 分支上的产品可以是缺失功能模块的半成品，但是已有的功能模块不能是半成品
-    * `develop` 分支只能通过与其他分支合并来更新内容，禁止直接在 `develop` 分支进行修改
-3. feature 
-    * 当要开发新功能时，从 master 分支创建一个新的 `feature` 分支，并在 `feature` 分支上进行开发. 
-    * 开发完成后，需要将该 `feature` 分支合并到 `develop` 分支，最后删除该 `feature` 分支
-4. release 
-    * 当 `develop` 分支上的项目准备发布时，从 `develop` 分支上创建一个新的 `release` 分支，新建的 `release` 分支只能进行质量测试、bug 修复、文档生成等面向发布的任务，不能再添加功能
-    * 这一系列发布任务完成后，需要将 `release` 分支合并到 `master` 分支上，并根据版本号为 `master` 分支添加 `tag`，然后将 `release` 分支创建以来的修改合并回 `develop` 分支，最后删除 `release` 分支
-5. hotfix(bug) 
-    * 当 `master` 分支中的产品出现需要立即修复的 bug 时，从 `master` 分支上创建一个新的 `hotfix` 分支，并在 `hotfix` 分支上进行 BUG 修复
-    * 修复完成后，需要将 `hotfix` 分支合并到 `master` 分支和 `develop` 分支，并为 `master` 分支添加新的版本号 `tag`，最后删除 `hotfix` 分支
-6. issue
-    * 某些非紧急问题
+##### master
+
+1. 存储正式发布的系统，`master` 分支要求随时处于可部署状态 
+2. **`master ` 分支只能通过与其他分支合并来更新内容，禁止直接在 `master` 分支进行修改**
+
+##### develop
+
+1. 汇总开发者完成的子任务，该分支上的产品可以是缺失功能模块的半成品，但是已有的功能模块不能是半成品
+2. `develop`该分支只能通过与其他分支合并来更新内容，禁止直接在 `develop` 分支进行修改
+
+##### feature 
+
+1. 当要开发新功能时，从 master 分支创建一个新的 `feature` 分支，并在 `feature` 分支上进行开发
+2. 开发完成后，需要将该 `feature` 分支合并到 `develop` 分支，最后删除该 `feature` 分支
+
+##### release 
+
+1. 当 `develop` 分支上的项目准备发布时，从 `develop` 分支上创建一个新的 `release` 分支，新建的 `release` 分支只能进行质量测试、bug 修复、文档生成等面向发布的任务，不能再添加功能
+2. 这一系列发布任务完成后，需要将 `release` 分支合并到 `master` 分支上，并根据版本号为 `master` 分支添加 `tag`，然后将 `release` 分支创建以来的修改合并回 `develop` 分支，最后删除 `release` 分支(保留现场亦可不删)
+
+##### hotfix(bug) 
+
+1. 当 `master` 分支中的产品出现需要立即修复的 bug 时，从 `master` 分支上创建一个新的 `hotfix` 分支，并在 `hotfix` 分支上进行 BUG 修复
+
+2. 修复完成后，需要将 `hotfix` 分支合并到 `master` 分支和 `develop` 分支，并为 `master` 分支添加新的版本号 `tag`，最后删除 `hotfix` 分支
+
+##### issue
+
+1. 某些非紧急问题
 
 #### Commit Message
 
-> 提交信息应该描述「做了什么」和「这么做的原因」，必要时还可以加上「造成的影响」
+> 提交信息应该描述「做了什么」和「这么做的原因」，必要时还可以加上「所属模块」「造成的影响」「关联影响」
 >
 
 **日志**
@@ -76,24 +88,24 @@ type 用于说明提交的类型，共有 8 个候选值
 
 #### 开发流程
 
-##### 配置
+##### 个人配置
 
 - [x] gitlab (或其他服务器) Account
-- [x] SSH 本地生成以及$ gitlab配置
+- [x] SSH 本地生成以及gitlab配置
 
 ##### 正常开发
 
 1. 获取源代码
 
 ~~~bash
-$ git clone examplepath.git
+$ git clone example.git
 ~~~
 
 2. 配置提交者信息
 
 ~~~bash
 $ git config --local user.name "GodYao"
-$ git config --local user.email "li@gmail.com"
+$ git config --local user.email "GodYao@gmail.com"
 ~~~
 
 3. 查看分支情况
@@ -106,14 +118,14 @@ $ git branch
 $ git branch -a 			
 ~~~
 
-2.  新建本地分支(检测并且追踪远程分支)
+2.  新建本地分支(检测并且追踪远程分支)，基于某个分支创建, 见上文各个分支作用
 
 ~~~bash
 # 远程已经存在dev，就会新建本地dev，并且追踪远程dev，通常采用此方法
-$ git branch dev
+$ git branch feature-xx
 
 # 新建并且切换
-$ git checkout -b dev 	
+$ git checkout -b feature-xx 	
 ~~~
 
 3.  切换分支
@@ -129,17 +141,17 @@ $ git checkout dev
 $ git checkout dev	
 
 # 合并feature to dev本地分支
-$ git merge feature		
+$ git merge feature-xx		
 ~~~
 
 6.  删除分支
 
 ~~~bash
 # 删除本地分支
-$ git branch -d dev
+$ git branch -d feature-xx	
 
 # 强行删除没有合并的分支
-$ git branch -D feature 	
+$ git branch -D feature-xx	 	
 
 # 删除远程分支
 $ git push origin --delete serverfix  
@@ -209,7 +221,7 @@ $ git status
 $ git checkout -- [file]	
 ~~~
 
-2.  改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改
+2.  改乱了工作区某个文件的内容，还添加到了暂存区时，回到工作区
 
 ~~~bash
 $ git reset HEAD file
@@ -238,7 +250,7 @@ $ git add missed-file
 $ git commit --amend --no-edit  
 ~~~
 
-3. reset
+3. 版本回退
 
 ~~~bash
 # 修改版本库，保留暂存区，保留工作区
@@ -251,7 +263,7 @@ $ git reset --hard HEAD~1
 $ git reset --hard commit_id 
 ~~~
 
-4. $ git revert
+4. 不覆盖回滚
 
 ~~~bash
 # git revert 是用一次新的commit来回滚之前的commit，git reset 是直接删除指定的commit

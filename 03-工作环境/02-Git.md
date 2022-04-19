@@ -226,7 +226,6 @@ $ git merge iss-1
 #### 配置
 
 ~~~bash
-$ sudo apt install git-all
 $ git config --global [--local] user.name "God Yao"      		
 $ git config --global [--local] user.email "mike@example.com"	
 $ git config --list
