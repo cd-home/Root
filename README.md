@@ -8,7 +8,7 @@
 | 编程语言 |  Python   |        基础语法        |   熟练    |  ✅   |
 |  数据库  |   MySQL   |        基础SQL         |   熟练    |  ✅   |
 |   容器   |  Docker   |     基础Docker命令     |   熟练    |  ✅   |
-|   容器   |   Docer   |     Dockerfil命令      |   熟练    |  ✅   |
+|   容器   |  Docker   |     Dockerfil命令      |   熟练    |  ✅   |
 | 版本工具 |    Git    |     Git基础、分支      |   熟练    |  ✅   |
 |  数据库  |   MySQL   |          事务          |   了解    |  ✅   |
 |  数据库  |   MySQL   |           锁           |   了解    |  ✅   |
@@ -19,5 +19,6 @@
 |  配置库  |   Viper   |     FIle、Env模式      |   熟练    |  ✅   |
 |   缓存   |   Redis   |      基本数据结构      |   熟练    |  ✅   |
 |   文档   |    API    |        Swagger         |   了解    |  ✅   |
+| 设计模式 | 行为模式  |        Strategy        |   了解    |  ✅   |
 
 心死为忙。
