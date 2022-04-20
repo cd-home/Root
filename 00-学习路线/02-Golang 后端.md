@@ -15,14 +15,14 @@
 - [x] flag 【命令行参数解析】
 - [ ] bytes
 - [ ] bufio
-- [ ] database【数据库】
+- [x] database【数据库】
 - [ ] io
-- [ ] net/http
+- [x] net/http【网络】
 - [ ] os【系统接口】
 - [ ] encoding/json
-- [ ] reflect
-- [ ] strconv
-- [ ] strings
+- [ ] reflect【反射】
+- [ ] strconv【数据类型转换】
+- [ ] strings【字符串操作】
 - [ ] sync【同步】
 - [ ] context【状态传播、超时控制取消】
 - [ ] testing【测试】
@@ -71,4 +71,5 @@
 - [ ] Go 语言并发之道
 - [ ] Go 学习笔记
 - [x] **Go 并发编程实战(极客时间)**
-- [ ] The Ultimate Go Notebook
+- [x] **The Ultimate Go Notebook**
+- [ ] Mastering Go
