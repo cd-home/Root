@@ -15,7 +15,7 @@
 | 业务框架 |  Gin、fx  | 路由、中间件、依赖注入 |   熟练    |  ✅   |
 |  工作流  | Linux cmd |    文件、目录、进程    |   了解    |  ✅   |
 |  日志库  |  Zap Log  |  基本使用、Option模式  |   熟练    |  ✅   |
-|  权限库  |  Casbin   |        Rab模式         |   了解    |  ✅   |
+|  权限库  |  Casbin   |        Rabc模式        |   了解    |  ✅   |
 |  配置库  |   Viper   |     FIle、Env模式      |   熟练    |  ✅   |
 |   缓存   |   Redis   |      基本数据结构      |   熟练    |  ✅   |
 |   文档   |    API    |        Swagger         |   了解    |  ✅   |
