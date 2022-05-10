@@ -522,6 +522,3 @@ $ strace -p <process-pid>
 $ objdump -d programmer
 $ size a.out
 ~~~
-
-#### 性能优化
-
