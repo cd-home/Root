@@ -48,6 +48,7 @@
 - [ ] FX【依赖注入】
 - [ ] machinery【异步任务队列】
 - [ ] resty【HTTP请求库】
+- [ ] Cabin【权限控制】
 
 #### 后端组件
 
@@ -55,8 +56,12 @@
 - [x] **Redis**
 - [ ] traefik
 - [x] **Docker**
-- [ ] Promethous
-- [x] ELK
+- [x] ElasticSearch
+
+#### 监控运维
+
+- [x] Promethous
+- [ ] Grafana
 
 #### 工具链
 
