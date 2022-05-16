@@ -65,11 +65,11 @@
 
 #### Web应用
 
-- [x] 浏览器、HTML、CSS、JSON
-- [x] TCP
-- [x] HTTP、HTTPS
-- [x] Cookie、Session、JWT、oAuth2
-- [x] RESTAPI
+- [ ] 浏览器、HTML、CSS、JSON
+- [ ] TCP
+- [ ] HTTP、HTTPS
+- [ ] Cookie、Session、JWT、oAuth2
+- [ ] RESTAPI
 
 #### 第三方库
 
@@ -88,14 +88,14 @@
 |   Gorm    |   ORM框架    |
 |   gRPC    |   RPC框架    |
 
-#### 组件
+#### 核心组件
 
 - [ ] MySQL
 - [ ] Redis
 - [ ] ElasticSearch
 - [ ] Kafka
 
-#### 设施
+#### 基础设施
 
 - [ ] Kubernetes
 - [ ] Docker
@@ -104,9 +104,8 @@
 
 #### 学习资源
 
-- [x] Go 程序设计语言
-- [ ] Go 语言并发之道
+- [ ] Go 程序设计语言
+- [ ] Go 语言并发之道(Go并发编程实战)
 - [ ] Go 学习笔记
-- [ ] Go 并发编程实战(极客时间)
-- [x] **The Ultimate Go Notebook**
+- [ ] **The Ultimate Go Notebook**
 - [ ] Mastering Go
