@@ -47,7 +47,7 @@ $ cd -
 $ cd or cd ~
 $ cd ./xxpath # 相对路径
 $ cd ..  	  # 上级目录
-$ pwd
+$ pwd		  # 当前目录路径
 ~~~
 
 3. 查看

@@ -216,7 +216,7 @@ else
     echo "a !< b"
 fi
 
-# <=
+# >=
 if [[ ${a} -ge ${b} ]]
 then
     echo "a >= b"
@@ -294,7 +294,6 @@ fi
 
 ~~~shell
 #!/bin/bash
-file="/Users/apple-liyao/Desktop/GodExample/shell/00.sh"
 if [[ -x ${file} ]]
 then
     echo "可执行"
