@@ -107,5 +107,7 @@
 - [ ] Go 程序设计语言
 - [ ] Go 语言并发之道(Go并发编程实战)
 - [ ] Go 学习笔记
-- [ ] **The Ultimate Go Notebook**
+- [x] **The Ultimate Go Notebook**
 - [ ] Mastering Go
+- [x] 深入剖析Kubernetes
+- [x] Go语言设计与实现
