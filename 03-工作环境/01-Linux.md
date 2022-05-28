@@ -2,16 +2,6 @@
 
 ### Linux
 
-> 资源 https://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html
-
-#### 帮助命令
-
-~~~bash
-$ info [command]
-$ man  [command]
-$ whereis [command]
-~~~
-
 #### 文件及目录管理
 
 1. 基本操作
@@ -23,9 +13,6 @@ $ mkdir testdir
 
 # 递归创建
 $ mkdir -p testPdir/testCdir
-
-# 查看当前目录下文件个数
-$ find ./ | wc -l 
 
 $ rm file
 # 强制删除
@@ -39,7 +26,7 @@ $ mv file/Dir toPath
 $ cp -r sourceDir destDir
 ~~~
 
-2. 切换路径
+2. 切换工作路径
 
 ~~~bash
 $ cd abspath
@@ -64,6 +51,8 @@ $ ls -lh      # 文件详细大小等
 4. 查找目录及文件
 
 ~~~bash
+# 查看当前目录下文件个数
+$ find ./ | wc -l 
 $ find ./ -name "Git*" | xargs file
 $ find ./ -name "*.go"
 # 递归当前目录删除.png文件
