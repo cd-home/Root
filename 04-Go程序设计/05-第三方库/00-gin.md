@@ -354,3 +354,376 @@ v1.POST("/bindjson", func(context *gin.Context) {
     context.JSON(http.StatusOK, gin.H{"msg": "OK"})
 })
 ~~~
+
+## 状态保持
+
+### cookie
+
+~~~go
+func Cookie(c *gin.Context) {
+	cookie, _ := c.Cookie("key") // Get
+	c.SetCookie("key", "value", 1000, "/", "127.0.0.1", false, true) // Set
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "OK",
+	})
+}
+~~~
+
+### session
+
+具体可见`https://github.com/gin-contrib/sessions`
+
+~~~go
+package main
+
+import (
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+    "github.com/gin-contrib/sessions/redis"
+)
+func main() {
+	r := gin.Default()
+	// store := cookie.NewStore([]byte("secret"))
+    store, _ := redis.NewStore(10, "tcp", "localhost:6379", "", []byte("secret"))
+	r.Use(sessions.Sessions("mysession", store))
+	r.GET("/hello", func(c *gin.Context) {
+		session := sessions.Default(c)
+		if session.Get("hello") != "world" {
+			session.Set("hello", "world")
+			session.Save()
+		}
+		c.JSON(200, gin.H{"hello": session.Get("hello")})
+	})
+	r.Run(":8000")
+}
+~~~
+
+
+
+## 上传文件
+
+### 单文件
+
+前端
+
+注意：上传文件需要指定`enctype="multipart/form-data"`
+
+~~~html
+<form action="/api/v1/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="avatar">
+    <input type="submit" name="提交">
+</form>
+~~~
+
+后端
+
+~~~go
+func UploadPic(c *gin.Context) {
+	file, _ := c.FormFile("avatar")
+	fileName := time.Now().Format("20060102150405_") + header.Filename
+    // fileName 充当path就在当前运行的程序目录下，也可以重新定义
+	_ = c.SaveUploadedFile(file, fileName)
+	c.JSON(http.StatusOK, gin.H{
+		"code": 2000,
+		"msg":  "OK",
+		"url":  fileName,
+	})
+}
+~~~
+
+### 多文件
+
+~~~go
+func main() {
+	r := gin.Default()
+	r.POST("/upload", func(c *gin.Context) {
+		// Multipart form
+		form, _ := c.MultipartForm()
+		files := form.File["upload"]
+		for _, file := range files {
+			log.Println(file.Filename)
+			// 上传文件至指定目录
+			c.SaveUploadedFile(file, dst)
+		}
+		c.String(http.StatusOK, fmt.Sprintf("%d files uploaded!", len(files)))
+	})
+	r.Run(":8080")
+}
+~~~
+
+
+
+## 中间件
+
+1.  日志
+2.  鉴权、权限
+
+### 默认中间件
+
+~~~go
+// Default 使用 Logger 和 Recovery 中间件
+r := gin.Default()
+~~~
+
+### 中间件
+
+#### 定义
+
+1.第一种形式
+
+~~~go
+func Auth(context *gin.Context) {
+    // code
+} 
+~~~
+
+2.  第二种形式
+
+~~~go
+func Auth() gin.HandlerFunc {
+	return func(context *gin.Context) {
+        //当前的请求上下文
+        context.Set("requestID", "client_request_ID") // 可以设置数据在context中
+        /*
+        可以在当前的请求的context中获取
+        reqID := c.MustGet("requestID").(string) 
+        reqID, _ := c.Get("requestID")             // 通常情况下使用Get
+        */
+        // 请求之前
+        context.Next()  // 执行下一个中间件，func (ctx *gin.Context)
+        // 还可以中断当前请求 context.Abort()
+        // 请求之后, 已经返回响应了
+	}
+}
+~~~
+
+*   context.Next() , 遇到Next就执行下一个中间件函数
+*   context.Abort()
+*   context.Set()  context.Get()
+
+第二种形式，可以给Auth传递参数，可以定制话一些服务，比如某个标志，决定是否使用中间件
+
+#### 使用
+
+1.  全局中间件
+
+~~~go
+r := gin.New()
+r.Use(middware.Auth())   // 可以注册多个 r.Use(middware.Auth(), middware.Log())
+~~~
+
+2.  分组中间件
+
+~~~go
+v1 := r.Group("api/v1/admin", middware.Auth())   // 可以注册多个 
+// or
+v1 := r.Group("api/v1/admin")
+v1.Use(middware.Auth())
+~~~
+
+3.  路由中间件
+
+~~~go
+v1.POST("/jwt", middware.Auth(), controller.Jwt)  // 可以注册多个
+~~~
+
+### 定制验证器
+
+### Goroutine
+
+当在中间件或 handler 中启动新的 Goroutine 时，**不能**使用原始的上下文，必须使用只读副本
+
+~~~go
+func main() {
+	r := gin.Default()
+	r.GET("/long_async", func(c *gin.Context) {
+		// 创建在 goroutine 中使用的副本
+		cCp := c.Copy()
+		go func() {
+			// 用 time.Sleep() 模拟一个长任务。
+			time.Sleep(5 * time.Second)
+			// 请注意您使用的是复制的上下文 "cCp"，这一点很重要
+			log.Println("Done! in path " + cCp.Request.URL.Path)
+		}()
+	})
+}
+~~~
+
+## 测试用例
+
+~~~go
+package main
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+	"github.com/stretchr/testify/assert"
+)
+func TestPingRoute(t *testing.T) {
+	router := setupRouter()
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/ping", nil)
+	router.ServeHTTP(w, req)
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "pong", w.Body.String())
+}
+~~~
+
+
+
+## 其他
+
+### 定制HTTP服务启动
+
+~~~go
+func main() {
+	router := gin.Default()
+	s := &http.Server{
+		Addr:           ":8080",
+		Handler:        router,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+	s.ListenAndServe()
+}
+~~~
+
+### JSONP
+
+~~~go
+func main() {
+	r := gin.Default()
+	r.GET("/JSONP?callback=x", func(c *gin.Context) {
+		data := map[string]interface{}{
+			"foo": "bar",
+		}
+		// callback 是 x
+		// 将输出：x({\"foo\":\"bar\"})
+		c.JSONP(http.StatusOK, data)
+	})
+	r.Run(":8080")
+}
+~~~
+
+### 日志
+
+#### 记录日志
+
+~~~go
+func main() {
+    // 禁用控制台颜色，将日志写入文件时不需要控制台颜色。
+    gin.DisableConsoleColor()
+    // 记录到文件。
+    f, _ := os.Create("gin.log")
+    gin.DefaultWriter = io.MultiWriter(f)
+    // 如果需要同时将日志写入文件和控制台，请使用以下代码。
+    // gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+    router := gin.Default()
+    router.GET("/ping", func(c *gin.Context) {
+        c.String(200, "pong")
+    })
+    router.Run(":8080")
+}
+~~~
+
+#### 路由日志
+
+~~~go
+func main() {
+	r := gin.Default()
+	gin.DebugPrintRouteFunc = func(
+        httpMethod, absolutePath, handlerName string, nuHandlers int) {
+		log.Printf("endpoint %v %v %v %v\n", httpMethod, 
+                   absolutePath, handlerName, nuHandlers)
+	}
+}
+
+~~~
+
+### 静态文件
+
+~~~go
+func main() {
+	router := gin.Default()
+    // 静态文件一般用这个 /static/1.jpg  去./static下面找
+	router.Static("/static", "./static") 
+    // 暴露文件，可以提供下载
+    router.StaticFS("/more_static", http.Dir("."))
+	router.StaticFS("/more_static", http.Dir("my_file_system"))
+    // 单个文件
+	router.StaticFile("/favicon.ico", "./resources/favicon.ico")
+	router.Run(":8080")
+}
+~~~
+
+### 多服务
+
+~~~go
+import (
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"golang.org/x/sync/errgroup"
+)
+var (
+	g errgroup.Group
+)
+func router01() http.Handler {
+	e := gin.New()
+	e.Use(gin.Recovery())
+	e.GET("/", func(c *gin.Context) {
+		c.JSON(
+			http.StatusOK,
+			gin.H{
+				"code":  http.StatusOK,
+				"error": "Welcome server 01",
+			},
+		)
+	})
+
+	return e
+}
+
+func router02() http.Handler {
+	e := gin.New()
+	e.Use(gin.Recovery())
+	e.GET("/", func(c *gin.Context) {
+		c.JSON(
+			http.StatusOK,
+			gin.H{
+				"code":  http.StatusOK,
+				"error": "Welcome server 02",
+			},
+		)
+	})
+
+	return e
+}
+func main() {
+	server01 := &http.Server{
+		Addr:         ":8080",
+		Handler:      router01(),
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	server02 := &http.Server{
+		Addr:         ":8081",
+		Handler:      router02(),
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	g.Go(func() error {
+		return server01.ListenAndServe()
+	})
+	g.Go(func() error {
+		return server02.ListenAndServe()
+	})
+	if err := g.Wait(); err != nil {
+		log.Fatal(err)
+	}
+}
+~~~
+
