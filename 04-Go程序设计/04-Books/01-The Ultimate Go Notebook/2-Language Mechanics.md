@@ -34,8 +34,8 @@ When I declare a type using a non-precision based type (unit, int) the size of t
 
 the program: 
 
-- [ ] 32 bit arch: int represents a signed int at 4 bytes of memory allocation , 32位架构, int类型 4字节内存分配
-- [ ] 64 bit arch: int represents a signed int at 8 bytes of memory allocation , 64位架构, int类型 8字节内存分配
+- [ ] 32 bit arch: int represents a signed int at 4 bytes of memory allocation , **32位架构, int类型 4字节内存分配**
+- [ ] 64 bit arch: int represents a signed int at 8 bytes of memory allocation , **64位架构, int类型 8字节内存分配**
 
 +++
 
