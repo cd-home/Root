@@ -206,9 +206,9 @@ Declare a variable of an unnamed literal type set to its non-zero value state us
 
 ~~~go
 e3 := struct { 
-    flag bool 
+    flag 	bool 
     counter int16 
-    pi float32 
+    pi 		float32 
 }{ 
     flag: true,
     counter: 10,
@@ -222,6 +222,24 @@ fmt.Println("Pi", e3.pi)
 +++
 
 #### 2.7 Padding and Alignment												(填充和对齐)
+
+How much memory is allocated for a value of type example? 
+
+为example类型的值分配了多少内存？
+
+**Listing 2.7.1**
+
+~~~go
+type example struct { 
+    flag 	bool 
+    counter int16 
+    pi 		float32 
+}
+~~~
+
+A bool is 1 byte, int16 is 2 bytes, float32 is 4 bytes. Add that all together and I get 7 bytes. 
+
+However, the actual answer is 8 bytes. Why, because there is a padding byte sitting between the flag and counter fields for the reason of alignment. 
 
 
 
