@@ -111,6 +111,8 @@
     *   255.255.0.0  ——> 主机位置K位置5  【假设B类IP地址】
     *   255.255.248.0
 
+![IPNetwork](./images/IPNetwork.svg)
+
 #### ARP/RARP
 
 **作用**
