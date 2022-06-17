@@ -26,7 +26,7 @@ $ mv file/Dir toPath
 $ cp -r sourceDir destDir
 ~~~
 
-2. 切换工作路径
+2. 切换目录(工作路径)
 
 ~~~bash
 $ cd abspath
@@ -37,7 +37,7 @@ $ cd ..  	  # 上级目录
 $ pwd		  # 当前目录路径
 ~~~
 
-3. 查看
+3. 查看目录下文件、目录
 
 ~~~bash
 $ ls
@@ -53,10 +53,13 @@ $ ls -lh      # 文件详细大小等
 ~~~bash
 # 查看当前目录下文件个数
 $ find ./ | wc -l 
-$ find ./ -name "Git*" | xargs file
 $ find ./ -name "*.go"
 # 递归当前目录删除.png文件
+# -exec 命令用来调用并执行指定的其他命令, 单独使用是不需要 - 例如: exec ls \;
+# {} 用来接受其他命令传入的参数集合
 $ find ./ -name "*.png" -exec rm {}
+# 效率更高
+$ find ./ -type f -name "tt*" -delete 
 ~~~
 
 5. 查看文件内容
@@ -210,15 +213,20 @@ $ cat LOG.* | tr a-z A-Z | grep "FROM " | grep "WHERE" > b
 
 3. xargs
 
+> xargs 命令的作用是给别的命令传递参数，一般会配合管道符 | 来使用，把前一命令的 stdout 输出作为自己的 stdin 输入，再转换成 command line 形式的参数传给其它命令
+
 ~~~bash
 # 单行输出
-$ cat file.txt| xargs
+$ cat file.txt | xargs
 
 # 多行输出 -n 每行的字数 -d 定义定界符 -0：指定0为输入定界符
 $ cat single.txt | xargs -n 3
 
 # 查找行数
-$ find source_dir/ -type f -name "*.cpp" -print0 |xargs -0 wc -l
+$ find source_dir/ -type f -name "*.cpp" -print0 | xargs -0 wc -l
+# 1. find的默认在每一个结果后加一个'\n' 所以结果是一行一行，并且由于文件名可能会有空格
+# 2. -print0 表示在find的每一个结果之后加一个NULL字符
+# 2. xargs -0表示用NULL来作为分隔符
 ~~~
 
 4. 排序
