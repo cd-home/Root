@@ -509,10 +509,6 @@ $ ulimit -n
 
 #### 程序调试
 
-##### GBD
-
-##### DLV
-
 ~~~bash
 $ pstrack <program-pid>
 $ strace -p <process-pid>
