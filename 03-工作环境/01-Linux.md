@@ -2,6 +2,10 @@
 
 ### Linux
 
+<img src="./images/Linux-Commands.svg" alt="Linux-Commands"  />
+
+![Vim](./images/Vim.svg)
+
 #### 文件及目录管理
 
 1. 基本操作
