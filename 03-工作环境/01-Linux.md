@@ -18,13 +18,15 @@ $ mkdir testdir
 # 递归创建
 $ mkdir -p testPdir/testCdir
 
-$ rm file
+$ touch testfile
+
+$ rm testfile
 # 强制删除
+
 $ rm -rf noEmptyDir
-# 匹配删除 == find ./ name "*log -exec rm {}"
 $ rm *log
 
-$ mv file/Dir toPath
+$ mv fromPath toPath
 
 # 通常情况下: -r 一般是递归、-f是强制
 $ cp -r sourceDir destDir
@@ -34,9 +36,9 @@ $ cp -r sourceDir destDir
 
 ~~~bash
 $ cd abspath
+$ cd ./xxpath # 相对路径
 $ cd -
 $ cd or cd ~
-$ cd ./xxpath # 相对路径
 $ cd ..  	  # 上级目录
 $ pwd		  # 当前目录路径
 ~~~
@@ -57,12 +59,12 @@ $ ls -lh      # 文件详细大小等
 ~~~bash
 # 查看当前目录下文件个数
 $ find ./ | wc -l 
+# 查找文件
 $ find ./ -name "*.go"
-# 递归当前目录删除.png文件
 # -exec 命令用来调用并执行指定的其他命令, 单独使用是不需要 - 例如: exec ls \;
 # {} 用来接受其他命令传入的参数集合
 $ find ./ -name "*.png" -exec rm {}
-# 效率更高
+# 删除效率更高
 $ find ./ -type f -name "tt*" -delete 
 ~~~
 
