@@ -92,7 +92,7 @@ ADD ./scripts /app/release/
 
 ~~~dockerfile
 CMD command param1 param2
-# 推荐第二种形式
+# 推荐第二种形式, 注意可执行文件位置
 CMD ["executable", "param1", "param2"...]
 ~~~
 
