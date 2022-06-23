@@ -82,6 +82,10 @@ COPY --from=Builder /app/build/app /app/release/
 
 > 基本作用和COPY一致，但是多了URL下载功能、解压功能，下载的在后面不能删除，基本上不推荐使用ADD
 
+~~~dockerfile
+ADD ./scripts /app/release/
+~~~
+
 #### CMD
 
 > 容器启动命令以及参数, docker run 最后指定的命令即是此， 并且run可以覆盖CMD
@@ -106,7 +110,7 @@ ENTRYPOINT CMD
 
 docker-entrypoint.sh
 
-> 
+> TODO
 
 #### VOLUME
 
@@ -136,10 +140,20 @@ COPY . .
 ENV GOOS=linux CGO_ENABLED=0 GOARCH=amd64
 RUN go build -o app -ldflags="-s -w" main.go
 
-FROM scratch
+FROM alpine:3.14
 LABEL stage=Run
 WORKDIR /app/release/
-COPY --from=Builder /app/build/app /app/release/
+COPY --from=Builder /app/build/ /app/release/
+EXPOSE 8080
+RUN apk update && \
+	apk add --no-cache \
+	vim && \
+	curl && \
+	ca-certificates && \
+	bash && \
+	tzdata && \
+	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+	echo Asia/Shanghai > /etc/timezone
 EXPOSE 8999
 ENTRYPOINT ["./app"]
 ~~~
