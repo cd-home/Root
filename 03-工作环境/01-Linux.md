@@ -263,8 +263,8 @@ $ ps -ajx
 # 查找进程
 $ pgrep -l mysql
 
-# 端口查进程
-$ lsof -i:3306
+# 使用某个端口的进程
+$ lsof -i :3306
 
 # 杀死
 $ kill -l
@@ -484,4 +484,10 @@ $ ls -lh | head -n 2
 $ 2 > /dev/ull
 $ >/dev/null 2>&1
 $ 2>&1 >/dev/null
+~~~
+
+#### 问题排查
+
+~~~bash
+$ strace -f -o ./strace.out excute_dev
 ~~~
