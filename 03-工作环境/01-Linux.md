@@ -18,19 +18,6 @@ opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 
 ![Dir_File_Perm](./images/Dir_File_Perm.svg)
 
-~~~bash
-# userMark 			u 用户、g 组、o其他用户、a 所有用户
-# permissionMark	r 读、w 写、x 执行
-# op				+ - =
-# chmod userMark [+-=] permissionMark 
-$ chmod u+x
-
-# 数字方式设置 
-# 三位八进制数字的形式来表示权限, 第一位指定属主的权限, 第二位指定组权限, 第三位指定其他用户的权限
-# 每位通过4(读)、2(写)、1(执行)三种数值的和来确定权限
-$ chomd 660 build.sh
-~~~
-
 #### 常见命令总览
 
 <img src="./images/Linux-Commands.svg" alt="Linux-Commands"  />
@@ -109,6 +96,17 @@ $ find ./ -name "*.go"
 $ chmod [-R] 777 Dir|File 
 # 符号模式 [u g o a] [+ - =] [r w x]
 $ chomd [-R] a+x Dir|File
+
+# userMark 			u 用户、g 组、o其他用户、a 所有用户
+# permissionMark	r 读、w 写、x 执行
+# op				+ - =
+# chmod userMark [+-=] permissionMark 
+$ chmod u+x
+
+# 数字方式设置 
+# 三位八进制数字的形式来表示权限, 第一位指定属主的权限, 第二位指定组权限, 第三位指定其他用户的权限
+# 每位通过4(读)、2(写)、1(执行)三种数值的和来确定权限
+$ chomd 660 build.sh
 
 # ------------------------------------[链接]-----------------------------------------
 # 硬链接
