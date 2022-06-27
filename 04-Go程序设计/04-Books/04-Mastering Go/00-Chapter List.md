@@ -2,9 +2,7 @@
 
 ### Mastering Go
 
-> To Be Better Goer
-
-#### 前沿
+#### 前言
 
 #### 第一部分
 
