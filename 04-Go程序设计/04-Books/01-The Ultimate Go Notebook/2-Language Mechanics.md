@@ -263,14 +263,14 @@ fmt.Println("Pi", e3. pi)
 
 #### 2. 7 Padding and Alignment																						(填充和对齐)
 
-How much memory is allocated for a value of type example? 
+How much memory is allocated for a value of type example1? 
 
-为example类型的值分配了多少内存？
+为example1类型的值分配了多少内存？
 
 **Listing 2. 7. 1**
 
 ~~~go
-type example struct { 
+type example1 struct { 
     flag 	bool 
     counter int16 
     pi 		float32 
@@ -313,7 +313,7 @@ In this example, I’ve added a new field called flag2 between the counter and p
 **Listing 2. 7. 3**
 
 ~~~go
-type example2 struct { 
+type example3 struct { 
     flag 	bool 	  // 0xc000100020 <- Starting Address 
          	byte 	  // 0xc000100021 <- 1 byte padding 
     counter int16     // 0xc000100022 <- 2 byte alignment 
@@ -343,8 +343,10 @@ If I need to minimize the amount of padding bytes, I must lay out the fields fro
 
 如果我需要最小化填充字节的数量, 我必须从最高分配到最小分配排列字段.  这将把任何必要的填充字节推到结构的底部, 并减少必要的填充字节总数. 
 
+**Listing 2. 7. 4**
+
 ~~~go
-type example struct { 
+type example4 struct { 
     pi float32 		// 0xc000100020 <- Starting Address 
     counter int16   // 0xc000100024 <- 2 byte alignment 
     flag bool       // 0xc000100026 <- 1 byte alignment 
@@ -378,6 +380,8 @@ CPU访问内存是以平台字大小(64, 8Bytes | 32, 4Bytes)
 - [ ] 数据类型对齐边界 = n * min(数据类型, 平台最大对齐边界) [n >= 1]
 
 以上文例子来看(偏移是相对于结构体起始地址)
+
+**Listing 2. 7. 5**
 
 ~~~go
 type example2 struct { 
@@ -416,6 +420,8 @@ unsafe.Sizeof(example2{}) ==> 8
 
 注意如下问题, 空结构体不占内存空间, 那是否该S结构分配32Bytes?
 
+**Listing 2. 7. 6**
+
 ~~~go
 type S struct {
 	A uint32
@@ -432,4 +438,81 @@ type S struct {
 
 **回到最初. 结构体分配内存取决于各个字段的类型尺寸和由字段的排列顺序引起的填充, 但是我们并不需要主动的进行内存对齐, 这一切由编译器为我们完成.** 
 
-#### 2.8 Assigning Values ()
+#### 2.8 Assigning Values 																										(赋值)
+
+If I have two different named types that are identical in structure, I can't assign a value of one to the other. 
+
+如果我有两个结构完全相同的不同命名的类型, 我不能无法将一个值赋给另一个.
+
+For example, if the types example1 and example2 are declared using the same exact declaration and we initialize two variables
+
+例如, 如果example1和example2类型(见上文)是使用相同的字段声明的, 并且我们用两个变量初始化
+
+**Listing 2. 8. 1**
+
+~~~go
+var ex1 example1
+var ex2 example2
+~~~
+
+I can’t assign these two variables to each other since they are of different named  types. The fact that they are identical in structure is irrelevant. 
+
+我无法将这两个变量彼此赋值, 因为它们的命名类型不同. 它们在结构上完全相同这一事实与此无关
+
+**Listing 2. 8. 2**
+
+~~~go
+ex1 = ex2 // Not Allowed compiler error
+~~~
+
+To perform any assignment, I would have to use conversion syntax and since they are identical in structure, the compiler will allow this. 
+
+要执行任何赋值, 我必须使用转换语法, 因为它们在结构上是相同的, 编译器将允许这样做
+
+**Listing 2. 8. 3**
+
+~~~go
+ex1 = example1(ex2) // Allowed, NO compiler error
+~~~
+
+However, if one of the variable’s (like ex2) was declared as an unnamed type with the same structure, no conversion syntax would be required. 
+
+但是, 如果其中一个变量(如ex2)被声明为具有相同结构的未命名类型, 则不需要转换语法. 
+
+~~~go
+var ex2 struct { 
+    flag bool 
+    counter int16 
+    pi float32 
+}
+ex1 = ex2 // Allowed, NO need for conversion syntax
+~~~
+
+The compiler will allow this assignment without the need for conversion. 
+
+编译器将允许此赋值, 而无需进行转换. 
+
+#### 2.9 Pointers 																													    (指针)
+
+**Pointers** serve the purpose of **sharing**. Pointers allow me to share values across program boundaries. There are several types of **program boundaries**. The most common one is between function calls. There is also a boundary between Goroutines which I have notes for later. 
+
+**指针**用于**共享**. 指针允许我跨程序边界共享值. 有几种类型的**程序边界**. 最常见的是函数调用之间. Goroutines之间还有一个边界, 我稍后会有注释. 
+
+When a Go program starts up, the Go runtime creates a Goroutine. **Every Goroutine is a separate path of execution that manages the instructions that need to be executed by the machine**. I can also think of Goroutines as lightweight application level threads because they are. Every Go program has at least 1 Goroutine called the main Goroutine.
+
+当一个Go程序启动时, Go运行时会创建一个Goroutine. **每个Goroutine都是一个单独的执行路径, 用于管理需要由机器执行的指令**. 我还可以将Goroutine视为轻量级应用程序级线程, 因为它们就是. 每个Go程序至少有一个Goroutine, 称为main Goroutine. 
+
+Every Goroutine is given a block of memory, called **stack memory**. The memory for the stack starts out at 2K bytes. It’s very small. Stacks can grow over time. Every time a function is called, a block of stack space is taken to help the Goroutine execute the instructions associated with that function. Each individual block of memory is called a **frame.** 
+
+每个Goroutine都有一个内存块, 称为**堆栈内存**. 堆栈的内存从2K字节开始. 它非常小. 堆栈可以随时间增长. 每次调用函数时, 都会占用一块堆栈空间来帮助Goroutine执行与该函数相关的指令. 每个单独的内存块称为一个**帧**. 
+
+The size of a frame for a given function is calculated at **compile time**. No value can be constructed on the stack unless the compiler knows the size of that value at compile time. If the compiler doesn’t know the size of a value at compile time, the value has to be constructed on the heap. 
+
+给定函数的帧大小是在**编译时**计算的.  除非编译器在编译时知道该值的大小, 否则不能在堆栈上构造任何值.  如果编译器在编译时不知道值的大小, 则必须在堆上构造该值. 
+
+Stacks are self cleaning and zero value helps with the **initialization** of the stack. Every time I make a function call, and a frame of memory is blocked out, the memory for that frame is initialized, which is how the stack is self cleaning. On a function return, the memory for the frame is left alone since it’s unknown if that memory will be needed again. It would be inefficient to initialize memory on returns. 
+
+堆栈是自清理的, 零值有助于堆栈的**初始化**.  每次我进行函数调用, 并且一帧内存被阻塞时, 该帧的内存都会被初始化, 这就是堆栈自我清理的方式.  在函数返回时, 帧的内存被单独留下, 因为不知道是否会再次需要该内存.  在返回时初始化内存效率低下. 
+
+
+
