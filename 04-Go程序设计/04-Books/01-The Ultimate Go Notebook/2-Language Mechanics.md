@@ -42,6 +42,28 @@ the program:
 
     **64位架构, int类型 8字节内存分配**
 
+**扩展说明 类型尺寸**
+
+|              Type              |    Size of Bytes     |                     |
+| :----------------------------: | :------------------: | ------------------- |
+|              bool              |          1           |                     |
+|        uint8,byte,int8         |          1           |                     |
+|          uint16,int16          |          2           |                     |
+|      uint32,int32,float32      |          4           |                     |
+| Uint64,int64,float64,complex64 |          8           |                     |
+|           complex128           |          16          |                     |
+|            int,uint            |        1 word        | 32-4Bytes 64-8Bytes |
+|            uintptr             |        1 word        |                     |
+|             string             |       2 words        |                     |
+|            pointer             |        1 word        |                     |
+|             slice              |       3 words        |                     |
+|              map               |        1 word        |                     |
+|            channle             |        1 word        |                     |
+|              func              |        1 word        |                     |
+|           interface            |        1 word        |                     |
+|             struct             | All Fields + Padding | Empty struct = 0    |
+|             array              |   Element * length   | Empty array  = 0    |
+
 +++
 
 #### 2. 2 Word Size																													(字大小)
@@ -338,8 +360,8 @@ After the reordering of the fields, the struct value only requires 8 bytes of al
 
 为什么需要内存对齐
 
-- [ ] 平台原因: 是所有的硬件平台都能访问任意地址上的任意数据的; 某些硬件平台只能在某些地址处取某些特定类型的数据, 否则抛出硬件异常
-- [ ] 性能原因：数据结构(尤其是栈)应该尽可能地在自然边界上对齐. 原因在于, 为了访问未对齐的内存, 处理器需要作两次内存访问; 而对齐的内存访问仅需要一次访问
+- [ ] 平台原因: 不是所有的硬件平台都能访问任意地址上的任意数据的; 某些硬件平台只能在某些地址处取某些特定类型的数据, 否则抛出硬件异常; 某些硬件平台不支持未对齐的内存访问. 
+- [ ] 性能原因：数据结构(尤其是栈)应该尽可能地在自然边界上对齐. 原因在于, 为了访问未对齐的内存, 处理器需要作两次内存访问; 而对齐的内存访问仅需要一次访问. 操作系统并非一个字长读取, 而是2,4,8多字长. 当CPU从存储器读数据到寄存器, 或者从寄存器写数据到存储器, IO的数据长度通常是字长
 
 CPU访问内存是以平台字大小(64, 8Bytes | 32, 4Bytes)
 
@@ -353,7 +375,7 @@ CPU访问内存是以平台字大小(64, 8Bytes | 32, 4Bytes)
 对齐边界
 
 - [ ] 编译器(平台)对应最大对齐边界: 字长
-- [ ] 数据类型对齐边界 = min(数据类型, 平台最大对齐边界)
+- [ ] 数据类型对齐边界 = n * min(数据类型, 平台最大对齐边界) [n >= 1]
 
 以上文例子来看(偏移是相对于结构体起始地址)
 
@@ -370,11 +392,17 @@ type example2 struct {
 }
 ~~~
 
-flag: 		 min(8, 1) => 1, 	偏移为0 	 [flag]
+字段的对齐系数(对齐边界)(类型的尺寸)
 
-counter:  min(8, 2) => 2, 	偏移为2	 [flag x counter counter]
+~~~go
+unsafe.Alignof(example2{}.flag)
+~~~
 
-flag2:      min(8, 1) => 1, 偏移为1  [flag x counter counter flag]
+flag: 		 min(8, 1) => 1, 	 偏移为0 	 [flag]
+
+counter:  min(8, 2) => 2, 	偏移为2	  [flag x counter counter]
+
+flag2:      min(8, 1) => 1,        偏移为1       [flag x counter counter flag]
 
 pi: min(8, 4) => 偏移为4, 但是已经存在5位, 所以大于5并且是4的倍数的就是8, 那么偏移就是8, 结果即是
 
@@ -400,6 +428,8 @@ type S struct {
 
 答案是40Bytes. 
 
-结构体尾部size为0的变量(字段)会被分配内存空间进行填充,**原因是如果不给它分配内存，该变量(字段)指针将指向一个非法的内存空间**
+实际上结构体尾部size为0的字段会被分配内存空间进行填充, **原因是如果不给它分配内存, 该字段指针将指向一个非法的内存空间**
 
-回到最初. 我们并不需要主动的进行内存对齐, 这一切由编译器为我们完成. 
+**回到最初. 结构体分配内存取决于各个字段的类型尺寸和由字段的排列顺序引起的填充, 但是我们并不需要主动的进行内存对齐, 这一切由编译器为我们完成.** 
+
+#### 2.8 Assigning Values ()
