@@ -21,7 +21,7 @@ $ docker pull <image-name>:tag
 
 ##### 查看			docker images
 
-> IMAGE ID 或者 REPOSITORY:TAG 标示唯一镜像,  以下使用IMAGE ID表示
+IMAGE ID 或者 REPOSITORY:TAG 标示唯一镜像,  以下使用IMAGE ID表示
 
 ```bash
 $ docker images	 	
@@ -58,7 +58,7 @@ $ docker inspect IMAGEID
 
 ##### 推送仓库	docker push
 
->   需要特定的标签[地址]才可以推送
+需要特定的标签[地址]才可以推送
 
 ~~~bash
 $ docker tag demo.docker.com/demo-project:tag
@@ -106,7 +106,7 @@ $ docker build [OPTIONS] Context(PATH|URL)
 
 #### 容器					container
 
->  \<container-name>  \<container-id> 标识唯一镜像
+ \<container-name>  \<container-id> 标识唯一镜像, 后续命令采用\<container-id>
 
 ##### 创建 			docker create
 
@@ -134,7 +134,7 @@ $ docker run -it --name alpine_o --rm alpine:latest /bin/sh
 
 With the `docker run [OPTIONS]` an operator can add to or override the image defaults set by a developer. And, additionally, operators can override nearly all the defaults set by the Docker runtime itself. 
 
-使用 `docker run [OPTIONS]` 可以添加或覆盖开发人员设置的镜像默认值。 此外，还可以覆盖几乎所有由 Docker 运行时本身设置的默认值
+使用 `docker run [OPTIONS]` 可以添加或覆盖开发人员设置的镜像默认值.  此外, 还可以覆盖几乎所有由 Docker 运行时本身设置的默认值. 
 
 **常用OPTIONS参数详细描述**
 
@@ -157,7 +157,7 @@ With the `docker run [OPTIONS]` an operator can add to or override the image def
 
 **注意：env-file使用key=value解析, 不能使用引号**
 
-说明：run options 部分参数可以覆盖Dockerfile
+**说明：run options 部分参数可以覆盖Dockerfile**
 
 1. [COMMAND] [ARG...] => CMD 
 2. --entrypoint                 => ENTRYPOINT
@@ -242,7 +242,7 @@ $ docker commit -m "desp" -a "author" <container-id> <image-name>:tag
 ##### 容器导出	docker export
 
 ~~~bash
-$ docker export <container-id> > xx_container.tar
+$ docker export <container-id> > dest_container.tar
 ~~~
 
 ##### 容器导入	docker import
@@ -250,7 +250,7 @@ $ docker export <container-id> > xx_container.tar
 导入容器快照到镜像库
 
 ~~~bash
-$ cat xx_container.tar | docker import - test/xx:v1.0.0
+$ cat dest_container.tar | docker import - test/xx:v1.0.0
 $ docker import URL example/imagerepo
 ~~~
 
@@ -258,8 +258,12 @@ $ docker import URL example/imagerepo
 
 ~~~bash
 $ docker inspect <container-id>
-$ docker rename <container-id> <newName>
+~~~
 
+##### 容器名字	docker rename
+
+~~~bash
+$ docker rename <container-id> newContainerName
 ~~~
 
 ##### 容器日志	docker logs
@@ -279,4 +283,3 @@ $ docker port <container-id>
 ~~~bash
 $ docker cp <container-id>:src dest
 ~~~
-
