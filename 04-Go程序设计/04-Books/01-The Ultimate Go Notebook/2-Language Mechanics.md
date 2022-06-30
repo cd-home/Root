@@ -496,15 +496,15 @@ The compiler will allow this assignment without the need for conversion.
 
 **Pointers** serve the purpose of **sharing**. Pointers allow me to share values across program boundaries. There are several types of **program boundaries**. The most common one is between function calls. There is also a boundary between Goroutines which I have notes for later. 
 
-**指针**用于**共享**. 指针允许我跨程序边界共享值. 有几种类型的**程序边界**. 最常见的是函数调用之间. Goroutines之间还有一个边界, 我稍后会有注释. 
+**指针**用于**共享**. **指针允许我跨程序边界共享值**. 有几种类型的**程序边界**. 最常见的是函数调用之间. Goroutines之间还有一个边界, 我稍后会有注释. 
 
 When a Go program starts up, the Go runtime creates a Goroutine. **Every Goroutine is a separate path of execution that manages the instructions that need to be executed by the machine**. I can also think of Goroutines as lightweight application level threads because they are. Every Go program has at least 1 Goroutine called the main Goroutine.
 
 当一个Go程序启动时, Go运行时会创建一个Goroutine. **每个Goroutine都是一个单独的执行路径, 用于管理需要由机器执行的指令**. 我还可以将Goroutine视为轻量级应用程序级线程, 因为它们就是. 每个Go程序至少有一个Goroutine, 称为main Goroutine. 
 
-Every Goroutine is given a block of memory, called **stack memory**. The memory for the stack starts out at 2K bytes. It’s very small. Stacks can grow over time. Every time a function is called, a block of stack space is taken to help the Goroutine execute the instructions associated with that function. Each individual block of memory is called a **frame.** 
+**Every Goroutine is given a block of memory, called stack memory.** The memory for the stack starts out at 2K bytes. It’s very small. Stacks can grow over time. Every time a function is called, a block of stack space is taken to help the Goroutine execute the instructions associated with that function. Each individual block of memory is called a **frame.** 
 
-每个Goroutine都有一个内存块, 称为**堆栈内存**. 堆栈的内存从2K字节开始. 它非常小. 堆栈可以随时间增长. 每次调用函数时, 都会占用一块堆栈空间来帮助Goroutine执行与该函数相关的指令. 每个单独的内存块称为一个**帧**. 
+**每个Goroutine都有一个内存块, 称为堆栈内存**. 堆栈的内存从2K字节开始. 它非常小. 堆栈可以随时间增长. **每次调用函数时, 都会占用一块堆栈空间来帮助Goroutine执行与该函数相关的指令. 每个单独的内存块称为一个帧.** 
 
 The size of a frame for a given function is calculated at **compile time**. No value can be constructed on the stack unless the compiler knows the size of that value at compile time. If the compiler doesn’t know the size of a value at compile time, the value has to be constructed on the heap. 
 
@@ -514,5 +514,121 @@ Stacks are self cleaning and zero value helps with the **initialization** of the
 
 堆栈是自清理的, 零值有助于堆栈的**初始化**.  每次我进行函数调用, 并且一帧内存被阻塞时, 该帧的内存都会被初始化, 这就是堆栈自我清理的方式.  在函数返回时, 帧的内存被单独留下, 因为不知道是否会再次需要该内存.  在返回时初始化内存效率低下. 
 
+#### 2.10 Pass By Value																											(值传递)
 
+All data is moved around the program by value. This means as data is being passed across program boundaries, each function or goroutine is given it’s own copy of the data. There are two types of data I work with, the value itself (int, string, user) or the value's address. Addresses are data that need to be copied and stored across program boundaries. 
+
+所有数据都按值在程序中移动.  这意味着当数据跨越程序边界传递时, 每个函数或 goroutine 都会被赋予它自己的数据副本. 我使用两种类型的数据, 值本身或值的地址. 地址是需要被复制和存储的数据当跨程序边界. 
+
+**Listing 2. 10. 1**
+
+~~~go
+func incrementByV(inc int) {
+	inc++
+	log.Printf("incrementByV: inc: %v, addr: %p", inc, &inc)
+}
+
+func incrementByP(inc *int) {
+	*inc++
+	log.Printf("incrementByP: inc: %v, addr: %p", *inc, inc)
+}
+
+func TestMoveByValue(t *testing.T) {
+	counter := 10
+	log.Printf("TestMoveByValue1: counter: %v, addr: %p", counter, &counter)
+    
+	incrementByV(counter)
+	log.Printf("TestMoveByValue1: counter: %v, addr: %p", counter, &counter)
+
+	incrementByP(&counter)
+	log.Printf("TestMoveByValue2: counter: %v, addr: %p", counter, &counter)
+}
+~~~
+
+**扩展指针、堆栈、堆、逃逸分析、值/指针语意的设计机制** TODO
+
+#### 2.11 Escape Analysis 																										(逃逸分析)
+
+I don’t like the term "escape analysis" for the algorithm the compiler uses to determine if a value should be constructed on the stack or heap because it makes it sound like all values are constructed on the stack and then escape (or move) to the heap when necessary. This is NOT the case. The construction of any value only happens once, and the escape analysis algorithm decides where that will be (stack or heap). Only construction on the heap is called an allocation in Go.
+
+我不喜欢编译器用来确定是否应该在堆栈或堆上构造值的算法的术语"逃逸分析", 因为它听起来好像所有值都在堆栈上构造然后必要时逃逸(或移动)到堆中. 事实并非如此. 任何值的构造只发生一次,逃逸分析算法决定将在哪里(堆栈或堆). 在 Go 中, 只有堆上的构造才称为分配. 
+
+Understanding escape analysis is about understanding value ownership. The idea is, when a value is constructed within the scope of a function, then that function owns the value. From there ask the question, does the value being constructed still have to exist when the owning function returns? If the answer is no, the value can be constructed on the stack. If the answer is yes, the value must be constructed on the heap.
+
+理解逃避分析就是理解值的所有权. 其思想是, 当一个值在一个函数的范围内构造时, 该函数就拥有该值. 由此提出一个问题, 当所属函数返回时, 正在构造的值是否仍必须存在? 如果答案为否, 则可以在堆栈上构造该值.如果答案是"是", 则必须在堆上构造该值. 
+
+Note: Escape analysis does have flaws and there are other reasons why a value might be constructed on the heap, but for now this general rule is a good starting point.
+
+注意: Escape分析确实存在缺陷,而且在堆上构建值还有其他原因, 但目前这条一般规则是一个很好的起点.
+
+**Listing 2. 11. 1**
+
+~~~go
+type user struct {
+	name  string
+	email string
+}
+
+func stayOnstack() user {
+	u := user{
+		name:  "GodYao",
+		email: "example.com",
+	}
+	return u
+}
+~~~
+
+~~~bash
+$ go build[test] -gcflags='-m -l'
+~~~
+
+The stayOnStack function is using value semantics to return a user value back to the caller. In other words, the caller gets their own copy of the user value being constructed.
+
+stayOnStack函数使用值语义将`user`值返回给调用者. 换句话说, 调用者获取自己的`user`值的副本. 
+
+When stayOnStack returns, the user value it constructs no longer needs to exist, since the caller is getting their own copy. Therefore, the construction of the user value inside of stayOnStack can happen on the stack. No allocation. 
+
+当stayOnStack返回时, 它构造的`user`值不再需要存在, 因为调用方正在获取自己的副本. 因此stayOnStack中的`user`值的构造可以在堆栈上进行. 没有分配. 
+
+**Listing 2. 11. 2**
+
+~~~go
+func excapeToHeap() *user {
+	u := user{
+		name:  "GodYao",
+		email: "example.com",
+	}
+	return &u
+}
+~~~
+
+The escapeToHeap function is using **pointer semantics** to return a user value back to the caller. In other words, the caller gets **shared access (an address)** to the user value being constructed.
+
+escapeToHeap函数使用**指针语义**将用户值返回给调用者. 换句话说, 调用者获得对正在构造的用户值的**共享访问权(地址).** 
+
+When escapeToHeap returns, the user value it constructs does still need to exist, since the caller is getting shared access to the value. Therefore, the construction of the user value inside of escapeToHeap can’t happen on the stack, it must happen on the heap. Yes allocation. 
+
+当escapeToHeap返回时,它构造的`user`值仍然需要存在, 因为调用者正在获得对该值的共享访问权. 因此，escapeToHeap中`user`值的构造不能发生在堆栈上, 而必须发生在堆上. 当然是分配. 
+
+Think about what would happen if the value was constructed on the stack when using pointer semantics on the return.
+
+思考如果在返回时使用指针语义时在堆栈上构造值会发生什么. 
+
+The caller would get a copy of a stack address from the frame below. Integrity would be lost. Once control goes back to the calling function, the memory on the stack where the user value exists is reusable again. The moment the calling function makes another function call, a new frame is sliced and the memory will be overridden, destroying the shared value. 
+
+调用者将从下面的帧中获得堆栈地址的副本.  完整性就会丧失.  一旦控制权返回到调用函数, `user`值所在的堆栈上的内存就可以再次重用. 在调用函数进行另一个函数调用的那一刻, 一个新的帧被切片并且内存将被覆盖,从而破坏共享值.
+
+This is why I think about the stack being self cleaning. Zero value initialization helps every stack frame that I need to be cleaned without the use of GC. The stack is self cleaning since a frame is taken and initialized for the execution of each function call. The stack is cleaned during function calls and not on returns because the compiler doesn't know if that memory on the stack will ever be needed again. 
+
+这就是为什么我认为堆栈是自清理的. 零值初始化有助于在不使用 GC 的情况下清理我需要清理的每个堆栈帧. 堆栈是自清理的, 因为每个函数调用的执行都会获取并初始化一个帧. **堆栈在函数调用期间被清理**，而不是在返回时被清理, 因为编译器不知道是否会再次需要堆栈上的内存. 
+
+Escape analysis decides if a value is constructed on the stack (the default) or the heap (the escape). With the stayOnStack function, I’m passing a copy of the value back to the caller, so it’s safe to keep the value on the stack. With the escaoeToHeap function, I’m passing a copy of the values address back to the caller (sharing up the stack) so it’s not safe to keep the value on the stack. 
+
+逃逸分析决定一个值是在堆栈(默认)还是堆(逃逸)上构造的. 使用 stayOnStack 函数, 我将值的副本传回给调用者, 因此将值保留在堆栈上是安全的. 使用 escaoeToHeap 函数, 我将值地址的副本传回给调用者(共享堆栈), 因此将值保留在堆栈上是不安全的. 
+
+#### 2.12 Stack Growth (栈) 																									(堆栈增长)
+
+The size of each frame for every function is calculated at compile time. This means, if the compiler doesn’t know the size of a value at compile time, the value must be constructed on the heap. An example of this is using the built-in function make to construct a slice whose size is based on a variable. 
+
+每个函数的每个帧的大小是在编译时计算的. 这意味着, 如果编译器在编译时不知道值的大小. 则必须在堆上构造该值. 这方面的一个例子是使用内置函数 make 来构造一个大小基于变量的切片.
 
