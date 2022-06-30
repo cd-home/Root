@@ -632,3 +632,21 @@ The size of each frame for every function is calculated at compile time. This me
 
 每个函数的每个帧的大小是在编译时计算的. 这意味着, 如果编译器在编译时不知道值的大小. 则必须在堆上构造该值. 这方面的一个例子是使用内置函数 make 来构造一个大小基于变量的切片.
 
+~~~go
+slices := make([]int, size) // Backing array allocates on the heap.
+~~~
+
+Go uses a **contiguous stack** vs using a segmented stack mechanic. In general, these are mechanics that dictate how stacks grow and shrink.
+
+Go使用**连续堆栈**, 而不是使用分段堆栈机制. 一般来说, 这些都是决定堆栈如何增长和收缩的机制.
+
+Every function call comes with a little preamble that asks, "Is there enough stack space for this new frame?". If yes, then no problem and the frame is taken and initialized. If not, then a new larger stack must be constructed and the memory on the existing stack must be copied over to the new one, with changes to pointers that reference memory on the stack. The benefits of contiguous memory and linear traversals with modern hardware is the tradeoff for the cost of the copy. 
+
+每个函数调用都有一个小前导, 询问"是否有足够的堆栈空间来容纳这个新帧?". 如果是, 则没有问题, 帧被获取并初始化. 如果否, 则必须构造一个新的更大堆栈, 并且必须将现有堆栈上的内存复制到新堆栈上, 同时更改引用堆栈上内存的指针. 使用现代硬件进行连续内存和线性遍历的好处是对拷贝成本的权衡.
+
+Because of the use of contiguous stacks, no Goroutine can have a pointer to some other Goroutine’s stack. There would be too much overhead for the runtime to keep track of every pointer to every stack and readjust those pointers to the new location. 
+
+由于使用了连续堆栈, 没有 Goroutine 可以拥有指向其他 Goroutine 堆栈的指针.  运行时跟踪每个堆栈的每个指针并将这些指针重新调整到新位置会产生太多开销. 
+
+
+
