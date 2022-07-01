@@ -33,3 +33,28 @@ With the network set to host a container will share the host’s network stack a
 Compared to the default `bridge` mode, the `host` mode gives *significantly* better networking performance since it uses the host’s native networking stack whereas the bridge has to go through one level of virtualization through the docker daemon. It is recommended to run containers in this mode when their networking performance is critical, for example, a production Load Balancer or a High Performance Web Server.
 
 与默认的桥接模式相比,  主机模式提供了明显更好的网络性能,  因为它使用主机的本机网络堆栈,  而桥接必须通过 docker 守护程序经过一层虚拟化. 当容器的网络性能至关重要时,  建议在此模式下运行容器,  例如生产负载均衡器或高性能 Web 服务器. 
+
+#### Docker-Cli
+
+##### 创建网络	docker network create
+
+~~~bash
+$ docker network create [OPTIONS] defx_net
+~~~
+
+**常见OPTIONS参数说明**
+
+| option |                 | 说明 |
+| :----: | --------------- | :--: |
+|   -d   | --driver=bridge |      |
+|        |                 |      |
+|        |                 |      |
+
+
+
+##### 查看网络	docker network ls
+
+~~~bash
+$ docker network ls
+~~~
+

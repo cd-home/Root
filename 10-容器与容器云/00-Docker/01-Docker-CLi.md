@@ -19,7 +19,7 @@ $ docker image pull <image-name>:tag
 $ docker pull <image-name>:tag
 ```
 
-##### 查看			docker images
+##### **查看			docker images**
 
 IMAGE ID 或者 REPOSITORY:TAG 标示唯一镜像,  以下使用IMAGE ID表示
 
@@ -79,7 +79,7 @@ $ docker save IMAGEID | gzip > dest_images.tar.gz
 $ docker load -i dest_images.tar.gz
 ~~~
 
-##### 构建镜像	docker build
+##### **构建镜像	docker build**
 
 `docker build` command builds Docker images from a Dockerfile and a "context". A build’s context is the set of files located in the specified `PATH` or `URL`. The build process can refer to any of the files in the context.
 
@@ -114,7 +114,7 @@ $ docker build [OPTIONS] Context(PATH|URL)
 $ docker container create -it --name <container-name> <image-name>:tag
 ~~~
 
-##### 运行 			docker run
+##### **运行 			docker run**
 
 Docker runs processes in isolated containers. A container is a process which runs on a host. The host may be local or remote. When an operator executes `docker run`, the container process that runs is isolated in that it has its own file system, its own networking, and its own isolated process tree separate from the host.
 
@@ -183,14 +183,14 @@ With the `docker run [OPTIONS]` an operator can add to or override the image def
 
     可选限制 Docker守护程序尝试重新启动的次数 on-failure:3
 
-##### 进入容器	docker exec
+##### **进入容器	docker exec**
 
 ```bash
 $ docker exec <container-id>
 $ docker exec -it <container-id> /bin/bash 
 ```
 
-##### 查看容器	docker ps
+##### **查看容器	docker ps**
 
 ```bash
 $ docker container ls 
@@ -202,7 +202,7 @@ $ docker ps --all
 $ docker ps -a
 ```
 
-##### 停止启动	docker start/stop/restart/kill
+##### **停止启动	docker start/stop/restart/kill**
 
 ```bash
 # 停止一个已经在运行的容器, 不会损坏容器与其中文件
@@ -217,6 +217,14 @@ $ docker restart <container-id>
 # kill掉一个已经在运行的容器
 $ docker kill <container-id>
 ```
+
+##### 暂停恢复	docker pause/unpause
+
+~~~bash
+# 不可以直接start, 可以restart
+$ docker pause <container-id>
+$ docker unpause <container-id>
+~~~
 
 ##### 删除容器	docker rm
 
@@ -254,7 +262,7 @@ $ cat dest_container.tar | docker import - test/xx:v1.0.0
 $ docker import URL example/imagerepo
 ~~~
 
-##### 容器信息	docker inspect
+##### **容器信息	docker inspect**
 
 ~~~bash
 $ docker inspect <container-id>
@@ -266,7 +274,7 @@ $ docker inspect <container-id>
 $ docker rename <container-id> newContainerName
 ~~~
 
-##### 容器日志	docker logs
+##### **容器日志	docker logs**
 
 ~~~bash
 $ docker logs -f
@@ -282,4 +290,10 @@ $ docker port <container-id>
 
 ~~~bash
 $ docker cp <container-id>:src dest
+~~~
+
+##### 容器进程	docker top
+
+~~~bash
+$ docker top <container-id>
 ~~~
