@@ -646,7 +646,7 @@ Every function call comes with a little preamble that asks, "Is there enough sta
 
 Because of the use of contiguous stacks, no Goroutine can have a pointer to some other Goroutine’s stack. There would be too much overhead for the runtime to keep track of every pointer to every stack and readjust those pointers to the new location. 
 
-由于使用了连续堆栈, 没有 Goroutine 可以拥有指向其他 Goroutine 堆栈的指针.  运行时跟踪每个堆栈的每个指针并将这些指针重新调整到新位置会产生太多开销. 
+由于使用了**连续堆栈**, 没有 Goroutine 可以拥有指向其他 Goroutine 堆栈的指针.  运行时跟踪每个堆栈的每个指针并将这些指针重新调整到新位置会产生太多开销. 
 
 
 
