@@ -626,7 +626,7 @@ Escape analysis decides if a value is constructed on the stack (the default) or 
 
 逃逸分析决定一个值是在堆栈(默认)还是堆(逃逸)上构造的. 使用 stayOnStack 函数, 我将值的副本传回给调用者, 因此将值保留在堆栈上是安全的. 使用 escaoeToHeap 函数, 我将值地址的副本传回给调用者(共享堆栈), 因此将值保留在堆栈上是不安全的. 
 
-#### 2.12 Stack Growth (栈) 																									(堆栈增长)
+#### 2.12 Stack Growth  																											(堆栈增长)
 
 The size of each frame for every function is calculated at compile time. This means, if the compiler doesn’t know the size of a value at compile time, the value must be constructed on the heap. An example of this is using the built-in function make to construct a slice whose size is based on a variable. 
 
@@ -648,5 +648,90 @@ Because of the use of contiguous stacks, no Goroutine can have a pointer to some
 
 由于使用了**连续堆栈**, 没有 Goroutine 可以拥有指向其他 Goroutine 堆栈的指针.  运行时跟踪每个堆栈的每个指针并将这些指针重新调整到新位置会产生太多开销. 
 
+#### 2.13 Garbage Collection 																								(垃圾回收)
 
+Once a value is constructed on the heap, the **Garbage Collector** (GC) has to get involved. The most important part of the GC is **the pacing algorithm**. It **determines** the frequency/pace that the GC has to run in order to maintain the smallest heap possible in conjunction with the best application throughput. 
+
+一旦在堆上构造了一个值, **垃圾收集器**(GC)就必须参与其中. GC最重要的部分是**速度调整算法**. 它确定GC必须运行的频率/速度，以保持尽可能小的堆和最佳的应用程序吞吐量. 
+
+#### 2.14 Constants 																													(常量)
+
+One of the more unique features of Go is how the language implements constants. The rules for constants in the language specification are unique to Go. They provide the flexibility Go needs to make the code we write **readable and intuitive** while still maintaining type safety. 
+
+Go的一个更独特的特性是该语言如何实现常量. 语言规范中的常量规则是唯一的. 它们提供了Go所需的灵活性, 使我们编写的**代码可读性和直观性**, 同时仍保持类型安全. 
+
+Constants can be typed or untyped. When a constant is untyped, it’s considered to be of a kind. Constants of a kind can be implicitly converted by the compiler. This all happens at compile time and not at runtime. 
+
+常量可以有类型或无类型. 当一个常量没有类型时, 它被认为是一种`kind`. `kind`常量能通过编译器隐式转换. 这一切都发生在编译时而不是运行时. [指的是显式声明或者未声明其类型, 并非无类型]
+
+Untyped numeric constants have a precision of 256 bits. 
+
+为声明类型的数字常量的精度为 256 位.
+
+**Listing 2. 14. 1**
+
+~~~go
+const ui = 123456	// type: kind int
+const uf = 3.1415   // type: kind floating-point
+~~~
+
+Typed constants still use the constant type system, but their precision is restricted. 
+
+类型化常量仍然使用常数类型系统, 但其精度受到限制. 
+
+**Listing 2. 14. 2**
+
+~~~go
+const ti int = 123456		// type: int
+const tf flaot64 = 3.1415   // type: floating
+~~~
+
+This doesn't work because the number 1000 is too large to store in an uint8. 
+
+下面这个无效(编译错误), 因为1000太大不能存储在uint8. 
+
+**Listing 2. 14. 3**
+
+~~~go
+const Myuint8 uint8 = 1000
+~~~
+
+Constant arithmetic supports the use of different kinds of constants. Kind Promotion is used to handle these different scenarios. All of this happens implicitly.
+
+常量算法支持使用不同类型的常量. ` Kind Promotion`用于处理这些不同的场景. 所有这些都是隐含的.
+
+**Listing 2. 14. 4**
+
+~~~go
+const answer = 3 * 0.333 // kindFloat(3) * kindFloat(0.333)
+~~~
+
+The answer variable will be of type float64 and represent 0.999 at a precision of 64 bits. 
+
+**Listing 2. 14. 5**
+
+~~~go
+const third = 1 / 3.0	// kindFloat(1) / kindFloat(3.0)
+~~~
+
+The third constant will be of kind floating point and represent 1/3 at a precision of 256 bits. 
+
+**Listing 2. 14. 6**
+
+~~~go
+const zero = 1 / 3 		// kindInt(1) / kindInt(3)
+~~~
+
+The zero constant will be of kind integer and set to 0. 
+
+**Listing 2. 14. 7**
+
+~~~go
+const one int8 = 1
+const two = 2 * one		// int8(2) * int8(1)
+~~~
+
+This is an example of constant arithmetic between typed and untyped constants. In this case a constant of a type promotes over a constant of a kind. The two constant will be of type int8 and set to 2.
+
+这是类型化常量和非类型化常量之间的常数算术示例. 在这种情况下, 一个类型的常量优于一个`kind`的常量.这两个常量的类型为int8, 并设置为2. [意思是看似是kind类型的常量,但是会由于与类型常量运算而确定类型]. 
 
