@@ -11,9 +11,9 @@
 ##### 定义
 
 > 1. 通过Key访问Value的数据结构
-> 2. Hash函数将key转化为数组的索引，然后将Value存储在对应索引位置
+> 2. Hash函数将key转化为数组的索引, 然后将Value存储在对应索引位置
 
-~~~
+~~~go
 hash(key) ==> (index) ==> value 
 ~~~
 
@@ -21,15 +21,15 @@ hash(key) ==> (index) ==> value
 
 ###### Hash冲突
 
-不同的Key可能会生产相同的Hash值，所以一般通过拉链法，将冲突的Key对应的Value加入到统一链表中
+不同的Key可能会生产相同的Hash值, 所以一般通过拉链法, 将冲突的Key对应的Value加入到统一链表中
 
 ###### 空间浪费
 
-不同Key生成的Hash后，索引值差距较大
+不同Key生成的Hash后, 索引值差距较大
 
 ###### 扩容
 
-当默认数组空间被填满后，如何扩容
+当默认数组空间被填满后, 如何扩容
 
 #### Map
 
@@ -38,22 +38,22 @@ hash(key) ==> (index) ==> value
 ~~~go
 type hmap struct {
     // Key-Value个数
-	count     int 
-	flags     uint8
+	count     	int 
+	flags     	uint8
     // log_2 of # of buckets (can hold up to loadFactor * 2^B items)
-	B         uint8 
+	B         	uint8 
     // approximate number of overflow buckets; see incrnoverflow for details
-	noverflow uint16 
+	noverflow 	uint16 
     // hash seed
-	hash0     uint32 
+	hash0     	uint32 
 	// array of 2^B Buckets. may be nil if count==0. 底层的buckets指针
-	buckets    unsafe.Pointer
+	buckets     unsafe.Pointer
     // previous bucket array of half the size, non-nil only when growing
 	oldbuckets unsafe.Pointer 
     // progress counter for evacuation (buckets less than this have been evacuated)
-	nevacuate  uintptr        
+	nevacuate   uintptr        
 	// optional fields 可选 溢出的
-	extra *mapextra 
+	extra 		*mapextra 
 }
 ~~~
 
@@ -85,7 +85,7 @@ func makemap(t *maptype, hint int, h *hmap) *hmap {
 	}
 	h.hash0 = fastrand()
 	
-    // 根据元素个数 与 负载因子 确定 B 的大小
+    // 根据 元素个数 与 负载因子 确定 B 的大小
 	// Find the size parameter B which will hold the requested # of elements.
 	// For hint < 0 overLoadFactor returns false since hint < bucketCnt.
 	B := uint8(0)
@@ -132,11 +132,9 @@ func bucketShift(b uint8) uintptr {
 
 太大的负载因子有如下问题
 
-~~~
-too large and we have lots of overflow, buckets, too small and we waste a lot of space
-~~~
+**too large and we have lots of overflow, buckets, too small and we waste a lot of space**
 
-所以经过验证，官方将负载因子定为6.5
+所以经过验证, 官方将负载因子定为6.5
 
 ~~~go
 // Maximum average load of a bucket that triggers growth is 6.5.
@@ -149,19 +147,20 @@ loadFactorDen = 2
 
 | B值  | 不等式                    | 结果            |
 | ---- | ------------------------- | --------------- |
-| 0    | 16≤ 2^0 * 6.5 => 16 ≤ 6.5 | 不成立，B递增1  |
-| 1    | 16 ≤ 2^1 * 6.5 => 16 ≤ 13 | 不成立，B递增1  |
-| 2    | 16 ≤ 2^2 * 6.5 => 16 ≤ 26 | 成立，B结束递增 |
+| 0    | 16≤ 2^0 * 6.5 => 16 ≤ 6.5 | 不成立, B递增1  |
+| 1    | 16 ≤ 2^1 * 6.5 => 16 ≤ 13 | 不成立, B递增1  |
+| 2    | 16 ≤ 2^2 * 6.5 => 16 ≤ 26 | 成立, B结束递增 |
 
-同时也和Map初始化hint也就是count关系，元素数量需要大于等于bucketCnt
+同时也和Map初始化hint也就是count关系, 元素数量需要大于等于bucketCnt
 
 ```go
- // Maximum number of key/elem pairs a bucket can hold.  一个bucket默认最大的key-value对数
- bucketCntBits = 3
- bucketCnt     = 1 << bucketCntBits
+// Maximum number of key/elem pairs a bucket can hold.  
+// 一个bucket默认最大的key-value对数
+bucketCntBits = 3
+bucketCnt     = 1 << bucketCntBits
 ```
 
-否则B默认为0，后面可以
+否则B默认为0, 后面可以
 
 ```
 if B == 0, the buckets field is allocated lazily later (in mapassign)
@@ -169,7 +168,7 @@ if B == 0, the buckets field is allocated lazily later (in mapassign)
 
 ##### buckets
 
-计算完B的大小，那么就到了分配BucketArray数组 = 1 << b **实际上就是 2 ^ B**
+计算完B的大小, 那么就到了分配BucketArray数组 = 1 << b **实际上就是 2 ^ B**
 
 ~~~go
 // makeBucketArray initializes a backing array for map buckets.
@@ -213,7 +212,8 @@ func makeBucketArray(t *maptype, b uint8, dirtyalloc unsafe.Pointer) (
 		// To keep the overhead of tracking these overflow buckets to a minimum,
 		// we use the convention that if a preallocated overflow bucket's overflow
 		// pointer is nil, then there are more available by bumping the pointer.
-		// We need a safe non-nil pointer for the last overflow bucket; just use buckets.
+		// We need a safe non-nil pointer for the last overflow bucket;
+        // just use buckets.
 		nextOverflow = (*bmap)(add(buckets, base*uintptr(t.bucketsize)))
 		last := (*bmap)(add(buckets, (nbuckets-1)*uintptr(t.bucketsize)))
 		last.setoverflow(t, (*bmap)(buckets))
@@ -222,7 +222,7 @@ func makeBucketArray(t *maptype, b uint8, dirtyalloc unsafe.Pointer) (
 }
 ~~~
 
-接下来就是buckets的内部结构了，buckets是一个数组，数组的成员是bmap
+接下来就是buckets的内部结构了, buckets是一个数组, 数组的成员是bmap
 
 ~~~go
 // A bucket for a Go map.
@@ -242,7 +242,7 @@ type bmap struct {
 }
 ~~~
 
-注意，这个结构并不是最终的bmap，编译器会动态的创建如下结构
+注意, 这个结构并不是最终的bmap, 编译器会动态的创建如下结构
 
 ~~~go
 type bmap struct {
@@ -269,7 +269,7 @@ func mapaccess1(t *maptype, h *hmap, key unsafe.Pointer) unsafe.Pointer {
 	hash := t.hasher(key, uintptr(h.hash0))
     
    
-    // 让 Key 的hash值 落在 buckets数组范围内，也就是计算 hash 的低 B 位
+    // 让 Key 的hash值 落在 buckets数组范围内, 也就是计算 hash 的低 B 位
 	m := bucketMask(h.B)
     // 通过 m 与 hash 计算 buckets 的首地址 
 	b := (*bmap)(add(h.buckets, (hash&m)*uintptr(t.bucketsize)))
@@ -305,7 +305,7 @@ bucketloop:
 			if t.indirectkey() {
 				k = *((*unsafe.Pointer)(k))
 			}
-            // 判断 key 存在，然后定位 value
+            // 判断 key 存在, 然后定位 value
 			if t.key.equal(key, k) {
 				e := add(unsafe.Pointer(b), dataOffset+bucketCnt*uintptr(t.keysize)+i*uintptr(t.elemsize))
 				if t.indirectelem() {
@@ -322,7 +322,7 @@ bucketloop:
 ##### 核心过程
 
 1. Hash值
-2. 低B位，确定bucket的地址
+2. 低B位, 确定bucket的地址
 3. tophash 高8位确定key的位置
 
 ##### 插入
