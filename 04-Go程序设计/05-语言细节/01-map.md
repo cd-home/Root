@@ -233,9 +233,11 @@ type bmap struct {
     // 一个bmap最多8个 k-v 键值对
 	tophash [bucketCnt]uint8
 	// Followed by bucketCnt keys and then bucketCnt elems.
-	// NOTE: packing all the keys together and then all the elems together makes the
-	// code a bit more complicated than alternating key/elem/key/elem/... but it allows
-	// us to eliminate padding which would be needed for, e.g., map[int64]int8.
+	// NOTE: 
+    // packing all the keys together and then all the elems together makes the
+	// code a bit more complicated than alternating key/elem/key/elem/... 
+    // but it allows us to eliminate padding which would be needed for, 
+    // e.g., map[int64]int8.
 	// Followed by an overflow pointer.
 }
 ~~~
@@ -254,7 +256,7 @@ type bmap struct {
 
 如图所示的存储方式
 
-![bmap](./images/bmap.svg)
+<img src="./images/bmap.svg" alt="bmap"  />
 
 ##### 查找
 
@@ -275,7 +277,7 @@ func mapaccess1(t *maptype, h *hmap, key unsafe.Pointer) unsafe.Pointer {
     // 扩容
 	if c := h.oldbuckets; c != nil {
 		if !h.sameSizeGrow() {
-			// There used to be half as many buckets; mask down one more power of two.
+	    // There used to be half as many buckets; mask down one more power of two.
 			m >>= 1
 		}
         // 求在oldbuckets的位置
