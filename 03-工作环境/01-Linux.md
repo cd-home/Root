@@ -262,6 +262,7 @@ $ ps -ajx
 
 # 查找进程
 $ pgrep -l mysql
+$ pidof progress_name
 
 # 使用某个端口的进程
 $ lsof -i :3306
@@ -371,6 +372,8 @@ $ netstat -altup | grep 6379
 #### 环境变量
 
 ~~~bash
+# 获取环境变量
+$ env
 # 全局 		  
 /etc/profile /etc/bashrc
 
