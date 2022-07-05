@@ -54,7 +54,7 @@
 | database |         数据库         |
 |    io    |        输入输出        |
 |    os    |      操作系统接口      |
-| net/http |        网络服务        |
+|   net    |        网络服务        |
 | encoding |        数据格式        |
 | reflect  |          反射          |
 | strconv  |      数据类型转换      |
