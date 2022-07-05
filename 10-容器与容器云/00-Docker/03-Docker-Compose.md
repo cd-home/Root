@@ -49,6 +49,3 @@ $ docker compose down
 $ docker compose ps
 $ docker compose top
 ~~~
-
-
-
