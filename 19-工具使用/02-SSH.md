@@ -56,4 +56,3 @@ HostName gitlab.com
 User ABC
 IdentityFile ~/.ssh/id_rsa_b
 ~~~
-
