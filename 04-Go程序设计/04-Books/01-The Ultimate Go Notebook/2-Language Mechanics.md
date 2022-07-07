@@ -70,12 +70,12 @@ the program:
 
 The word size represents the amount of memory allocation required to store integers and pointers for a given architecture. 
 
-字大小 表示 存储给定体系结构的 **整数** 和 **指针** 所需的内存分配量
+字大小 表示 存储给定体系结构(CPU架构)的 **整数** 和 **指针** 所需的内存分配量
 
  For example: 
 
-- [ ] 32 bit arch: word size is 4 bytes of memory allocation  32位架构, 内存分配4字节字大小 
-- [ ]  64 bit arch: word size is 8 bytes of memory allocation 64位架构, 内存分配8字节字大小 
+- [ ] 32 bit arch: word size is 4 bytes of memory allocation  32位架构, 字大小分配4字节内存 
+- [ ]  64 bit arch: word size is 8 bytes of memory allocation 64位架构, 字大小分配8字节内存 
 
 This is important because Go has **internal data structures** (slices, interfaces) that store integers and pointers. The size of these data structures will be based on the architecture being used to build the program.  
 
@@ -89,9 +89,9 @@ In Go, the amount of memory allocated for a value of type int, a pointer, or a w
 
 #### 2. 3 Zero Value Concept																								(零值概念)
 
-Every single value I construct in Go is initialized at least to its zero value state unless I specify the initialization value at construction.  The zero value is the setting of every bit in every byte to zero. 
+Every single value I **construct** in Go is initialized at least to its **zero value** state unless I specify the initialization value at construction.  The zero value is the setting of every bit in every byte to zero. 
 
-除非我在构造时指定初始化值, 否则我在Go中构造的每个值都至少初始化为其零值状态, 零值是将每个字节中的每个位设置为零. 
+除非我在构造时指定初始化值, 我在Go中**构造**的每个值都至少初始化为其**零值**状态, 零值是将每个字节中的每个位设置为零. 
 
 This is done for **data integrity** and it’s not free.  It takes time to push electrons through the machine to reset those bits, but I should always take integrity over performance.   
 
@@ -135,7 +135,7 @@ Strings use the UTF8 **character set**, but are really just a collection of byte
 
 A string is a two-word internal data structure in Go: 
 
-一个字符串在Go中是两个字的内部数据结构：
+一个字符串在Go中是两个"字"的内部数据结构：
 
 - [ ] The first word represents a pointer to a backing array of bytes 
 
@@ -163,17 +163,17 @@ func gostringnocopy(str *byte) string {
 }
 ~~~
 
-Using the short variable declaration operator, I can declare, construct, and initialize a value all at the same time.  
+Using the short variable declaration operator,I can **declare**, **construct**, and **initialize** a value all at the same time.  
 
-使用短变量声明操作符, 我可以同时声明、构造和初始化一个值. 
+使用短变量声明操作符, 我可以同时**声明、构造和初始化**一个值. 
 
 **Listing 2. 4. 2**
 
 ~~~go
-aa := 10 			// int [10] 
-bb := "hello"   	// string [hello] 
-cc := 3. 14159   	// float64 [3. 14159] 
-dd := true      	// bool [true] 
+aa := 10 			// int 		[10] 
+bb := "hello"   	// string 	[hello] 
+cc := 3. 14159   	// float64 	[3. 14159] 
+dd := true      	// bool 	[true] 
 fmt.Printf("aa := 10 \t %T [%v]\n", aa, aa)
 fmt.Printf("bb := \"hello\" \t %T [%v]\n", bb, bb) 
 fmt.Printf("cc := 3. 14159 \t %T [%v]\n", cc, cc) 
@@ -330,7 +330,7 @@ This is how the alignment and padding play out if I pretend a value of type exam
 
 如果我假设example2类型的值从地址0xc00000100020开始, 那么对齐和填充就是这样进行的.  flag字段表示起始地址, 大小仅为1字节.  由于counter字段需要2字节的分配, 因此它必须以2字节对齐方式放置在内存中, 这意味着它需要位于2的倍数地址上.  这意味着计数器字段必须从地址0xc000100022开始.  这将在标志字段和计数器字段之间创建1字节的间隙
 
-<img src="./images/struct_alignment2.svg" alt="struct_alignment2" style="zoom:150%;" />
+<img src="./images/struct_alignment2.svg" alt="struct_alignment2"  />
 
 The flag2 field is a bool and can fall at the next address 0xc000100024.  The final field is pi and requires 4 bytes of allocation so it needs to fall on a 4-byte alignment.  The next address for a 4 byte value is at 0xc000100028.  That means 3 more padding bytes are needed to maintain a proper alignment.  This results in a value of type example2 requiring 12 bytes of total memory allocation.  
 
@@ -505,7 +505,7 @@ When a Go program starts up, the Go runtime creates a Goroutine. **Every Gorouti
 
 **Every Goroutine is given a block of memory, called stack memory.** The memory for the stack starts out at 2K bytes. It’s very small. Stacks can grow over time. Every time a function is called, a block of stack space is taken to help the Goroutine execute the instructions associated with that function. Each individual block of memory is called a **frame.** 
 
-**每个Goroutine都有一个内存块, 称为堆栈内存**. 堆栈的内存从2K字节开始. 它非常小. 堆栈可以随时间增长. **每次调用函数时, 都会占用一块堆栈空间来帮助Goroutine执行与该函数相关的指令. 每个单独的内存块称为一个帧.** 
+**每个Goroutine都有一个内存块, 称为堆栈内存**. 堆栈的内存从2K字节开始. 它非常小. 堆栈可以随时间增长. **每次调用函数时, 都会占用一块堆栈空间来帮助Goroutine执行与该函数相关的指令. 每个单独的内存块称为一个帧.** [堆栈==栈, 计算机术语]
 
 The size of a frame for a given function is calculated at **compile time**. No value can be constructed on the stack unless the compiler knows the size of that value at compile time. If the compiler doesn’t know the size of a value at compile time, the value has to be constructed on the heap. 
 
@@ -546,13 +546,17 @@ func TestMoveByValue(t *testing.T) {
 }
 ~~~
 
-**扩展指针、堆栈、堆、逃逸分析、值/指针语意的设计机制** TODO
+This post provides a four part series that explains the mechanics and design behind pointers, stacks, heaps, escape analysis and value/pointer semantics in Go. 
+
+指针、堆栈、堆、逃逸分析、值/指针语意的设计机制 
+
+(见资料扩展Language Mechanics On Stacks And Pointers)
 
 #### 2.11 Escape Analysis 																										(逃逸分析)
 
 I don’t like the term "escape analysis" for the algorithm the compiler uses to determine if a value should be constructed on the stack or heap because it makes it sound like all values are constructed on the stack and then escape (or move) to the heap when necessary. This is NOT the case. The construction of any value only happens once, and the escape analysis algorithm decides where that will be (stack or heap). Only construction on the heap is called an allocation in Go.
 
-我不喜欢编译器用来确定是否应该在堆栈或堆上构造值的算法的术语"逃逸分析", 因为它听起来好像所有值都在堆栈上构造然后必要时逃逸(或移动)到堆中. 事实并非如此. 任何值的构造只发生一次,逃逸分析算法决定将在哪里(堆栈或堆). 在 Go 中, 只有堆上的构造才称为分配. 
+我不喜欢编译器用来确定是否应该在堆栈或堆上构造值的算法的术语"逃逸分析", 因为它听起来好像所有值都在堆栈上构造然后必要时逃逸(或移动)到堆中. 事实并非如此. 任何值的构造只发生一次,逃逸分析算法决定将在哪里(堆栈或堆). **在 Go 中, 只有堆上的构造才称为分配**. 
 
 Understanding escape analysis is about understanding value ownership. The idea is, when a value is constructed within the scope of a function, then that function owns the value. From there ask the question, does the value being constructed still have to exist when the owning function returns? If the answer is no, the value can be constructed on the stack. If the answer is yes, the value must be constructed on the heap.
 
@@ -585,11 +589,11 @@ $ go build[test] -gcflags='-m -l'
 
 The stayOnStack function is using value semantics to return a user value back to the caller. In other words, the caller gets their own copy of the user value being constructed.
 
-stayOnStack函数使用值语义将`user`值返回给调用者. 换句话说, 调用者获取自己的`user`值的副本. 
+`stayOnStack` 函数使用值语义将`user`值返回给调用者. 换句话说, 调用者获取自己的`user`值的副本. 
 
 When stayOnStack returns, the user value it constructs no longer needs to exist, since the caller is getting their own copy. Therefore, the construction of the user value inside of stayOnStack can happen on the stack. No allocation. 
 
-当stayOnStack返回时, 它构造的`user`值不再需要存在, 因为调用方正在获取自己的副本. 因此stayOnStack中的`user`值的构造可以在堆栈上进行. 没有分配. 
+当 `stayOnStack` 返回时, 它构造的`user`值不再需要存在, 因为调用方正在获取自己的副本. 因此stayOnStack中的`user`值的构造可以在堆栈上进行. 没有分配. [注意上述分配的定义]
 
 **Listing 2. 11. 2**
 
@@ -609,11 +613,11 @@ escapeToHeap函数使用**指针语义**将用户值返回给调用者. 换句�
 
 When escapeToHeap returns, the user value it constructs does still need to exist, since the caller is getting shared access to the value. Therefore, the construction of the user value inside of escapeToHeap can’t happen on the stack, it must happen on the heap. Yes allocation. 
 
-当escapeToHeap返回时,它构造的`user`值仍然需要存在, 因为调用者正在获得对该值的共享访问权. 因此，escapeToHeap中`user`值的构造不能发生在堆栈上, 而必须发生在堆上. 当然是分配. 
+当 `escapeToHeap` 返回时,它构造的`user`值仍然需要存在, 因为调用者正在获得对该值的共享访问权. 因此, `escapeToHeap`中`user`值的构造不能发生在堆栈上, 而必须发生在堆上. 当然是分配. 
 
 Think about what would happen if the value was constructed on the stack when using pointer semantics on the return.
 
-思考如果在返回时使用指针语义时在堆栈上构造值会发生什么. 
+思考如果在返回时使用指针语义时在堆栈上构造值会发生什么. [不要过度深入错误方向]
 
 The caller would get a copy of a stack address from the frame below. Integrity would be lost. Once control goes back to the calling function, the memory on the stack where the user value exists is reusable again. The moment the calling function makes another function call, a new frame is sliced and the memory will be overridden, destroying the shared value. 
 
@@ -626,6 +630,10 @@ This is why I think about the stack being self cleaning. Zero value initializati
 Escape analysis decides if a value is constructed on the stack (the default) or the heap (the escape). With the stayOnStack function, I’m passing a copy of the value back to the caller, so it’s safe to keep the value on the stack. With the escaoeToHeap function, I’m passing a copy of the values address back to the caller (sharing up the stack) so it’s not safe to keep the value on the stack. 
 
 逃逸分析决定一个值是在堆栈(默认)还是堆(逃逸)上构造的. 使用 stayOnStack 函数, 我将值的副本传回给调用者, 因此将值保留在堆栈上是安全的. 使用 escaoeToHeap 函数, 我将值地址的副本传回给调用者(共享堆栈), 因此将值保留在堆栈上是不安全的. 
+
+指针、堆栈、堆、逃逸分析、值/指针语意的设计机制
+
+ (见资料扩展Language Mechanics On Escape Analysis)
 
 #### 2.12 Stack Growth  																											(堆栈增长)
 
@@ -655,19 +663,21 @@ Once a value is constructed on the heap, the **Garbage Collector** (GC) has to g
 
 一旦在堆上构造了一个值, **垃圾收集器**(GC)就必须参与其中. GC最重要的部分是**速度调整算法**. 它确定GC必须运行的频率/速度，以保持尽可能小的堆和最佳的应用程序吞吐量. 
 
+ (见资料扩展Garbage Collection In Go- Part I II III)
+
 #### 2.14 Constants 																													(常量)
 
 One of the more unique features of Go is how the language implements constants. The rules for constants in the language specification are unique to Go. They provide the flexibility Go needs to make the code we write **readable and intuitive** while still maintaining type safety. 
 
 Go的一个更独特的特性是该语言如何实现常量. 语言规范中的常量规则是唯一的. 它们提供了Go所需的灵活性, 使我们编写的**代码可读性和直观性**, 同时仍保持类型安全. 
 
-Constants can be typed or untyped. When a constant is untyped, it’s considered to be of a kind. Constants of a kind can be implicitly converted by the compiler. This all happens at compile time and not at runtime. 
+Constants can be typed or untyped. When a constant is untyped, it’s considered to be of a kind. Constants of a kind can be implicitly converted by the compiler. **This all happens at compile time and not at runtime.** 
 
-常量可以有类型或无类型. 当一个常量没有类型时, 它被认为是一种`kind`. `kind`常量能通过编译器隐式转换. 这一切都发生在编译时而不是运行时. [指的是显式声明或者未声明其类型, 并非无类型]
+常量可以有类型或无类型. 当一个常量没有类型时, 它被认为是一种`kind`. `kind`常量能通过编译器隐式转换. 这一切都发生在**编译时**而不是运行时. [指的是显式声明或者未声明其类型, 并非无类型]
 
 Untyped numeric constants have a precision of 256 bits. 
 
-为声明类型的数字常量的精度为 256 位.
+未声明类型的数字常量的精度为 256 位.
 
 **Listing 2. 14. 1**
 
