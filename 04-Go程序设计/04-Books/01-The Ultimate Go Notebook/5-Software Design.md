@@ -2,7 +2,7 @@
 
 ### 5. Software Design
 
-#### 5.1 Group Different Types of Data 分组不同类型的数据
+#### 5.1 Group Different Types of Data 											(分组不同类型的数据)
 
 It’s important to remember that in Go the **concepts** of **sub-typing** or **sub-classing** really don't exist and these **design patterns** should be avoided
 
@@ -14,8 +14,8 @@ The following is an **anti-pattern** I shouldn’t follow or **implement**
 
 ~~~go
 type Animal struct {
-		Name     string
-		IsMammal bool
+	Name     string
+	IsMammal bool
 }
 ~~~
 
@@ -219,7 +219,7 @@ Guidelines around declaring types: 关于声明类型的指南
 
 7. Question types whose sole purpose is to share common state
 
-#### 5.2 Don’t Design With Interfaces 不要使用接口进行设计
+#### 5.2 Don’t Design With Interfaces 											(不要使用接口进行设计)
 
 Unfortunately, too many developers attempt to solve problems in the abstract first. They focus on interfaces right away and this leads to interface pollution. As a developer, I exist in one of two modes: a **programmer** and then an **engineer**.
 
@@ -259,7 +259,7 @@ Don’t design with interfaces, discover them
 
 不要用接口进行设计，要发现它们
 
-#### 5.3 Composition 组合
+#### 5.3 Composition					 															(组合)
 
 The best way to take advantage of embedding is through the **compositional design pattern**. The idea is to compose larger types from smaller types and focus on the composition of behavior.
 

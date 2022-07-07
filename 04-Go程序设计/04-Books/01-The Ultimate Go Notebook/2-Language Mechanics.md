@@ -119,14 +119,16 @@ The keyword var can be used to construct values for all types to their zero valu
 **Listing 2. 4. 1**
 
 ~~~go
-var a int
-var b string
-var c float64
-var d bool
-fmt.Printf("var a int \t %T [%v]\n", a, a) 
-fmt.Printf("var b string \t %T [%v]\n", b, b) 
-fmt.Printf("var c float64 \t %T [%v]\n", c, c) 
-fmt.Printf("var d bool \t %T [%v]\n\n", d, d)
+func TestTypeZeroValue(t *testing.T) {
+	var a int
+	var b string
+	var c float64
+	var d bool
+	fmt.Printf("var a int \t type: %T     value: %v\n", a, a)
+	fmt.Printf("var b string \t type: %T  value: %v\n", b, b)
+	fmt.Printf("var c float64 \t type: %T value: %v\n", c, c)
+	fmt.Printf("var d bool \t type: %T    value: %v\n\n", d, d)
+}
 ~~~
 
 Strings use the UTF8 **character set**, but are really just a collection of bytes.  
@@ -170,14 +172,16 @@ Using the short variable declaration operator,I can **declare**, **construct**, 
 **Listing 2. 4. 2**
 
 ~~~go
-aa := 10 			// int 		[10] 
-bb := "hello"   	// string 	[hello] 
-cc := 3. 14159   	// float64 	[3. 14159] 
-dd := true      	// bool 	[true] 
-fmt.Printf("aa := 10 \t %T [%v]\n", aa, aa)
-fmt.Printf("bb := \"hello\" \t %T [%v]\n", bb, bb) 
-fmt.Printf("cc := 3. 14159 \t %T [%v]\n", cc, cc) 
-fmt.Printf("dd := true \t %T [%v]\n\n", dd, dd)
+func TestShortDeclareType(t *testing.T) {
+	aa := 10      // int 		[10]
+	bb := "hello" // string 	[hello]
+	cc := 3.14159 // float64 	[3.14159]
+	dd := true    // bool 		[true]
+	fmt.Printf("aa := 10 \t type: %T     	value:[%v]\n", aa, aa)
+	fmt.Printf("bb := \"hello\" \t type: %T   value:[%v]\n", bb, bb)
+	fmt.Printf("cc := 3. 14159 \t type: %T  value:[%v]\n", cc, cc)
+	fmt.Printf("dd := true \t type: %T     value:[%v]\n\n", dd, dd)
+}
 ~~~
 
 +++
@@ -191,8 +195,12 @@ Go没有**投影**, 只有**转换**.  **需要将字节复制到新表示的新
 **Listing 2. 5. 1**
 
 ~~~go
-aaa := int32(10) 
-fmt.Printf("aaa := int32(10) %T [%v]\n", aaa, aaa)
+func TestConvType(t *testing.T) {
+	var a int8 = 10
+	b := int32(a)
+	fmt.Printf("a := 10 type: %T value: %v\n", a, a)
+	fmt.Printf("b := int32(10) type: %T value: %v\n", b, b)
+}
 ~~~
 
 #### 2. 6 Struct and Construction Mechanics																(结构定义)
@@ -218,8 +226,10 @@ Declare a variable of type example and initialize it to its zero value state.
 **Listing 2. 6. 2**
 
 ~~~go
-var e example
-fmt.Printf("%+v\n", e1)
+func TestDefineMyType(t *testing.T) {
+	var e example
+	fmt.Printf("%+v\n", e)
+}
 ~~~
 
 Declare a variable of type example not set to its zero value state by using **literal construction syntax**.  
@@ -229,14 +239,16 @@ Declare a variable of type example not set to its zero value state by using **li
 **Listing 2. 6. 3**
 
 ~~~go
-e2 := example{ 
-    flag: true, 
-    counter: 10, 
-    pi: 3. 141592,
+func TestDeclareMyType(t *testing.T) {
+	e2 := example{
+		flag:    true,
+		counter: 10,
+		pi:      3.141592,
+	}
+	fmt.Println("Flag", e2.flag)
+	fmt.Println("Counter", e2.counter)
+	fmt.Println("Pi", e2.pi)
 }
-fmt.Println("Flag", e2. flag) 
-fmt.Println("Counter", e2. counter) 
-fmt.Println("Pi", e2. pi)
 ~~~
 
 Declare a variable of an unnamed literal type set to its non-zero value state using literal construction syntax.  This is a one-time thing.  
@@ -246,18 +258,20 @@ Declare a variable of an unnamed literal type set to its non-zero value state us
 **Listing 2. 6. 4**
 
 ~~~go
-e3 := struct { 
-    flag 	bool 
-    counter int16 
-    pi 		float32 
-}{ 
-    flag: true,
-    counter: 10,
-    pi: 3. 141592, 
+func TestUnamedType(t *testing.T) {
+	e3 := struct {
+		flag    bool
+		counter int16
+		pi      float32
+	}{
+		flag:    true,
+		counter: 10,
+		pi:      3.141592,
+	}
+	fmt.Println("Flag", e3.flag)
+	fmt.Println("Counter", e3.counter)
+	fmt.Println("Pi", e3.pi)
 }
-fmt.Println("Flag", e3. flag) 
-fmt.Println("Counter", e3. counter) 
-fmt.Println("Pi", e3. pi)
 ~~~
 
 +++
@@ -347,11 +361,11 @@ If I need to minimize the amount of padding bytes, I must lay out the fields fro
 **Listing 2. 7. 4**
 
 ~~~go
-type example4 struct { 
-    pi float32 		// 0xc000100020 <- Starting Address 
-    counter int16   // 0xc000100024 <- 2 byte alignment 
-    flag bool       // 0xc000100026 <- 1 byte alignment 
-    flag2 bool      // 0xc000100027 <- 1 byte alignment 
+type example4 struct {
+	pi      float32 // 0xc000100020 <- Starting Address
+	counter int16   // 0xc000100024 <- 2 byte alignment
+	flag    bool    // 0xc000100026 <- 1 byte alignment
+	flag2   bool    // 0xc000100027 <- 1 byte alignment
 }
 ~~~
 
