@@ -28,9 +28,9 @@
     
         int32四个字节的**有符号整型**
 
-When I declare a type using a non-precision based type (unit, int) the size of the values constructed for these types are based on the **architecture** being used to build 
+When I declare a type using a non-precision based type (unit, int) the size of the values constructed for these types are based on the **architecture** being used to build. 
 
-当我用一个无精度的类型声明一个类型时, 为这些类型构造的值的大小基于用于构建的**体系结构** 
+当我用一个无精度基础类型(uint,int)声明一个类型时, 为这些类型构造的值的大小基于用于构建的**体系结构** 
 
 the program: 
 
@@ -97,15 +97,16 @@ This is done for **data integrity** and it’s not free.  It takes time to push 
 
 这样做是为了**数据完整性** ,并且不是无消耗的.  通过机器推动电子重置这些位需要时间, 但我应该始终保持完整性而不是性能. 
 
-~~~go
- Type		 Zero Value
-Integer			0
-Boolean			false
-Floating		0
-Complex			0i
-String			""
-Pointer			nil
-~~~
+|   Type   | Zero Value |
+| :------: | :--------: |
+| Integer  |     0      |
+| Boolean  |   false    |
+| Floating |     0      |
+|  String  |     ""     |
+| Pointer  |    nil     |
+|  Slice   |    nil     |
+|   Map    |    nil     |
+| Channle  |    nil     |
 
 +++
 
@@ -462,7 +463,7 @@ I can’t assign these two variables to each other since they are of different n
 **Listing 2. 8. 2**
 
 ~~~go
-ex1 = ex2 // Not Allowed compiler error
+ex1 = ex2 			// Not Allowed compiler error
 ~~~
 
 To perform any assignment, I would have to use conversion syntax and since they are identical in structure, the compiler will allow this. 
@@ -485,7 +486,7 @@ var ex2 struct {
     counter int16 
     pi float32 
 }
-ex1 = ex2 // Allowed, NO need for conversion syntax
+ex1 = ex2 		// Allowed, NO need for conversion syntax
 ~~~
 
 The compiler will allow this assignment without the need for conversion. 
@@ -735,3 +736,105 @@ This is an example of constant arithmetic between typed and untyped constants. I
 
 这是类型化常量和非类型化常量之间的常数算术示例. 在这种情况下, 一个类型的常量优于一个`kind`的常量.这两个常量的类型为int8, 并设置为2. [意思是看似是kind类型的常量,但是会由于与类型常量运算而确定类型]. 
 
+**Listing 2. 14. 7**
+
+~~~go
+const MaxInt = 9223372036854775807
+~~~
+
+This is the max integer value for a 64 bit integer
+
+Source
+
+~~~go
+const (
+	intSize = 32 << (^uint(0) >> 63) // 32 or 64
+
+	MaxInt  = 1<<(intSize-1) - 1
+    ........
+)
+~~~
+
+**Listing 2. 14. 8**
+
+~~~go
+const bigger = 9223372036854775808543522345
+~~~
+
+The bigger constant is a much larger value than a 64 bit integer, but it can be stored in a constant of kind int since constants of kind int are not limited to 64 bits of precision. 
+
+较大的常量比64位整数大得多, 但它可以存储在`int kind`常量中, 因为`int kind`常量的精度不限于64位
+
+[可以存储编译, 但是无法使用]
+
+**Listing 2. 14. 9**
+
+~~~go
+const bigger int64 = 9223372036854775808543522345 // compile error: overflow
+~~~
+
+However, if bigger was a constant of type int64, this would not compile. 
+
+#### 2.15 IOTA 																															(IOTA)
+
+IOTA provides nice support for setting numeric constants. 
+
+**Listing 2. 15. 1**
+
+~~~go
+const ( 
+    A1 = iota // 0 : Start at 0 
+    B1 = iota // 1 : Increment by 1 
+    C1 = iota // 2 : Increment by 1 
+)
+~~~
+
+The iota keyword works within a constant block and starts with the value of 0. Then for each next constant declared, iota increments by 1. 
+
+iota关键字在常量块内工作, 并以值0开始. 然后, 对于每个声明的下一个常量, iota增量为1. 
+
+**Listing 2. 15. 2**
+
+~~~go
+const (
+	A2 = iota // 0 : Start at 0
+	B2        // 1 : Increment by 1
+	C2        // 2 : Increment by 1
+)
+
+~~~
+
+I don’t need to repeat the use of the iota keyword. It is assumed once applied. 
+
+我不需要重复使用iota关键词, 一旦前面使用过. [仅仅限于当前常量块]
+
+**Listing 2. 15. 3**
+
+~~~go
+const (
+	A3 = iota + 1 // 1 : Start at 0 + 1
+	B3            // 2 : Increment by 1
+	C3            // 3 : Increment by 1
+)
+~~~
+
+If I didn’t want to start with 0 for the first constant, perform some math and the incrementation will take place automatically. 
+
+如果我不想第一个常量从0开始, 执行一些数学运算, 增量将自动进行. 
+
+**Listing 2. 15. 4**
+
+~~~go
+const (
+	Ldate         = 1 << iota // 1 : Shift 1 to the left 0. 0000 0001
+	Ltime                     // 2 : Shift 1 to the left 1. 0000 0010
+	Lmicroseconds             // 4 : Shift 1 to the left 2. 0000 0100
+	Llongfile                 // 8 : Shift 1 to the left 3. 0000 1000
+	Lshortfile                // 16 : Shift 1 to the left 4. 0001 0000
+	LUTC                      // 32 : Shift 1 to the left 5. 0010 0000
+)
+~~~
+
+I can use this feature like the Log package does for these flags. In this case, bit operations are being used to create flag values.
+
+我可以像日志包对这些标志所做的那样使用此功能. 在这种情况下, 位操作用于创建标志位值. 
