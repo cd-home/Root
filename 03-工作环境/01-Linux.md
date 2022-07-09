@@ -494,3 +494,7 @@ $ 2>&1 >/dev/null
 ~~~bash
 $ strace -f -o ./strace.out excute_dev
 ~~~
+
+#### zsh
+
+》Oh My Zsh 安装与使用即可
