@@ -31,8 +31,8 @@ services:
     	- ./base.env
     	- ./dev.env
     environment:
-      - mode: DEBUG
-      - app: admin
+      	mode: DEBUG
+      	app: admin
     # 同 EXPOSE 暴露端口
     expose:
       - 8080
