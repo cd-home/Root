@@ -26,6 +26,8 @@ services:
       context: app
       dockerfile: app/Dockerfile
     container_name: webapp
+    args:
+    	arch: amd64
     # 环境变量
     env_file: 
     	- ./base.env
@@ -69,6 +71,7 @@ $ docker compose images
 $ docker compose logs
 $ docker compose exec
 $ docker compose port
+# 指定容器名称, 就无法scale
 $ docker compose scale web=3 db=2
 ~~~
 
@@ -95,3 +98,4 @@ EXPOSE 8999
 ENTRYPOINT ["./app"]
 ~~~
 
+在Dockerfile中设置的命令, 无必要在Compose中重复设置
