@@ -79,7 +79,7 @@ Options
 |   -f   | --file Name         | docker-compose文件 |
 |   -p   | --project-name Name | 项目名称           |
 
-Example Dockerfile
+Example Simple Dockerfile
 
 ~~~dockerfile
 FROM golang:alpine AS Builder
