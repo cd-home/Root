@@ -151,10 +151,10 @@ COPY --from=Builder /app/build/ /app/release/
 EXPOSE 8080
 RUN apk update && \
 	apk add --no-cache \
-	vim && \
-	curl && \
-	ca-certificates && \
-	bash && \
+	vim \
+	curl \
+	ca-certificates \
+	bash \
 	tzdata && \
 	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
 	echo Asia/Shanghai > /etc/timezone
