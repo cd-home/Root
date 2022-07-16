@@ -50,8 +50,6 @@ $ docker network create [OPTIONS] defx_net
 |        |                 |      |
 |        |                 |      |
 
-
-
 ##### 查看网络	docker network ls
 
 ~~~bash
