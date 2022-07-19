@@ -61,7 +61,8 @@
 | strings  |       字符串操作       |
 |   sync   |          同步          |
 | context  | 状态传播、超时控制取消 |
-| testing  |          测试          |
+| testing  |     单元、性能测试     |
+| fuzzing  |        模糊测试        |
 
 #### Web应用
 
