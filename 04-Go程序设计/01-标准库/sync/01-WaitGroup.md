@@ -116,12 +116,12 @@ func (*noCopy) Unlock() {}
 	call of doSomething copies lock value: sync.WaitGroup contains sync.noCopy
 ~~~
 
+#### 扩展3: Source Code Analysis
+
+TODO
+
 #### Conclusion
 
 - [x] WaitGroup是用来同步等待一组goroutines完成
 - [x] WaitGroup在第一次使用后不可被复制(会导致操作不匹配)
 - [x] 如果不能保证上述问题, 请使用 go vet 静态检测
-
-#### 扩展3: Source Code Analysis
-
-TODO
