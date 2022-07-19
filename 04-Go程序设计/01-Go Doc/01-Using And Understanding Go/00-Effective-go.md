@@ -1,8 +1,30 @@
 [TOC]
 
-### Effective-Go
+### Effective Go
 
-#### 格式化
+》From https://go.dev/doc/effective_go
+
+#### Introduction
+
+Go is a new language. Although it borrows ideas from existing languages, it has unusual properties that make effective Go programs different in character from programs written in its relatives. A straightforward translation of a C++ or Java program into Go is unlikely to produce a satisfactory result—Java programs are written in Java, not Go. On the other hand, thinking about the problem from a Go **perspective** could produce a successful but quite different program. In other words, to write Go well, it's important to understand its **properties and idioms**. It's also important to know the established conventions for programming in Go, such as naming, formatting, program construction, and so on, so that programs you write will be easy for other Go programmers to understand.
+
+Go 是一门新语言. 尽管它借鉴了现有语言的思想, 但它具有不同寻常的特性,使得 `effective` Go 程序在性质上不同于用其 `relatives` 编写的程序.  将 C++ 或 Java 程序直接翻译成 Go 不太可能产生令人满意的结果— Java 程序是用 Java 编写的, 而不是 Go. 另一方面, 从 Go 的**角度**思考问题可能会产生一个成功但完全不同的程序. 换句话说, 要写好 Go, 理解它的**特性和语言习惯**很重要. 了解 Go 编程的既定约定也很重要, 例如命名、格式、程序构造等, 以便您编写的程序易于其他 Go 程序员理解. 
+
+This document gives tips for writing clear, idiomatic Go code. It augments the [language specification](https://go.dev/ref/spec), the [Tour of Go](https://go.dev/tour/), and [How to Write Go Code](https://go.dev/doc/code.html), all of which you should read first.
+
+本文档提供了编写清晰、惯用的 Go 代码的技巧. 它扩充了语言规范、Go 之旅和如何编写 Go 代码, 所有这些都是您应该首先阅读的. 
+
+Note added January, 2022: This document was written for Go's release in 2009, and has not been updated significantly since. Although it is a good guide to understand how to use the language itself, thanks to the **stability of the language**, it says little about the libraries and nothing about significant changes to the Go ecosystem since it was written, such as the build system, testing, modules, and polymorphism. There are no plans to update it, as so much has happened and a large and growing set of documents, blogs, and books do a fine job of describing modern Go usage. Effective Go continues to be useful, but the reader should understand it is far from a complete guide. See [issue 28782](https://github.com/golang/go/issues/28782) for context.
+
+2022 年 1 月添加的注释: 本文档是为 2009 年的 Go 版本编写的, 此后没有进行重大更新. 尽管它是理解如何使用语言本身的一个很好的指南,  多亏**语言的稳定性**, 它很少提及标准库, 也没有提及自编写以来对 Go 生态系统的重大变化, 例如构建系统、测试 、模块和多态性.  目前没有更新它的计划, 因为已经发生了很多事情，而且越来越多的文档、博客和书籍很好地描述了现代 Go 的使用.  Effective Go 仍然有用, 但读者应该明白它远非完整的指南. 有关上下文, 请参见问题 28782. 
+
+#### Examples
+
+The Go package sources (https://go.dev/src/) are intended to serve not only as the core library but also as examples of how to use the language. Moreover, many of the packages contain working, self-contained executable examples you can run directly from the http://go.dev/ web site, such as this one(https://pkg.go.dev/strings) (if necessary, click on the word "Example" to open it up). If you have a question about how to approach a problem or how something might be implemented, the documentation, code and examples in the library can provide answers, ideas and background.
+
+Go 源码包 (https://go.dev/src) 不仅用作核心库, 而且用作如何使用该语言的示例.  此外, 许多包都包含有效的、独立的可执行示例, 您可以直接从 http://go.dev/ 网站运行, 例如这个(https://pkg.go.dev/strings)(如有必要,单击“示例”一词打开它) 如果您对如何解决问题或如何实现有疑问, 库中的文档、代码和示例可以提供答案、想法和背景. 
+
+#### Formatting 格式化
 
 > 以包为对象进行格式化
 >
