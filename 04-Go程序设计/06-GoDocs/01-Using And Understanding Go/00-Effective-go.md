@@ -24,25 +24,45 @@ The Go package sources (https://go.dev/src/) are intended to serve not only as t
 
 Go 源码包 (https://go.dev/src) 不仅用作核心库, 而且用作如何使用该语言的示例.  此外, 许多包都包含有效的、独立的可执行示例, 您可以直接从 http://go.dev/ 网站运行, 例如这个(https://pkg.go.dev/strings)(如有必要,单击“示例”一词打开它) 如果您对如何解决问题或如何实现有疑问, 库中的文档、代码和示例可以提供答案、想法和背景. 
 
-#### Formatting 格式化
+#### Formatting 	格式化
 
-> 以包为对象进行格式化
->
-> 1. 缩进, 使用Tab缩进
-> 2. 括号, if switch for无需圆括号
-> 3. 行长
-> 4. 空格
-> 5. 注释
-> 6. 字段对齐
+Formatting issues are the most contentious but the least consequential. People can adapt to different formatting styles but it's better if they don't have to, and less time is devoted to the topic if everyone adheres to the same style. The problem is how to approach this Utopia without a long prescriptive style guide.
+
+格式问题是最有争议但影响最小的问题. 人们可以适应不同的格式风格, 但如果不需要的话会更好, 如果每个人都坚持相同的风格, 那么花在这个主题上的时间就会更少. 问题是, 如果没有一个冗长的规定性风格指南, 如何接近这个乌托邦. 
+
+With Go we take an unusual approach and let the machine take care of most formatting issues. The `gofmt` program (also available as `go fmt`, which operates at the package level rather than source file level) reads a Go program and emits the source in a standard style of **indentation and vertical alignment**, retaining and if necessary reformatting comments. If you want to know how to handle some new layout situation, run `gofmt`; if the answer doesn't seem right, rearrange your program (or file a bug about `gofmt`), don't work around it.
+
+使用Go, 我们采取了一种不同寻常的方法, 让机器处理大多数格式问题. gofmt程序(也称为go fmt), 在包级别而不是源文件级别运行) 读取go程序, 并以**缩进和垂直对齐**的标准样式发出源代码, 保留注释，并在必要时重新格式化注释. 如果您想知道如何处理一些新的布局情况, 请运行gofmt；如果答案似乎不正确, 请重新安排您的程序(或提交有关gofmt的错误), 不要绕过它.
+
+「以包为对象进行格式化」
+
+「缩进, 使用Tab缩进」
+
+「if switch for无需圆括号(Go需要更少的圆括号)」
+
+「行长 (Go没有行长的限制)」
+
+「空格」
+
+「注释」
+
+「字段对齐」
 
 ~~~bash
 go fmt
 ~~~
 
-#### 注释
+**建议: 使用 go fmt, 使得代码规范统一.** 
 
-> 1.  单行更为常用, 尽量是完整的说明
-> 2.  每个包都应包含一段**包注释**, 即放置在包子句前的一个块注释
+#### Commentary 注释
+
+Go provides C-style /* */ block comments and C++-style // line comments. Line comments are the norm; block comments appear mostly as package comments, but are useful within an expression or to disable large swaths of code.
+
+Go提供C风格的/**/块注释和C++风格的//行注释. 行注释是标准; 块注释主要以包注释的形式出现, 但在表达式中很有用, 或者可以禁用大量代码. 
+
+「单行更为常用, 尽量是完整的说明, 并且简洁明了」
+
+「每个包都应包含一段包注释, 即放置在包子句前的一个块注释」
 
 ~~~go
 // 单行注释
@@ -51,32 +71,69 @@ go fmt
 */
 ~~~
 
-#### 命名
+**建议: 对包、结构体、函数、方法、枚举类型、核心逻辑做注释. 并且注释需要完整简洁.** 
 
-**包**
+#### Name 				命名
 
-> 1. 可见性【首字母大写其他的包可见, 小写本包内可见】
-> 2. 名称应该简洁明了易于理解. 按照惯例, 包应当以小写的单个单词来命名, 且不应使用下划线或驼峰记法
+Names are as important in Go as in any other language. They even have semantic effect: the visibility of a name outside a package is determined by whether its first character is upper case. It's therefore worth spending a little time talking about naming conventions in Go programs.
 
-~~~go
-import .  // 勿使用
-~~~
+名称在 Go 中与在任何其他语言中一样重要. 它们甚至具有语义效果: 名称在包外的可见性取决于它的第一个字符是否为大写.  因此, 值得花一点时间讨论 Go 程序中的命名约定. 
 
-**接口**
+「名称首字母大写, 包外可见」
 
-> 1. 只包含一个方法的接口应当以该方法的名称加上-er后缀来命名
-> 2. 接口与方法尽量不要使用标准库等常用的名称
+##### Package names 	包名称
+
+When a package is imported, the package name becomes an accessor for the contents
+
+当一个包被导入时, 包名成为内容的访问器.
+
+After import "bytes" the importing package can talk about `bytes.Buffer`
+
+It's helpful if everyone using the package can use the same name to refer to its contents, which implies that the package name should be good: short, concise, evocative. By convention, packages are given lower case, single-word names; there should be no need for underscores or mixedCaps. Err on the side of brevity, since everyone using your package will be typing that name. And don't worry about collisions a priori. The package name is only the default name for imports; it need not be unique across all source code, and in the rare case of a collision the importing package can choose a different name to use locally. In any case, confusion is rare because the file name in the import determines just which package is being used.
+
+如果每个使用包的人都可以使用相同的名称来引用其内容, 这会很有帮助, 这意味着包的名称应该是好的: 简短、简洁、令人印象深刻.  按照惯例, 包被赋予小写的单个名称; 不需要下划线或混合大写字母. 简洁起见, 因为每个使用您的包的人都会输入该名称. 并且不要担心冲突. 包名只是导入的默认名称; 它不需要在所有源代码中都是唯一的, 并且在极少数发生冲突的情况下, 导入包可以选择不同的名称以在本地使用. 无论如何, 混淆很少见, 因为导入中的文件名决定了正在使用哪个包. 
+
+「小写的单个单词来命名, 且不应使用下划线或驼峰记法」
+
+Another convention is that the package name is the base name of its source directory; the package in `src/encoding/base64` is imported as `"encoding/base64"` but has name `base64`, not `encoding_base64` and not `encodingBase64`.
+
+另一个约定是包名是其源目录的基名; src/encoding/base64 中的包被导入为"encoding/base64", 但名称为 base64, 不是 encoding_base64, 也不是 encodingBase64.
+
+The importer of a package will use the name to refer to its contents, so exported names in the package can use that fact to avoid repetition. (Don't use the import . notation, which can simplify tests that must run outside the package they are testing, but should otherwise be avoided.) For instance, the buffered reader type in the ` bufio` package is called Reader, not BufReader, because users see it as bufio.Reader, which is a clear, concise name. Moreover, because imported entities are always **addressed** with their package name, bufio.Reader does not conflict with io.Reader. Similarly, the function to make new instances of ring.Ring—which is the definition of a constructor in Go—would normally be called NewRing, but since Ring is the only type exported by the package, and since the package is called ring, it's called just New, which clients of the package see as ring.New. Use the package structure to help you choose good names.
+
+包的导入器将使用包名称来引用其内容, 因此包中的导出名称可以使用该事实来避免重复. 
+
+(不要使用 import . 表示法, 它可以简化必须在他们正在测试的包之外运行的测试, 但应该避免使用)
+
+ 例如, bufio 包中的缓冲读取器类型称为 Reader, 而不是 BufReader, 因为用户将其视为 bufio.Reader, 这是一个简洁明了的名称. 此外, 由于导入的实体总是以其包名来**寻址**, 因此 bufio.Reader 不会与 io.Reader 冲突.
+
+**「不要使用 import . 倒入全部名称」**
+
+**「通过包来寻地址后, 不同包名称空间中可出现相同」** 
+
+类似地, 创建 ring.Ring 的新实例的函数——它是 Go 中构造函数的定义——通常称为 NewRing, 但由于 Ring 是**包导出的唯一类型**, 并且由于包被称为 ring, 所以它是只称为 New, 包的客户将其视为ring.New.使用包结构来帮助您选择好名称. 「**如果包中只有一个类型, 构造函数可使用New更为简洁明了**」
+
+Another short example is `once.Do`; `once.Do(setup)` reads well and would not be improved by writing `once.DoOrWaitUntilDone(setup)`. Long names don't automatically make things more readable. A helpful doc comment can often be more valuable than an extra long name.
+
+另一个简短的例子是 once.Do; once.Do(setup) 可读性很好,并且不会通过编写once.DoOrWaitUntilDone(setup) 来改进. 长名称不会自动使内容更具可读性. 有用的文档注释通常比超长的名称更有价值. 
+
+「**简短名字配合文档注释常常会更好**」
+
+##### Interface names 	接口名字
+
+1. 只包含一个方法的接口应当以该方法的名称加上-er后缀来命名
+2. 接口与方法尽量不要使用标准库等常用的名称
 
 **驼峰命名**
 
-> 1. 勿使用关键字来命名
-> 2. Go中约定使用驼峰记法
+1. 勿使用关键字来命名
+2. Go中约定使用驼峰记法
 
 #### 分号
 
-> 1.  正式语法使用分号来结束语句, 词法分析器会使用一条简单的规则来自动插入分号, **源码中不用分号**
->
-> 2.  不能将一个控制结构（`if`、`for`、`switch` 或 `select`）的左大括号放在下一行
+1.  正式语法使用分号来结束语句, 词法分析器会使用一条简单的规则来自动插入分号, **源码中不用分号**
+
+2.  不能将一个控制结构（`if`、`for`、`switch` 或 `select`）的左大括号放在下一行
 
 #### 控制
 
