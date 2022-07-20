@@ -4,6 +4,8 @@
 
 #### From Rob Pike
 
+》TODO
+
 Go Proverbs Simple, Poetic, Pithy
 
 [Don't communicate by sharing memory, share memory by communicating.](https://www.youtube.com/watch?v=PAAkCSZUG1c&t=2m48s)
