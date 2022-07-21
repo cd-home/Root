@@ -104,6 +104,26 @@ $ docker build [OPTIONS] Context(PATH|URL)
 | --build-arg | --build-arg k=v     | 设置构建时变量, 可覆盖ARG     |
 |     -o      | --output            | 构建完成输出                  |
 
+##### 构建镜像   docker buildx build
+
+构建多系统架构支持的镜像
+
+~~~bash
+$ docker buildx build
+~~~
+
+Dockerfile 支持变量
+
+~~~dockerfile
+ARG TARGETPLATFORM
+ARG TARGETOS
+ARG TARGETARCH 
+
+ARG BUILDPLATFORM
+ARG BUILDOS
+ARG BUILDARCH
+~~~
+
 #### 容器					container
 
  \<container-name>  \<container-id> 标识唯一镜像, 后续命令采用\<container-id>
