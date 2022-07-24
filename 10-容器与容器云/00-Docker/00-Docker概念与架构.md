@@ -8,6 +8,8 @@
 
 #### Docker Arch
 
+》容器实质是进程
+
 ![Docker-Arch](./images/Docker-Arch.svg)
 
 #### Docker Cli

@@ -12,9 +12,10 @@ $ docker search <image-name>:<tag>
 
 ##### 拉取			docker pull
 
->  tag 可选, 默认latest, 并不一定代表最新
+tag 可选, 默认latest, 并不一定代表最新
 
 ```bash
+$ docker image pull [docker-your-register.com/your_image:tag]
 $ docker image pull <image-name>:tag
 $ docker pull <image-name>:tag
 ```
