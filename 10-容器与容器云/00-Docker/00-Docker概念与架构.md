@@ -4,7 +4,7 @@
 
 #### Docker vs VM
 
-![docker-containerized-and-vm-transparent-bg.png](./images/docker-containerized-and-vm-transparent-bg.png.webp)
+![docker-containerized-and-vm-transparent](./images/docker-containerized-and-vm-transparent.svg)
 
 #### Docker Arch
 
