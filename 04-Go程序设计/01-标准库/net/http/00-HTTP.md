@@ -4,7 +4,7 @@
 
 #### Server
 
-> HTTP Server
+HTTP Server
 
 ##### 核心流程图
 
@@ -51,7 +51,7 @@ func main() {
 
 ##### 处理器函数模式
 
-> 实际上内部还是调用处理器模式
+实际上内部还是调用处理器模式
 
 ~~~go
 package main
