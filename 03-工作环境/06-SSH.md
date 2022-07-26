@@ -44,13 +44,13 @@ $ ssh -T git@github.com
 可以在config中配置多个账号
 
 ~~~bash
-# 个人账号xxxxx@foxmail.com
+# xxxxx@foxmail.com
 Host https://github.com/GodYao1995
 HostName github.com
 User GodYao1995
 IdentityFile ~/.ssh/id_rsa_a
 
-# 公司账号xxx@xxx.com
+# xxx@xxx.com
 Host xx.gitlab.com
 HostName gitlab.com
 User ABC
