@@ -54,6 +54,13 @@ ARG Key
 ARG Key=Value Key1=Value1
 ~~~
 
+说明 ARG 变量可以在FROM前出现, 可以动态构建镜像
+
+~~~dockerfile
+AGR VERSION
+FROM golang:${VERSION}
+~~~
+
 #### EXPOSE
 
 暴露端口, 只是一个申明, 具体映射需要 docker run 指定 -p
