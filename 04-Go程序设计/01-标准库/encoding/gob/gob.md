@@ -72,6 +72,8 @@ func TestNormalGob(t *testing.T) {
 }
 ~~~
 
+说明 源与目标不用完全匹配对应; 目标可以缺失某些字段;源必须是导出字段;他们是根据名称来匹配的.
+
 ##### Transmit Interface 
 
 ~~~go
