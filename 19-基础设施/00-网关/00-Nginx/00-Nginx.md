@@ -2,70 +2,33 @@
 
 ## Nginx
 
-Nginx是一款高性能的 HTTP服务器和反向代理服务器
+》http://nginx.org/en/docs/
+
+Nginx是一款高性能的HTTP服务器和反向代理服务器(负载均衡)
 
 1. 跨平台：Nginx 可以在大多数服务器编译运行
-2. 非阻塞、高并发连接：数据复制时,磁盘I/O的第一阶段是非阻塞的
-3. 内存消耗小
-4. 稳定性高
-5. 事件驱动: 通信机制采用epoll模型,支持更多的的并发连接,并发数越大(不超过最大)可以最大化发挥epoll模型
+2. 非阻塞、高并发连接
+3. 事件驱动: 通信机制采用epoll模型,支持更多的的并发连接
+4. 内存消耗小
+5. 稳定性高
 
-官方测试能够支撑5万并发连接,实际生产环境中2～3万并发连接数.(Nginx使用epoll模型)
+官方测试能够支撑5万并发连接,实际生产环境中2～3万并发连接数
 
-**作用**
+代理
 
-1. 负载均衡,降低负载,提高吞吐量
-2. 静态服务器,缓存静态内容
-3. 隐藏服务端,保护作用
-4. 容灾处理(转发到正常的服务器上)
-5. 恢复添加
-
-说明
-
-1. 代理服务器
-
-    一般是指局域网内部的机器通过代理服务器发送请求到互联网上的服务器
-
-    代理服务器一般作用在客户端
-
-2. 正向代理
-
-    作为客户端的代理向服务器发送请求获取响应,客户端是不透明的,服务器端是不知道访问它的是客户端还是代理
-
-3. 反向代理
-
-    作为服务端的代理,接收客户端的请求然后转发到服务器获取到数据后,返回给客户端,服务端是不透明的
-
-    所以客户端是不知道它访问的是客户端还是代理
-
-4. 基本图示如下
+基本图示如下
 
 ![代理服务器](images/代理服务器.svg)
 
-由反向代理于防火墙的情况下,可以有效的保护原始的服务器
-
-### 安装
-
-mac
-
-~~~bash
- brew install nginx
-~~~
-
-服务启动
-
-~~~bash
-brew services start nginx
-brew services restart nginx
-brew services stop nginx
-~~~
+### Install
 
 Linux
 
 安装(yum管理)
 
 ~~~bash
-sudo apt-get install nginx
+$ apt-get install nginx
+$ yum install nginx
 ~~~
 
 服务器(systemctl管理)
@@ -81,4 +44,74 @@ Docker
 ~~~bash
 docker pull nginx:latest
 docker run -d -p 80:80 --name ng nginx:latest 
+~~~
+
+### Controlling
+
+At Runtime -s [signal]
+
+~~~bash
+$ nginx -s stop
+# 重载配置文件
+$ nginx -s reload 
+$ nginx -s quit
+~~~
+
+### Config
+
+/etc/nginx  (or /usr/local/etc/nginx, /usr/local/nginx/conf)
+
+~~~bash
+conf.d	fastcgi_params	mime.types  modules  nginx.conf  scgi_params  uwsgi_params
+~~~
+
+To make the configuration easier to maintain, we recommend that you split it into a set of feature‑specific files stored in the **/etc/nginx/conf.d** directory and use the [include] directive in the main **nginx.conf** file to reference the contents of the feature‑specific files.
+
+~~~nginx
+user  nginx;
+worker_processes  auto;
+
+error_log  /var/log/nginx/error.log notice;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+# top‑level directives
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+    
+	# 可以更加的细化
+    # include /etc/nginx/conf.d/*.conf;
+    include conf.d/http;
+}
+
+# TCP or UDP
+# top‑level directives
+stream {
+    ...
+    include conf.d/stream;
+}
+~~~
+
+更改配置文件后, 可以检测是否正确
+
+~~~bash
+$ nginx -t 	
 ~~~
