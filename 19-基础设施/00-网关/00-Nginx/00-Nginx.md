@@ -29,9 +29,10 @@ Linux
 ~~~bash
 $ apt-get install nginx
 $ yum install nginx
+$ nginx -v
 ~~~
 
-服务器(systemctl管理)
+服务管理(systemctl管理)
 
 ~~~bash
 sudo service nginx start
@@ -46,18 +47,25 @@ docker pull nginx:latest
 docker run -d -p 80:80 --name ng nginx:latest 
 ~~~
 
-### Controlling
+### command-line parameters
 
 At Runtime -s [signal]
 
 ~~~bash
+# shut down quickly
 $ nginx -s stop
-# 重载配置文件
-$ nginx -s reload 
+# shut down gracefully
 $ nginx -s quit
+# 检测配置文件语法以及引用文件是否正确
+$ nginx -t 	
+# 重载配置文件
+# 1. reload configuration
+# 2. start the new worker process with a new configuration
+# 3. gracefully shut down old worker processes
+$ nginx -s reload 
 ~~~
 
-### Config
+### config
 
 /etc/nginx  (or /usr/local/etc/nginx, /usr/local/nginx/conf)
 
@@ -65,7 +73,9 @@ $ nginx -s quit
 conf.d	fastcgi_params	mime.types  modules  nginx.conf  scgi_params  uwsgi_params
 ~~~
 
-To make the configuration easier to maintain, we recommend that you split it into a set of feature‑specific files stored in the **/etc/nginx/conf.d** directory and use the [include] directive in the main **nginx.conf** file to reference the contents of the feature‑specific files.
+To make the configuration easier to maintain(维护), we recommend that you split it into a set of feature‑specific files stored in the **/etc/nginx/conf.d** directory and use the [**include**] directive in the main **nginx.conf** file to reference the contents of the feature‑specific files.
+
+nginx.conf
 
 ~~~nginx
 user  nginx;
@@ -97,21 +107,33 @@ http {
 
     #gzip  on;
     
-	# 可以更加的细化
-    # include /etc/nginx/conf.d/*.conf;
-    include conf.d/http;
-}
-
-# TCP or UDP
-# top‑level directives
-stream {
-    ...
-    include conf.d/stream;
+    include /etc/nginx/conf.d/default.conf;
 }
 ~~~
 
-更改配置文件后, 可以检测是否正确
+conf.d/default.conf
 
-~~~bash
-$ nginx -t 	
+~~~nginx
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    #access_log  /var/log/nginx/host.access.log  main;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+    # error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
 ~~~
+
