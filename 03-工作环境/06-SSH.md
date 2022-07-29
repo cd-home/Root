@@ -56,3 +56,10 @@ HostName gitlab.com
 User ABC
 IdentityFile ~/.ssh/id_rsa_b
 ~~~
+
+配置免密登陆虚拟机
+
+~~~bash
+$ ssh-copy-id -i id_rsa.pub root@10.211.55.102
+~~~
+
