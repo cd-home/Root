@@ -102,6 +102,8 @@ $ containerd cinfig default > /etc/containerd/config.toml
 $ systemctl start containerd
 ~~~
 
+注意一下cni的位置
+
 #### ctr
 
 》containerd CLI
@@ -161,6 +163,8 @@ GLOBAL OPTIONS:
 
 #### nerdctl
 
+contaiNERD CTL - Docker-compatible CLI for containerd
+
 如果已有containerd情况下,可以选择只安装nerdctl; 否则请安装full版本
 
 ~~~bash
@@ -201,3 +205,22 @@ $ nerdctl pull nginx
 $ nerdctl run -d -p 80:80 --name ng nginx:latest
 ~~~
 
+Other Just Like Docker-cli
+
+~~~bash
+$ nerdctl images
+$ nerdctl ps -a
+$ nerdctl logs -f 
+$ nerdctl rmi
+$ nerdctl rm
+~~~
+
+build
+
+首先要安装 buildctl buildkitd
+
+~~~bash
+$ wget https://github.com/moby/buildkit/releases/download/v0.10.3/buildkit-v0.10.3.linux-arm64.tar.gz
+~~~
+
+TODO 安装成功, 但是无法nerdctl build, 出现Dockerfile RUN 指令错误
