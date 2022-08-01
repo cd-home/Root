@@ -2,7 +2,7 @@
 
 ### Linux
 
-> 一切皆文件
+一切皆文件
 
 #### 目录系统
 
@@ -24,7 +24,9 @@ opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 
 #### 目录管理
 
-> 创建、查询、删除、移动、查找、权限设置
+##### Directory
+
+##### File
 
 ~~~bash
 # ------------------------------------[目录操作]-------------------------------------
@@ -198,7 +200,11 @@ $ echo this is en example | sed 's/\w+/[&]/g'
 
 #### 用户管理
 
-> 组、权限信息 /etc/group /etc/passwd 
+##### User
+
+##### Group
+
+组、权限信息 /etc/group /etc/passwd 
 
 ~~~bash
 # ------------------------------------[用户组管理]------------------------------------
@@ -424,10 +430,12 @@ $ mount /dev/hda1 /mnt
 $ umount
 
 # 系统服务管理
-$ systemctl [stop | start | restart | status | enable | disable] XService
+$ systemctl [stop | start | restart | status | enable | disable] X.service
 ~~~
 
 #### 软件安装
+
+》通常情况下可以更新yum的镜像源(见Linux System)
 
 ~~~bash
 $ yum search
@@ -436,10 +444,6 @@ $ yum install
 $ yum update
 $ yum remove
 ~~~
-
-#### Vim
-
-![Vim](./images/Vim.svg)
 
 #### 补充
 

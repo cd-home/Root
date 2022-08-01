@@ -2,8 +2,6 @@
 
 ### Shell
 
-![Shell](/Users/admin/Documents/otherSpace/Onism/03-工作环境/images/Shell.svg)
-
 #### 注释
 
 ~~~shell
@@ -18,18 +16,6 @@ EOF
 #### echo
 
 ~~~shell
-#!/bin/bash
-echo "Hello Wolrd" > Hello.txt
-
-printf "%-10s %-8s %-4s\n" 姓名 性别 体重kg  
-printf "%-10s %-8s %-4.2f\n" 郭靖 男 66.1234 
-printf "%-10s %-8s %-4.2f\n" 杨过 男 48.6543 
-printf "%-10s %-8s %-4.2f\n" 郭芙 女 47.9876 
-~~~
-
-#### Hello World
-
-~~~shell
 #!/usr/bin/env bash
 echo "Hello World"
 ~~~
@@ -41,21 +27,21 @@ echo "Hello World"
 1.  脚本必须有执行权限
 
 ~~~bash
-chmod +x 00.sh
+chmod +x test.sh
 ~~~
 
 2.  执行方式
 
 ~~~bash
-./00.sh
-/bin/bash 00.sh
+./test.sh
+/bin/bash test.sh
 ~~~
 
 #### 变量
 
 ~~~bash
 #!/usr/bin/env bash
-name="li yao"
+name="God Yao"
 echo ${name}
 
 age=25
@@ -65,30 +51,26 @@ readonly age
 echo ${age}
 ~~~
 
-说明
+定义变量
 
-1.  定义变量
+1. 命名只能使用英文字母，数字和下划线，首个字符不能以数字开头
+2. 中间不能有空格，可以使用下划线（_
+3. 不能使用标点符号
+4. 不能使用bash里的关键字（可用help命令查看保留关键字）
 
-~~~
-命名只能使用英文字母，数字和下划线，首个字符不能以数字开头
-中间不能有空格，可以使用下划线（_
-不能使用标点符号。
-不能使用bash里的关键字（可用help命令查看保留关键字）
-~~~
-
-2.  使用变量
+使用变量
 
 ~~~bash
 ${name}
 ~~~
 
-3.  变量：局部变量、环境变量、Shell变量
+变量：局部变量、环境变量、Shell变量
 
 #### 字符串
 
 ~~~shell
 #!/usr/bin/env bash
-name="li yao"
+name="God Yao"
 str1="hello"
 # 拼接
 echo "${str1}, ${name}"
@@ -138,12 +120,12 @@ echo $?
 ~~~
 
 ~~~bash
-./04.sh li yao 25
+./test.sh God Yao 25
 ~~~
 
 #### 算术运算符
 
->   原生bash不支持简单的数学运算，但是可以通过其他命令来实现，例如 awk 和 expr，expr 最常用
+原生bash不支持简单的数学运算，但是可以通过其他命令来实现，例如 awk 和 expr，expr 最常用
 
 ~~~shell
 #!/bin/bash
@@ -237,7 +219,7 @@ fi
 
 #### 布尔运算符
 
->   常规的布尔运算符有：!、&&、||
+常规的布尔运算符有：!、&&、||
 
 ~~~shell
 #!/bin/bash
@@ -395,7 +377,7 @@ case ${num} in
 esac
 ~~~
 
-#### Shell函数
+#### 函数
 
 ~~~shell
 Foo() {
@@ -416,7 +398,8 @@ Foo $@
 
 ~~~shell
 echo "Hello World" > 1.txt
-echo "Hello World追加" >> 1.txt
+# 追加
+echo "Hello World" >> 1.txt
 ~~~
 
 #### 引用外部Shell

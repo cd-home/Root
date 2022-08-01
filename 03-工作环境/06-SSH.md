@@ -62,4 +62,3 @@ IdentityFile ~/.ssh/id_rsa_b
 ~~~bash
 $ ssh-copy-id -i id_rsa.pub root@10.211.55.102
 ~~~
-
