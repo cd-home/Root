@@ -18,15 +18,11 @@ opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 
 ![Dir_File_Perm](./images/Dir_File_Perm.svg)
 
-#### 常见命令总览
+#### 命令总览
 
 <img src="./images/Linux-Commands.svg" alt="Linux-Commands"  />
 
 #### 目录管理
-
-##### Directory
-
-##### File
 
 ~~~bash
 # ------------------------------------[目录操作]-------------------------------------
@@ -51,9 +47,13 @@ $ cd ..
 # 当前目录路径
 $ pwd
 
-# 显示 Tree yum install tree -y
+# 显示 yum install tree -y
 $ tree
+~~~
 
+#### 文件管理
+
+~~~bash
 # ------------------------------------[查看目录]-------------------------------------
 # 查看目录下子目录、文件信息
 $ ls
@@ -73,19 +73,26 @@ $ which rm
 # ----------------------------------[目录、文件通用]----------------------------------
 # 强制递归删除
 $ rm -rf noEmptyDir
+
 # 删除文件
 $ rm testfile
 $ rm *log
+
 # 移动
 $ mv source_[Dir|file] dest_[Dir|file]
+
 # 复制 -r 递归
 $ cp -r source_[Dir|file] dest_[Dir|file]
+
 # 检测类型
 $ file dir|file
+
 # 查找位置
 $ locate dir|file
+
 # 详细信息
 $ stat dir|file
+
 # 重命名
 $ rename old_name new_name old_name
 
@@ -127,11 +134,18 @@ $ tar -xvf target.tar
 $ tar -zcvf target.tar.gz dest_dir
 # 打包后 bzip2 压缩
 $ tar -zcvf target.tar.bz2 dest_dir
+
+# 查看压缩包内容, 不解压
+$ tar -tf target.tar.gz
+# 解压
+$ tar -zxvf target.tar.gz -C dest_dir
+
 # gzip
 $ gzip -r dest.tar		# dest.tar.gz
 $ gzip -rv /source_dir  # 递归压缩
 $ gzip -dr test/        # 递归地解压目录
 $ gunzip dest.tar.gz    # 解压
+
 # zip
 $ zip dest.zip source_dir
 $ unzip dest.zip
@@ -168,7 +182,7 @@ $ less testfile
 $ egrep "error: auth"  api.log
 
 # ------------------------------------[过滤]----------------------------------------
-# 									通常作用在其他命令的管道的结果    ps -ef | grep nginx
+# 通常作用在其他命令的管道的结果: ps -ef | grep nginx
 # 显示匹配行、以及行号 -i 忽略大小写
 $ grep -n -i 'error: ' api.log
 # 匹配多个模式:
@@ -199,10 +213,6 @@ $ echo this is en example | sed 's/\w+/[&]/g'
 ~~~
 
 #### 用户管理
-
-##### User
-
-##### Group
 
 组、权限信息 /etc/group /etc/passwd 
 
@@ -477,7 +487,7 @@ $ ls -lh | head -n 2
 
 **文件描述符**
 
-> Linux系统预留可三个文件描述符：0、1和2，他们的意义如下所示：
+Linux系统预留可三个文件描述符：0、1和2，他们的意义如下所示：
 
 ~~~bash
 0——标准输入（stdin）
