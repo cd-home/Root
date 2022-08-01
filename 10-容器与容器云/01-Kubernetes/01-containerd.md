@@ -10,6 +10,10 @@
 - [ ] 调用 runc 运行容器(与 runc 等容器运行时交互)
 - [ ] 管理容器网络接口及网络
 
+#### Arch
+
+![architecture](./images/architecture.png)
+
 #### install
 
 Arch Centos 8 arm64
@@ -224,3 +228,4 @@ $ wget https://github.com/moby/buildkit/releases/download/v0.10.3/buildkit-v0.10
 ~~~
 
 TODO 安装成功, 但是无法nerdctl build, 出现Dockerfile RUN 指令错误
+
