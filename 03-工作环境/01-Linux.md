@@ -14,7 +14,7 @@ opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 
 ![Linux_dir](./images/Linux_dir.svg)
 
-#### 目录与文件属性
+#### 文件属性
 
 ![Dir_File_Perm](./images/Dir_File_Perm.svg)
 
@@ -217,7 +217,7 @@ $ echo this is en example | sed 's/\w+/[&]/g'
 组、权限信息 /etc/group /etc/passwd 
 
 ~~~bash
-# ------------------------------------[用户组管理]------------------------------------
+# ------------------------------------[用户组管理]-----------------------------------
 # 创建组
 $ groupadd gx
 
