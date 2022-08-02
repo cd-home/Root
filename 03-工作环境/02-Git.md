@@ -4,7 +4,7 @@
 
 #### 前言
 
->   分布式版本控制 Distributed Version Control System
+分布式版本控制 Distributed Version Control System
 
 1. 本地完全克隆代码仓库(本地拥有完整的代码)
 2. Git 保存的不是文件的变化或者差异, 而是一系列不同时刻(commit)的 **快照**
@@ -26,7 +26,7 @@
 
 创建仓库
 
-> 本地初始化仓库, 通常情况下无需次操作, 仓库基本上都是服务器上
+本地初始化仓库, 通常情况下无需次操作, 仓库基本上都是服务器上
 
 ~~~bash
 $ mkdir test && cd test 		
@@ -36,7 +36,7 @@ $ git clone xxPath.git					# 拉取远程仓库
 
 工作区状态
 
-> 1 Untracked  2 new file  3 modified
+1 Untracked  2 new file  3 modified
 
 ~~~bash
 $ git status  
@@ -45,7 +45,7 @@ $ git status -s 						# 精简的输出
 
 跟踪文件(添加到暂存区)
 
-> 注意实际项目中, 并不是所有的修改都需要Track, 按需add, 避免提交错误, 配合上忽略文件
+注意实际项目中, 并不是所有的修改都需要Track, 按需add, 避免提交错误, 配合上忽略文件
 
 
 ~~~bash
@@ -62,7 +62,7 @@ $ git commit -m "version description"
 
 查看差异
 
-> 工作目录中当前文件和暂存区域快照之间的差异, 本身只显示尚未暂存的改动
+工作目录中当前文件和暂存区域快照之间的差异, 本身只显示尚未暂存的改动
 
 ~~~bash
 $ git diff 	
@@ -133,8 +133,9 @@ $ git push origin --delete <tagname> 	# 删除远程标签
 
 #### 分支
 
-> Git 的分支,其实本质上仅仅是指向提交对象的可变指针(特殊的HEAD 指针, 指向当前分支), 本地分支与远程一一对应
->
+Git 的分支,其实本质上仅仅是指向提交对象的可变指针(特殊的HEAD 指针, 指向当前分支)
+
+本地分支与远程一一对应
 
 查看分支
 
@@ -177,7 +178,7 @@ $ git merge dev 						# 合并分支
 
 远程分支
 
-> 以 `<remote>/<branch>` 的形式命名, remote 一般是 origin, 通常省略origin
+以 `<remote>/<branch>` 的形式命名, remote 一般是 origin, 通常省略origin
 
 ~~~bash
 $ git remote show origin
@@ -188,7 +189,7 @@ $ git push origin <branch>:<remote-branch>
 
 变基
 
-> 改变原始切换分支时的基底, 一般情况下不要进行rebase, 除非你知道自己在做什么
+改变原始切换分支时的基底, 一般情况下不要进行rebase, 除非你知道自己在做什么
 
 正如前面合并, 当分支可以直接移动指针合并时, 说明没有分叉, 可以快速合并. 但是一旦当分叉, 只能寻找共同祖先, 生成当前最新的快照commit然后合并. 这样的好处是, 可以保存所有的提交与合并信息. 
 
