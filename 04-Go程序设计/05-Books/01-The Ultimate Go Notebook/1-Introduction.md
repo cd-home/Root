@@ -22,7 +22,7 @@ Somewhere Along The Line (曾几何时)
 
 - [ ] We lost the understanding that every decision comes with a cost. 
 
-    我们失去了每一个决定都要付出代价的认识. 
+    我们失去了每一个决定都要付出代价的认识
 
 These Days Are Gone 这些日子一去不复返了
 
