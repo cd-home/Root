@@ -105,8 +105,8 @@
 
 #### 学习资源
 
-- [ ] Go 程序设计语言
-- [ ] Go 语言并发之道(Go并发编程实战)
+- [x] **Go 程序设计语言 The Go Programming Language** 
+- [ ] **Go 语言并发之道 Concurrency in Go Tools and Techniques for Developers**
 - [ ] Go 学习笔记
 - [x] **The Ultimate Go Notebook**
 - [ ] Mastering Go
