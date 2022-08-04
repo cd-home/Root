@@ -99,9 +99,9 @@ drwxr-xr-x. 89 root root 0 Aug  3 21:21 system.slice
 drwxr-xr-x.  3 root root 0 Aug  3 21:21 user.slice
 ~~~
 
-如果在memory子系统下, 创建一个控制组[文件即是接口, 可创建、可删除], 即可发现该目录下自动创建父级同样的管理文件.
+如果在某个子系统下, 创建一个控制组[文件即是接口, 可创建、可删除], 即可发现该目录下自动创建父级同样的资源管理文件.
 
-自己创建cpu资源限制配置
+例如, 在cpu子系统下, 自己创建控制组
 
 ~~~bash
 [root@g7 ~]# mkdir /sys/fs/cgroup/cpu/cg.test
@@ -203,8 +203,6 @@ drwxr-xr-x. 2 root root 0 Aug  3 23:18 a388edb818f7e1c96c5c3a0778ad6e6111d266db2
 -rw-r--r--. 1 root root 0 Aug  3 22:29 notify_on_release
 -rw-r--r--. 1 root root 0 Aug  3 22:29 tasks
 ~~~
-
-
 
 #### NameSpace
 
