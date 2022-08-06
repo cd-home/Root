@@ -83,3 +83,6 @@ type Writer interface {
 }
 ~~~
 
+The io.Writer interface defines the contract[合约] between Fprintf and its callers[调用者]. On the one hand, the contract requires that the caller provide a value of a concrete type like *os.File or *bytes.Buffer that has a method called Write with the appropriate[恰当的] signature[签名] and behavior. On the other hand, the contract guarantees[保证] that Fprintf will do its job given any value that satisfies[满足] the io.Writer interface. Fprintf may not assume[假定] that it is writing to a file or to memory, only that it can call Write.
+
+io.Writer 接口定义了 Fprintf 和它的调用者之间的合约.  一方面, 合约要求调用者提供一个具体类型的值, 如 *os.File 或 *bytes.Buffer, 该值具有名为 Write 的方法, 具有适当的签名和行为. 另一方面, 合约保证 Fprintf 将在给定任何满足 io.Writer 接口的值的情况下完成其工作. Fprintf可能不会假设它正在向文件或内存写入, 只是它可以调用Write. 
