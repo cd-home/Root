@@ -4,7 +4,7 @@
 
 #### Ready Arch
 
-Linux Centos 8 Arm64
+Linux Centos 8 Arm64 [2CPU, 4G, 60GB]
 
 #### Ready Node 
 
@@ -42,7 +42,7 @@ $ systemctl stop firewalld
 $ systemctl disable firewalld
 ~~~
 
-- [x] 禁用 SELINUX
+- [x] 禁用 SELINUX (允许容器访问主机文件系统)
 
 ~~~bash
 $ sestatus
@@ -51,11 +51,13 @@ $ setenforce 0
 # 永久
 $ vim /etc/sysconfig/selinux
 SELINUX=disable
+# 可选操作
+$ sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 # Need reboot
 $ shutdown -r now
 ~~~
 
-- [x] 关闭swap分区 [后续添加 k8s.conf配置]
+- [x] 关闭swap分区, 保证kubelet正常工作 [后续添加 k8s.conf配置]
 
 ~~~bash
 $ swapoff -a
@@ -65,7 +67,7 @@ $ vim /etc/fstab
 $ free -h
 ~~~
 
-- [x] 开启  br_netfilter
+- [ ] 允许 iptables 检查桥接流量; 开启  br_netfilter
 
 ~~~bash
 $ modprobe br_netfilter
@@ -79,6 +81,7 @@ net.ipv4.ip_forward = 1
 vm.swappiness=0
 
 $ sysctl -p /etc/sysctl.d/k8s.conf
+$ sysctl --system
 ~~~
 
 - [x] 安装ipvs
@@ -128,7 +131,7 @@ gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors
 EOF
 ~~~
 
-- [x] 安装
+- [x] 安装 [注意三个组件的版本最好保持一致]
 
 ~~~bash
 yum install \
@@ -137,6 +140,8 @@ yum install \
 	kubectl-1.24.3 -y \
 	--disableexcludes=kubernetes
 ~~~
+
+- [x] 检查端口是否被占用 6443 6379 等
 
 #### Ready Cluster
 
@@ -192,12 +197,15 @@ scheduler: {}
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: ipvs
-# 新增的
+# 新增的, 配置 cgroupDriver 为 systemd; 
+# 注意同样需要去containerd配置文件修改 SystemdCgroup = true
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 cgroupDriver: systemd
 ~~~
+
+\>=1.22 版本 如果用户没有在 `KubeletConfiguration` 中设置 `cgroupDriver` 字段,  `kubeadm init` 会将它设置为默认值 `systemd`
 
 先拉取镜像, 减少初始化的时间
 
