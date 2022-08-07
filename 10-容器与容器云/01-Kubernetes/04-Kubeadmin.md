@@ -261,6 +261,7 @@ kubeadm join 10.211.55.100:6443 --token abcdef.0123456789abcdef \
 	--discovery-token-ca-cert-hash sha256:365171a0d3c85b57ec8e74cfebf06aba51267d30cee8e1f1de9e3666b0ddd9ae
 	
 # join会帮你启动kubelet, 然后你再开启开机启动即可
+# kubeadm token create --print-join-command
 ~~~
 
 安装flannel网络插件, 并且修改containerd cni 配置
@@ -276,3 +277,87 @@ $ mv /etc/cni/net.d/10-containerd-net.conflist  /etc/cni/net.d/10-containerd-net
 ~~~
 
 Node节点可以先从Master把配置文件拿过来, 再加入集群,这样就pod就没必要删除重建.
+
+#### kubelet
+
+~~~bash
+$ kubectl get nodes
+$ kubectl get pods -n [kube-system|default] [-o wide]
+$ kubectl describe pod 
+$ kubectl get pods --watch -n default
+
+$ kubectl explain deployment
+$ kubectl apply -f nginx.yaml
+$ kubectl delete -f nginx.yaml
+
+$ kubectl get deployment [deploy]
+~~~
+
+部署nginx, 了解yaml
+
+~~~yaml
+apiVersion: apps/v1  # API版本
+kind: Deployment     # API对象类型
+metadata:			 # Map
+  name: nginx-deploy
+  labels:
+    chapter: first-app
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2  		# Pod 副本
+  template:    		# Pod 模板
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:	# Array
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+~~~
+
+转换为json
+
+~~~json
+{
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+      	"name": "nginx-deploy",
+      	"labels": {
+        	"chapter": "first-app"  
+      }
+    },
+    "spec": {
+        "selector": {
+            "matchLabels": {
+                "app": "nginx"
+            }
+        },
+        "replicas": 2,
+        "template": {
+            "metadata": {
+                "labels": {
+                    "app": "nginx"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "name": "nginx",
+                        "image": "nginx:latest",
+                        "ports": [
+                            {"containerPort": "80"}
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}
+~~~
+
+对比看, yaml表达能力更好.
