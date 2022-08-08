@@ -272,9 +272,14 @@ Then you can join any number of worker nodes by running the following on each as
 
 kubeadm join 10.211.55.100:6443 --token abcdef.0123456789abcdef \
 	--discovery-token-ca-cert-hash sha256:365171a0d3c85b57ec8e74cfebf06aba51267d30cee8e1f1de9e3666b0ddd9ae
-# Token 是有有效期的	
 # join会帮你启动kubelet, 然后你再开启开机启动即可
-# kubeadm token create --print-join-command
+
+# Token 是有有效期的, 可以重新生成
+# --token
+$ kubeadm token create --print-join-command  
+# --discovery-token-ca-cert-hash 
+$ openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | \
+   openssl dgst -sha256 -hex | sed 's/^.* //'
 ~~~
 
 - [x] 安装flannel网络插件, 并且修改 cni 配置
@@ -291,6 +296,16 @@ $ mv /etc/cni/net.d/10-containerd-net.conflist \
 ~~~
 
 Node节点可以先从Master把配置文件拿过来, 再加入集群,这样就pod就没必要删除重建.
+
+注意
+
+由于集群节点通常是按顺序初始化的, CoreDNS Pod 很可能都运行在第一个控制面节点上. 为了提供更高的可用性, 请在加入至少一个新节点后使用
+
+~~~bash
+$ kubectl -n kube-system rollout restart deployment coredns
+~~~
+
+更加暴力的做法可以删除pod, 让其自动重建
 
 #### kubelet
 
@@ -378,3 +393,15 @@ spec:
 ~~~
 
 对比看, yaml表达能力更好.
+
+#### Tips
+
+如何重新来过?
+
+~~~bash
+# 会提示删除必要的目录,配置等
+$ kubeadm reset
+$ iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+$ ipvsadm -C
+~~~
+
