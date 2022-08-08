@@ -4,7 +4,7 @@
 
 #### Ready Arch
 
-Linux Centos 8 Arm64 [2CPU, 4G, 60GB]
+Linux Centos 8 ARM64 [2CPU, 4G, 60GB] [注意: 后续所有的操作针对 ARM64]
 
 #### Ready Node 
 
@@ -57,7 +57,7 @@ $ sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 $ shutdown -r now
 ~~~
 
-- [x] 关闭swap分区, 保证kubelet正常工作 [后续添加 k8s.conf配置]
+- [x] 关闭swap分区, 保证kubelet正常工作 [并且需要后续添加配置到k8s.conf]
 
 ~~~bash
 $ swapoff -a
@@ -67,20 +67,21 @@ $ vim /etc/fstab
 $ free -h
 ~~~
 
-- [ ] 允许 iptables 检查桥接流量; 开启  br_netfilter
+- [x] 允许 iptables 检查桥接流量
 
 ~~~bash
+# 开启  br_netfilter
 $ modprobe br_netfilter
-~~~
 
-~~~bash
 $ vim /etc/sysctl.d/k8s.conf
+
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
 vm.swappiness=0
 
 $ sysctl -p /etc/sysctl.d/k8s.conf
+# 重新加载
 $ sysctl --system
 ~~~
 
@@ -115,12 +116,14 @@ $ systemctl enable chronyd --now
 $ chronyc -a makestep
 ~~~
 
-- [x] 安装 containerd [见containerd二进制安装教程, 配置开机启动]
+- [x] 安装容器运行时 containerd [1.24版本后将移除cri-dockerd]
+    1. 见containerd二进制安装教程, 配置开机启动
+    2. 注意配置sandbix_image, 以及镜像仓库地址[安装成功后可测试, 保证拉取镜像成功]
 
-- [x] 配置yum
+- [x] 配置 yum 源
 
 ~~~bash
-cat > /etc/yum.repos.d/kubernetes.repo <<EOF
+$ cat > /etc/yum.repos.d/kubernetes.repo <<EOF
 [kubernetes]
 name=Kubernetes
 baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-aarch64/
@@ -134,7 +137,7 @@ EOF
 - [x] 安装 [注意三个组件的版本最好保持一致]
 
 ~~~bash
-yum install \
+$ yum install \
 	kubeadm-1.24.3 \
 	kubelet-1.24.3 \
 	kubectl-1.24.3 -y \
@@ -183,7 +186,7 @@ dns: {}
 etcd:
   local:
     dataDir: /var/lib/etcd
-# 修改为阿里的镜像源
+# 修改为阿里的镜像源, 拉取控制平面的容器
 imageRepository: registry.aliyuncs.com/k8sxio
 kind: ClusterConfiguration
 kubernetesVersion: 1.24.3
@@ -197,7 +200,7 @@ scheduler: {}
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: ipvs
-# 新增的, 配置 cgroupDriver 为 systemd; 
+# 新增的, 配置 cgroupDriver 为 systemd
 # 注意同样需要去containerd配置文件修改 SystemdCgroup = true
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
@@ -205,17 +208,19 @@ kind: KubeletConfiguration
 cgroupDriver: systemd
 ~~~
 
-\>=1.22 版本 如果用户没有在 `KubeletConfiguration` 中设置 `cgroupDriver` 字段,  `kubeadm init` 会将它设置为默认值 `systemd`
+\>=1.22 版本情况下:
 
-先拉取镜像, 减少初始化的时间
+如果用户没有在 `KubeletConfiguration` 中设置 `cgroupDriver` 字段,  `kubeadm init` 会将它设置为默认值 `systemd`,所以上述的配置文件亦可不必手动填写. 
+
+- [x] 先拉取镜像, 减少初始化的时间, 注意观察日志
 
 ~~~bash
 $ kubeadm config images list
 $ kubeadm config images pull --config kubeadm.yaml
 
-# 注意: coredns 无法拉取
+# 注意: coredns 无法拉取, 手动拉取后打tag [imagePullPolicy: IfNotPresent] 不会重复拉取
 $ ctr -n k8s.io i pull docker.io/coredns/coredns:1.8.6
-$ ctr -n k8s.io i tag docker.io/coredns/coredns:1.8.6  registry.aliyuncs.com/k8sxio/coredns:v1.8.6
+$ ctr -n k8s.io i tag docker.io/coredns/coredns:1.8.6 \   registry.aliyuncs.com/k8sxio/coredns:v1.8.6
 ~~~
 
 - [x] 初始化
@@ -224,15 +229,15 @@ $ ctr -n k8s.io i tag docker.io/coredns/coredns:1.8.6  registry.aliyuncs.com/k8s
 $ kubeadm init --config kubeadm.yaml
 ~~~
 
-出现问题
+过程中出现如下问题
 
-缺少 tc
+1. 缺少 tc
 
 ~~~bash
 $ yum install iproute-tc.aarch64
 ~~~
 
-/proc/sys/net/bridge/bridge-nf-call-iptables does not exist
+2. /proc/sys/net/bridge/bridge-nf-call-iptables does not exist
 
 ~~~bash
 $ modprobe br_netfilter
@@ -240,7 +245,7 @@ $ echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 $ echo 1 > /proc/sys/net/ipv4/ip_forward
 ~~~
 
-sandbox [修改containerd的sandbox] (导致无法创建容器)
+3. sandbox [修改containerd的配置文件 sandbox_image源] (导致无法创建容器)
 
 ~~~bash
 $ vim /etc/containerd/config.toml
@@ -267,12 +272,12 @@ Then you can join any number of worker nodes by running the following on each as
 
 kubeadm join 10.211.55.100:6443 --token abcdef.0123456789abcdef \
 	--discovery-token-ca-cert-hash sha256:365171a0d3c85b57ec8e74cfebf06aba51267d30cee8e1f1de9e3666b0ddd9ae
-	
+# Token 是有有效期的	
 # join会帮你启动kubelet, 然后你再开启开机启动即可
 # kubeadm token create --print-join-command
 ~~~
 
-安装flannel网络插件, 并且修改containerd cni 配置
+- [x] 安装flannel网络插件, 并且修改 cni 配置
 
 ~~~bash
 $ wget https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
@@ -280,8 +285,9 @@ $ wget https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation
 # 注意先修改里面的namespace: kube-system
 $ kubectl apply -f kube-flannel.yml
 
-# 修改名字, 让他读取 flannel 的配置
-$ mv /etc/cni/net.d/10-containerd-net.conflist  /etc/cni/net.d/10-containerd-net.conflist.bak
+# 修改名字, 让他读取 flannel 的配置 [貌似是按照字母读的配置]
+$ mv /etc/cni/net.d/10-containerd-net.conflist \
+/etc/cni/net.d/10-containerd-net.conflist.bak
 ~~~
 
 Node节点可以先从Master把配置文件拿过来, 再加入集群,这样就pod就没必要删除重建.
@@ -290,13 +296,16 @@ Node节点可以先从Master把配置文件拿过来, 再加入集群,这样就p
 
 ~~~bash
 $ kubectl get nodes
-$ kubectl get pods -n [kube-system|default] [-o wide]
+$ kubectl get pods -n [kube-system|default] [-o wide] [要注意命名空间]
+
 $ kubectl describe pod 
+
 $ kubectl get pods --watch -n default
 
-$ kubectl explain deployment
 $ kubectl apply -f nginx.yaml
 $ kubectl delete -f nginx.yaml
+
+$ kubectl explain x_deployment
 
 $ kubectl get deployment [deploy]
 ~~~
