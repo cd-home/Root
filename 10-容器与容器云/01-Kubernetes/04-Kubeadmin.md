@@ -20,7 +20,7 @@ $ nmcli c modify enp0s5 ipv4.dns '114.114.114.114'
 $ nmcli c up enp0s5
 ~~~
 
-- [x] hostnamectl 设置hostname
+- [x] 设置 hostname
 
 ~~~bash
 $ hostnamectl set-hostname master [node1 node2]
@@ -48,11 +48,14 @@ $ systemctl disable firewalld
 $ sestatus
 # 临时
 $ setenforce 0
+
 # 永久
 $ vim /etc/sysconfig/selinux
+
 SELINUX=disable
+
 # 可选操作
-$ sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+$ sudo sed -i 's/^SELINUX=enforcing$/SELINUX=disable/' /etc/selinux/config
 # Need reboot
 $ shutdown -r now
 ~~~
@@ -60,6 +63,7 @@ $ shutdown -r now
 - [x] 关闭swap分区, 保证kubelet正常工作 [并且需要后续添加配置到k8s.conf]
 
 ~~~bash
+# 当内存不足时,Linux 会自动使用 swap, 将部分内存数据存放到磁盘中, 这个这样会使性能下降
 $ swapoff -a
 $ vim /etc/fstab
 # 注释
@@ -70,22 +74,23 @@ $ free -h
 - [x] 允许 iptables 检查桥接流量
 
 ~~~bash
-# 开启  br_netfilter
+# 开启 br_netfilter
 $ modprobe br_netfilter
 
 $ vim /etc/sysctl.d/k8s.conf
-
-net.bridge.bridge-nf-call-ip6tables = 1
+# 默认情况下, 从容器发送到默认网桥的流量并不会被转发到外部, 所以需要开启容器网络转发
+net.bridge.bridge-nf-call-ip6tables = 1  
 net.bridge.bridge-nf-call-iptables = 1
+# 容器可被其他宿主机访问
 net.ipv4.ip_forward = 1
 vm.swappiness=0
 
-$ sysctl -p /etc/sysctl.d/k8s.conf
 # 重新加载
+$ sysctl -p /etc/sysctl.d/k8s.conf
 $ sysctl --system
 ~~~
 
-- [x] 安装ipvs
+- [x] 安装ipvs [ipvs性能比iptables好]
 
 ~~~bash
 $ cat > /etc/sysconfig/modules/ipvs.modules <<EOF
