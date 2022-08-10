@@ -6,34 +6,38 @@
 
 #### 语言基础
 
-- [ ] 基础语法(类型声明、基础数据类型)
-- [ ] 包、导入、导出
-- [ ] 函数、不定参数、命名返回值、多返回值
-- [ ] 类型转换
+- [ ] 类型声明(var、const)
+- [ ] 基础数据类型(int, string,bool)
+- [ ] 包、导入、导出、名称可见性
+- [ ] 函数、不定参数、返回值、多返回值
+- [ ] 类型转换、定义类型、类型别名
 - [ ] 数组(Array)
 - [ ] 切片(Slice)
 - [ ] 字典(Map)
 - [ ] 结构体(Struct)
 - [ ] 接口(Interface)
 - [ ] 指针(Pointer)
-- [ ] make、new
+- [ ] 初始化(make、new)
 - [ ] for-Loop、for-range
 - [ ] if 、switch-case
-- [ ] defer
+- [ ] 延迟调用(defer)
 - [ ] panic、recover
-- [ ] 依赖管理(Module、Work)
+- [ ] 依赖管理(mod)
+- [ ] 工作空间(work)
 
 #### 语言中级
 
-- [ ] 标准库(io、os、http、context)
-- [ ] 接口类型
+- [ ] **接口类型**
 - [ ] 类型、类型断言
 - [ ] 通道(channle)
 - [ ] 协程(Goroutine)
 - [ ] 多路选择(select)
+- [ ] 标准库(io、os、http、context)
 
 #### 语言高级
 
+- [ ] **类型系统**
+- [ ] **范型**
 - [ ] 编程范式(接口、组合)
 - [ ] GPM模型
 - [ ] 数据竞争(Data race)
