@@ -219,13 +219,66 @@ $ nerdctl rmi
 $ nerdctl rm
 ~~~
 
-build
+#### buildkit
 
-首先要安装 buildctl buildkitd
+首先要安装 buildctl buildkitd, 在buildkit下
 
 ~~~bash
 $ wget https://github.com/moby/buildkit/releases/download/v0.10.3/buildkit-v0.10.3.linux-arm64.tar.gz
+
+$ tar -C /usr/local/ -zxf buildkit-v0.10.3.linux-arm64.tar.gz
 ~~~
 
-TODO 安装成功, 但是无法nerdctl build, 出现Dockerfile RUN 指令错误
+/usr/lib/systemd/system/buildkit.service
+
+~~~bash
+[Unit]
+Description=BuildKit
+Requires=buildkit.socket
+After=buildkit.socket
+Documentation=https://github.com/moby/buildkit
+
+[Service]
+Type=notify
+ExecStart=/usr/local/bin/buildkitd --oci-worker=false --containerd-worker=true
+
+[Install]
+WantedBy=multi-user.target
+~~~
+
+/usr/lib/systemd/system/buildkit.socket
+
+~~~bash
+[Unit]
+Description=BuildKit
+Documentation=https://github.com/moby/buildkit
+
+[Socket]
+ListenStream=%t/buildkit/buildkitd.sock
+SocketMode=0660
+
+[Install]
+WantedBy=sockets.target
+~~~
+
+~~~bash
+$ systemctl daemon-reload 
+$ systemctl start buildkit
+~~~
+
+Example
+
+~~~bash
+$ buildctl build \
+	--output type=image,name=ng  \
+	--frontend=dockerfile.v0 \
+	--local context=. \
+	--local dockerfile=.
+~~~
+
+说明: buildctl 的镜像在 ctr的buildkit空间下
+
+~~~bash
+$ ctr -n buildkit i ls
+~~~
 
