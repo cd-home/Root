@@ -13,7 +13,7 @@ Linux Centos 8 ARM64 [2CPU, 4G, 60GB] [注意: 后续所有的操作针对 ARM64
 ~~~bash
 $ nmcli c modify enp0s5 connection.autoconnect yes
 $ nmcli c modify enp0s5 ipv4.address 10.211.55.100/24
-$ nmcli c modffy enp0s5 ipv4.method manul
+$ nmcli c modffy enp0s5 ipv4.method manual
 $ nmcli c modify enp0s5 ipv4.gateway 10.211.55.1
 $ nmcli c modify enp0s5 ipv4.dns '114.114.114.114'
 
