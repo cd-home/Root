@@ -1,15 +1,50 @@
 [TOC]
 
-### MySQL
+### Tutorial
+
+Install And Config
+
+Service
+
+~~~bash
+mysqld
+~~~
+
+~~~bash
+/etc/my.cnf
+/etc/mysql/my.cnf
+~~~
+
+Connecting And Disconnecting
+
+~~~bash
+$ mysql -h host -u user -p
+
+> QUIT;
+~~~
+
+Entering Queries
+
+~~~bash
+$ SELECT VERSION(), CURRENT_DATE;
+~~~
+
+mysql determines where your statement ends by looking for the **terminating semicolon**, not by looking for the end of the input line. 
+
+PS: [分号作为完整SQL的结束]
+
+PS: [大小写不敏感，推荐关键词大些，其他(字段名、表名)小写]
 
 #### 术语
 
-1. 数据库管理系统    SQL database management system
-2. 数据库                     database
-3. 数据表                     table
-4. 数据行(记录)        rows, record
-5. 数据列(字段)        columns,  field
-6. 存储引擎               engine
+|      术语      |              说明              |
+| :------------: | :----------------------------: |
+| 数据库管理系统 | SQL database management system |
+|     数据库     |            database            |
+|     数据表     |             table              |
+|  数据行(记录)  |          rows, record          |
+|  数据列(字段)  |        columns,  field         |
+|    存储引擎    |         storage engine         |
 
 #### 数据(列类型)
 
@@ -81,77 +116,44 @@ NULL;  NOT NULL
 
 **准确性, 完整性、唯一性, 可靠性、联动性.** 
 
-##### 主键
+|  约束  |                   意义                   |
+| :----: | :--------------------------------------: |
+|  主键  | PRIMARY KEY 唯一, 自增长, 只能有一个主键 |
+|  唯一  |              UNIQUE 唯一性               |
+|  非空  |              非空(NOT NULL)              |
+| 默认值 |              默认值 default              |
+|  外键  |                 引用关系                 |
 
-推荐表都新建唯一主键、并且自动增长
-
-##### 唯一
-
-唯一约束
-
-##### 非空
-
-非空(NULL)约束
-
-##### 默认
-
-默认值约束
-
-##### 外键
-
-详细见SQL
-
-#### SQL
-
-1. 完整SQL语句采用分号结尾
-2. 大小写不敏感，推荐关键词大些，其他(字段名、表名)小写
-
-##### DDL
-
-###### 定义
+#### DDL
 
 Data Definition Language: 操作数据库、表
 
-~~~mysql
-CREATE
-ALTER
-DROP
-TRUNCATE
-COMMENT
-GRANT
-REVOKE
-~~~
+##### Database
 
-###### 数据库操作
-
-~~~mysql
--- 连接
-mysql -u root -p
-
--- 数据库操作
-mysql> show databases;
+~~~sql
+mysql> SHOW DATABASES;
 
 -- 创建数据库
-mysql> create database dbname charset utf8mb4;
+mysql> CREATE DATABASE dbname CHARSET utf8mb4;
 
 -- 显示数据库创建信息
-mysql> show create database \G;
+mysql> SHOW CREATE DATABASE \G;
 
 -- 修改数据库的元信息
-mysql> alter database dbname charset utf8mb4;
+mysql> ALTER DATABASE dbname CHARSET utf8mb4;
 
 -- 使用数据库
-mysql> use dbname;
-mysql> show status;
-mysql> show GRANTS;
+mysql> USE dbname;
+mysql> SHOW STATUS;
+mysql> SHOW GRANTS;
 
 -- 删除数据库【危险操作🚫】
-mysql> drop database dbname;
+mysql> DROP DATABASE dbname;
 ~~~
 
-###### 数据表操作
+##### Table
 
-~~~mysql
+~~~sql
 -- 创建表：列 约束1 约束2 约束3【列之间逗号隔开】
 CREATE table t_class(
 	 id int(11) primary key auto_increment,
@@ -199,13 +201,11 @@ mysql> create unique index idx_card on t_name (card);		-- 创建唯一索引
 mysql> show index from t_name \G;							-- 查看索引信息
 ~~~
 
-##### DML
-
-###### 定义
+#### DML
 
 Data Manipulation Language：操作数据行
 
-~~~mysql
+~~~sql
 SELECT
 INSERT
 UPDATE
@@ -214,23 +214,23 @@ EXPLAIN # SQL执行计划
 LOCK
 ~~~
 
-###### Examples
+##### SELECT
 
-SELECT
-
-~~~mysql
+~~~sql
 SELECT 
 	col1,
 	col2
-FROM　　　　　  
+FROM　T　　　　  
 
 LEFT JOIN 	-- JOIN 、RIGHT JOIN
 
 WHERE     	
 			-- 条件筛选 = != > >= < <= 
 			-- in ()  
-			-- is null (is not null) 
-			-- like (% _)
+			-- not in ()
+			-- is null 
+			-- is not null
+			-- like (%  _)
 			-- 条件连接 and or 
 			
 GROUP BY    -- 分组 (SUM、AVG等) 
@@ -252,27 +252,25 @@ UNION ALL   -- 不去重
 SELECT * FROM 
 ~~~
 
-INSERT
+##### INSERT
 
 ~~~sql
-INSERT INTO t_name(field1, field2, ...) VALUES(v1, v2, ....)
+INSERT INTO T(Field1, Field2, ...) VALUES(v1, v2, ....)
 ~~~
 
-UPDATE
+##### UPDATE
 
 ~~~sql
-UPDATE t_name SET field1=newValue, field2=newValue2 WHERE [Condition]
+UPDATE T SET Field1=NewValue, Field2=NewValue2 WHERE [conditions]
 ~~~
 
-DELETE
+##### DELETE
 
 ~~~sql
-DELETE FROM t_name WHERE [Condition] -- 【危险操作🚫】通常增加一列is_delete删除标记
+DELETE FROM T WHERE [conditions]
 ~~~
 
-##### DCL
-
-###### 定义
+#### DCL
 
 Data Control Language
 
@@ -285,7 +283,7 @@ ROLLBACK
 SET TRANSACTION
 ~~~
 
-###### Examples
+Examples: 事务
 
 ~~~mysql
 mysql> BEGIN;
