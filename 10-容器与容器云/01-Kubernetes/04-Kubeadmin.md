@@ -47,7 +47,7 @@ $ systemctl disable firewalld
 ~~~bash
 $ sestatus
 # 临时
-$ setenforce 0
+$ f
 
 # 永久
 $ vim /etc/sysconfig/selinux
@@ -147,6 +147,8 @@ $ yum install \
 	kubelet-1.24.3 \
 	kubectl-1.24.3 -y \
 	--disableexcludes=kubernetes
+	
+$ systemctl enable kubelet
 ~~~
 
 - [x] 检查端口是否被占用 6443 6379 等
@@ -201,10 +203,7 @@ networking:
   serviceSubnet: 10.96.0.0/12
 scheduler: {}
 # 新增的
----
-apiVersion: kubeproxy.config.k8s.io/v1alpha1
-kind: KubeProxyConfiguration
-mode: ipvs
+co
 # 新增的, 配置 cgroupDriver 为 systemd
 # 注意同样需要去containerd配置文件修改 SystemdCgroup = true
 ---
@@ -236,21 +235,22 @@ $ kubeadm init --config kubeadm.yaml
 
 过程中出现如下问题
 
-1. 缺少 tc
+1. 缺少 tc [每台节点]
 
 ~~~bash
 $ yum install iproute-tc.aarch64
 ~~~
 
-2. /proc/sys/net/bridge/bridge-nf-call-iptables does not exist
+2. /proc/sys/net/bridge/bridge-nf-call-iptables does not exist [每台节点]
 
 ~~~bash
 $ modprobe br_netfilter
+
 $ echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 $ echo 1 > /proc/sys/net/ipv4/ip_forward
 ~~~
 
-3. sandbox [修改containerd的配置文件 sandbox_image源] (导致无法创建容器)
+3. sandbox [修改containerd的配置文件 sandbox_image源] (旧地址导致无法创建容器)[每台节点]
 
 ~~~bash
 $ vim /etc/containerd/config.toml
@@ -277,11 +277,11 @@ Then you can join any number of worker nodes by running the following on each as
 
 kubeadm join 10.211.55.100:6443 --token abcdef.0123456789abcdef \
 	--discovery-token-ca-cert-hash sha256:365171a0d3c85b57ec8e74cfebf06aba51267d30cee8e1f1de9e3666b0ddd9ae
-# join会帮你启动kubelet, 然后你再开启开机启动即可
 
 # Token 是有有效期的, 可以重新生成
 # --token
 $ kubeadm token create --print-join-command  
+
 # --discovery-token-ca-cert-hash 
 $ openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | \
    openssl dgst -sha256 -hex | sed 's/^.* //'
@@ -312,13 +312,20 @@ $ kubectl -n kube-system rollout restart deployment coredns
 
 更加暴力的做法可以删除pod, 让其自动重建
 
+由于上述操作顺序问题, 可能导致cni0建立错误, 可以删除重建
+
+~~~bash
+$ ifconfig cni0 down
+$ ip link delete cni0
+~~~
+
 #### kubelet
+
+常见命令
 
 ~~~bash
 $ kubectl get nodes
 $ kubectl get pods -n [kube-system|default] [-o wide] [要注意命名空间]
-
-$ kubectl describe pod 
 
 $ kubectl get pods --watch -n default
 
@@ -327,7 +334,10 @@ $ kubectl delete -f nginx.yaml
 
 $ kubectl explain x_deployment
 
-$ kubectl get deployment [deploy]
+$ kubectl get deploy
+
+# 遇到任何问题, 可以查看
+$ kubectl describe pod|deploy 
 ~~~
 
 部署nginx, 了解yaml

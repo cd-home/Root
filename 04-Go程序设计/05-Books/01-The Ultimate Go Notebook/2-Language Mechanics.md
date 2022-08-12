@@ -758,7 +758,9 @@ const two = 2 * one		// int8(2) * int8(1)
 
 This is an example of constant arithmetic between typed and untyped constants. In this case a constant of a type promotes over a constant of a kind. The two constant will be of type int8 and set to 2.
 
-这是类型化常量和非类型化常量之间的常数算术示例. 在这种情况下, 一个类型的常量优于一个`kind`的常量.这两个常量的类型为int8, 并设置为2. [意思是看似是kind类型的常量,但是会由于与类型常量运算而确定类型]. 
+这是类型化常量和非类型化常量之间的常数算术示例. 在这种情况下, 一个类型的常量优于一个`kind`的常量.这两个常量的类型为int8, 并设置为2. 
+
+PS: [意思是看似是kind类型的常量,但是会由于与类型常量运算而确定类型]. 
 
 **Listing 2. 14. 7**
 
