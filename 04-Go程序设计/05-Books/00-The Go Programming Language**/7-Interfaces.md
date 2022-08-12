@@ -42,9 +42,15 @@ There is another kind of type in Go called an interface type.
 
 An interface is an abstract type. It doesn’t expose[暴露出、公开] the representation or internal structure[内部结构] of its values, or the set of basic operations they support; it reveals[显示、展示] only some of their methods. When you have a value of an interface type, you know nothing about what it is; you know only what it can do, or more precisely, what behaviors are provided by its methods.
 
-PS: [接口类型没有暴露其值内部结构, 你只能知道其行为]
+PS: [接口类型没有暴露其值内部结构, 你只能知道其方法提供的行为]
 
-Throughout the book, we’ve been using two similar functions for string formatting: fmt.Printf, which writes the result to the standard output (a file), and fmt.Sprintf, which returns the result as a string. It would be unfortunate if the hard part, formatting the result, had to be duplicated[重复] because of these superficial[表面的] differences in how the result is used. Thanks to interfaces, it does not. Both of these functions are , in effect, wrappers around a third function, fmt.Fprintf, that is agnostic[不可知的] about what happens to the result it computes.
+Throughout the book, we’ve been using two similar functions for string formatting: 
+
+fmt.Printf, which writes the result to the standard output (a file), and fmt.Sprintf, which returns the result as a string. 
+
+It would be unfortunate if the hard part, formatting the result, had to be duplicated[重复] because of these superficial[表面的] differences in how the result is used.
+
+Thanks to interfaces, it does not. Both of these functions are , in effect, wrappers around a third function, fmt.Fprintf, that is agnostic[不可知的] about what happens to the result it computes.
 
 ~~~go
 package fmt
@@ -74,7 +80,11 @@ func Sprintf(format string, args ...interface{}) string {
 }
 ~~~
 
-The F prefix of Fprintf stands for[代表] file and indicates[间接提示] that the formatted[格式化] output should be written to the file provided as the first argument. In the Printf case, the argument, os.Stdout, is an *os.File. In the Sprintf case, however, the argument is not a file, though[尽管] it superficially resembles[从表面上看起来像] one: &buf is a pointer to a memory buffer to which bytes can be written.
+The F prefix of Fprintf stands for[代表] file and indicates[间接提示] that the formatted[格式化] output should be written to the file provided as the first argument. 
+
+In the Printf case, the argument, os.Stdout, is an *os.File. 
+
+In the Sprintf case, however, the argument is not a file, though[尽管] it superficially resembles[从表面上看起来像] one: &buf is a pointer to a memory buffer to which bytes can be written.
 
 The first parameter of Fprintf is not a file either. It’s an io.Writer, which is an interface type with the following declaration[声明]:
 
@@ -95,6 +105,32 @@ type Writer interface {
 }
 ~~~
 
-The io.Writer interface defines the contract[合约] between Fprintf and its callers[调用者]. On the one hand, the contract requires that the caller provide a value of a concrete type like *os.File or *bytes.Buffer that has a method called Write with the appropriate[恰当的] signature[签名] and behavior. On the other hand, the contract guarantees[保证] that Fprintf will do its job given any value that satisfies[满足] the io.Writer interface. Fprintf may not assume[假定] that it is writing to a file or to memory, only that it can call Write.
+The io.Writer interface defines the contract[合约] between Fprintf and its callers[调用者].
 
-io.Writer 接口定义了 Fprintf 和它的调用者之间的合约.  一方面, 合约要求调用者提供一个具体类型的值, 如 *os.File 或 *bytes.Buffer, 该值具有名为 Write 的方法, 具有适当的签名和行为. 另一方面, 合约保证 Fprintf 将在给定任何满足 io.Writer 接口的值的情况下完成其工作. Fprintf可能不会假设它正在向文件或内存写入, 只是它可以调用Write. 
+io.Writer 接口定义了 Fprintf 和它的调用者之间的合约.  
+
+ On the one hand, the contract requires that the caller[调用者] provide a value of a concrete type like *os.File or *bytes.Buffer that has a method called Write with the appropriate[恰当的] signature[签名] and behavior. 
+
+一方面, 合约要求调用者提供一个具体类型的值, 如 *os.File 或 *bytes.Buffer, 该值有一个带有适当签名和行为名为 Write 的方法. 
+
+On the other hand, the contract guarantees[保证] that Fprintf will do its job given any value that satisfies[满足] the io.Writer interface. Fprintf may not assume[假定] that it is writing to a file or to memory, only that it can call Write.
+
+另一方面, 合约保证 Fprintf 将在给定任何满足 io.Writer 接口的值的情况下完成其工作. Fprintf可能不会假设它正在向文件或内存写入, 仅是可以调用Write. 
+
+Because `fmt.Fprintf` assumes nothing about the representation of the value and relies[依赖] only on the behaviors guaranteed by the io.Writer contract, we can safely pass a value of any concrete type that satisfies io.Writer as the first argument to `fmt.Fprintf`. This freedom[自由] to substitute[替换] one type for another that satisfies the same interface is called substitutability[可替换性], and isa hallmark[特点] of object-oriented[面向对象] programming.
+
+Let’s test this out using a new type. The Write method of the *ByteCounter type below merely counts the bytes written to it before discarding[丢弃] them. (The conversion is required to make the types of len(p) and *c match in the += assignment statement.)
+
+~~~go
+type ByteCounter int
+
+func (c *ByteCounter) Write(p []byte) (int, error) {
+    *c = ByteCounter(len(p))
+    return len(p), nil
+}
+~~~
+
+Since *ByteCounter satisfies the io.Writer contract, we can pass it to Fprintf, which does its string formatting oblivious[未察觉] to this change; the ByteCounter correctly accumulates the length of the result.
+
+PS: [接口只关注其方法, 具体的实现是由具体的类型]
+
