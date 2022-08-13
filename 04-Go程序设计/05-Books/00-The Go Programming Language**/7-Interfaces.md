@@ -14,7 +14,7 @@ Many object-oriented languages have some notion of interfaces, but what makes Go
 
 许多面向对象的语言都有一些接口的概念, 但 Go 的接口如此与众不同的原因在于它们被隐式地实现. 
 
-PS: [不需要像其他语言一样显式的声明类型A实现接口I]
+PS: [不需要像其他语言一样显式的声明类型实现接口]
 
 In other words, there’s no need to declare all the interfaces that a given concrete type satisfies; simply possessing the necessary methods is enough.
 
