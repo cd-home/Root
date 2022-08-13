@@ -5,7 +5,8 @@
 1. 本地生成公钥
 
 ~~~bash
-ssh-keygen -t rsa -C liyaoo1995@gmail.com # 提示可以设置密码
+# 提示可以设置密码
+$ ssh-keygen -t rsa -C liyaoo1995@gmail.com 
 ~~~
 
 2. .ssh
@@ -15,8 +16,8 @@ $ ls
 authorized_keys id_rsa id_rsa.pub known_hosts
 ~~~
 
-3. 复制.pub的内容添加到Github的SSH配置
-4. ssh配置 
+3. 复制.pub的内容添加到代码仓库大的SSH配置管理(例如GitHub)
+4. SSH配置 
 
 ~~~bash
 $ vim ~/.ssh/config # 添加以下内容
@@ -29,7 +30,8 @@ IdentityFile ~/.ssh/id_rsa
 5. 添加
 
 ~~~bash
-$ ssh-add ~/.ssh/id_rsa	# 如果第一步设置了密码，这里需要输入密码
+# 如果第一步设置了密码，这里需要输入密码
+$ ssh-add ~/.ssh/id_rsa
 ~~~
 
 6. 测试
@@ -39,23 +41,7 @@ $ ssh -T git@github.com
 # Hi ! You’ve successfully authenticated, but GitHub does not provide shell access.
 ~~~
 
-#### 多账号
-
-可以在config中配置多个账号
-
-~~~bash
-# xxxxx@foxmail.com
-Host https://github.com/GodYao1995
-HostName github.com
-User GodYao1995
-IdentityFile ~/.ssh/id_rsa_a
-
-# xxx@xxx.com
-Host xx.gitlab.com
-HostName gitlab.com
-User ABC
-IdentityFile ~/.ssh/id_rsa_b
-~~~
+#### Tips
 
 配置免密登陆虚拟机
 

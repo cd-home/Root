@@ -4,7 +4,7 @@
 
 #### 前言
 
-分布式版本控制 Distributed Version Control System
+》分布式版本控制 Distributed Version Control System
 
 1. 本地完全克隆代码仓库(本地拥有完整的代码)
 2. Git 保存的不是文件的变化或者差异, 而是一系列不同时刻(commit)的 **快照**
@@ -54,7 +54,7 @@ $ git add *.c
 $ git add code.txt  
 ~~~
 
-暂存区提交到本地仓库
+暂存区提交到本地仓库[具体的提交信息, 可见Web开发—Git规范设计]
 
 ~~~bash
 $ git commit -m "version description"
@@ -84,16 +84,16 @@ $ git log --pretty=format:"%h: %cd %s" --graph
 暂存区回到工作区
 
 ~~~bash
-$ git reset head  [file]	 			# 回到工作区, 保留修改
+$ git reset head [file]	 			    # 回到工作区, 保留修改
 ~~~
 
-丢弃工作区改动
+丢弃工作区改动(较危险命令, 除非你知道自己在做什么)
 
 ~~~bash
 $ git checkout -- [file] 	  			# 回到工作区,不保留修改,回退到最后一次提交
 ~~~
 
-本地仓库版本回退道工作区
+本地仓库版本回退到工作区
 
 ~~~bash
 $ git reset --hard HEAD^
@@ -166,13 +166,17 @@ $ $ git push origin --delete serverfix  # 删除远程分支
 $ git merge dev 						# 合并分支
 ~~~
 
-试图合并两个分支时,  如果顺着一个分支走下去能够到达另一个分支, 那么Git 在合并两者的时候,  只会简单的将指针向前推进（指针右移）因为这种情况下的**合并操作没有需要解决的分歧**——这就叫做快进(fast-forward)
+试图合并两个分支时,  如果顺着一个分支走下去能够到达另一个分支, 那么Git 在合并两者的时候,  只会简单的将指针向前推进（指针右移）因为这种情况下的**合并操作没有需要解决的分歧**
+
+该模式称为: 快进(fast-forward)
 
 ![merge](images/merge.svg)
 
 
 
-但是如果合并iss-1时, 出现分叉, 无法靠移动指针合并, 把两个分支的最新快照C3 和 C5以及二者最近的共同祖先C2进行三方合并, 合并的结果是生成一个新的快照C6, 并提交, 合并过程中可能有冲突出现, 解决冲突, 然后重新提交
+但是如果合并iss-1时, 出现分叉, 无法靠移动指针合并, 把两个分支的最新快照C3 和 C5以及二者最近的共同祖先C2进行三方合并, 合并的结果是生成一个新的快照C6, 并提交. 
+
+合并过程中可能有冲突出现, 解决冲突, 然后重新提交
 
 ![merge2](images/merge2.svg)
 
@@ -226,3 +230,4 @@ $ git config --list
 
 SSH配置
 
+》见SSH
