@@ -78,7 +78,7 @@ $ rm -rf noEmptyDir
 $ rm testfile
 $ rm *log
 
-# 移动
+# 移动、重命名
 $ mv source_[Dir|file] dest_[Dir|file]
 
 # 复制 -r 递归
@@ -249,7 +249,7 @@ $ passwd u1
 # 切换root用户
 $ su  
 # 切换普通用户
-$ su xxuser
+$ su other_user
 
 # root用户执行
 $ sudo command
@@ -410,6 +410,10 @@ $ env
 # 开关机
 $ rebbot
 $ shutdown
+# 立即重启
+$ shutdown -r now
+# 立即关机
+$ shutdown -h now 
 
 # 系统版本
 $ uname -a
@@ -440,7 +444,8 @@ $ mount /dev/hda1 /mnt
 $ umount
 
 # 系统服务管理
-$ systemctl [stop | start | restart | status | enable | disable] X.service
+$ systemctl [stop | start | restart | status | enable | disable] 
+$ systemctl daemon-reload
 ~~~
 
 #### 软件安装
