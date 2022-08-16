@@ -2,7 +2,7 @@
 
 ### Tutorial
 
-Install And Config
+Install And CONfig
 
 Service
 
@@ -15,7 +15,7 @@ mysqld
 /etc/mysql/my.cnf
 ~~~
 
-Connecting And Disconnecting
+CONnecting And DiscONnecting
 
 ~~~bash
 $ mysql -h host -u user -p
@@ -29,7 +29,7 @@ Entering Queries
 $ SELECT VERSION(), CURRENT_DATE;
 ~~~
 
-mysql determines where your statement ends by looking for the **terminating semicolon**, not by looking for the end of the input line. 
+mysql determines where your statement ends by looking for the **terminating semicolON**, not by looking for the end of the input line. 
 
 PS: [分号作为完整SQL的结束]
 
@@ -50,7 +50,7 @@ PS: [大小写不敏感，推荐关键词大些，其他(字段名、表名)小�
 
 ##### 数值类型
 
-unsigned、signed类型修饰
+unsigned、signed类型修饰;  注意选择合适的类型使用;
 
 |       类型       | 大小( byte) |    (有符号)    |  (无符号)  |       用途       |
 | :--------------: | :---------: | :------------: | :--------: | :--------------: |
@@ -66,6 +66,8 @@ unsigned、signed类型修饰
 DECIMAL(M,D) M表示总位数、D表示小数
 
 ##### 字符串
+
+通常情况下使用CHAR、VARCHAR、TEXT 较多
 
 |     类型     |   大小(bytes)   |              用途               | 例子     |
 | :----------: | :-------------: | :-----------------------------: | -------- |
@@ -126,11 +128,12 @@ NULL;  NOT NULL
 
 #### DDL
 
-Data Definition Language: 操作数据库、表
+Data DefinitiON Language: 操作数据库、表
 
 ##### Database
 
 ~~~sql
+-- 显示所有数据库
 mysql> SHOW DATABASES;
 
 -- 创建数据库
@@ -143,67 +146,71 @@ mysql> SHOW CREATE DATABASE \G;
 mysql> ALTER DATABASE dbname CHARSET utf8mb4;
 
 -- 使用数据库
+-- Under Unix, database names are case-sensitive (unlike SQL keywords)
+-- 数据库、以及表是 区分大小写的 (SQL 关键词是不区分大小写的, 通常使用大写)
+-- 推荐 非SQL关键词小写
 mysql> USE dbname;
 mysql> SHOW STATUS;
 mysql> SHOW GRANTS;
 
--- 删除数据库【危险操作🚫】
+-- 删除数据库【危险操作, 所有的删除库、表操作都应该授权】
 mysql> DROP DATABASE dbname;
 ~~~
 
 ##### Table
 
 ~~~sql
--- 创建表：列 约束1 约束2 约束3【列之间逗号隔开】
-CREATE table t_class(
-	 id int(11) primary key auto_increment,
-	 name varchar(10) not null
-)engine=innodb default charset=utf8mb4;
+-- 创建表：列名 类型 约束1 约束2 约束3【列之间逗号隔开】
+CREATE TABLE t_class(
+	 id int(11) PRIMARY KEY AUTO_INCREMENT,
+	 name VARCHAR(10) NOT NULL
+)ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
 
-create table t_name(
-    id int(11) primary key auto_increment comment "id", -- 自增主键
-    name varchar(10) not null default 'Mike',			-- 默认值
-    card varchar(18) unique,							-- 唯一约束
-    phone char(11) not null,
-    class_id int not null,
-    index idx_name(name),								-- 创建普通索引				
-    unique index idx_phone(phone),						-- 创建唯一索引
-	constraint fk_name foreign key(class_id) references t_class(id) -- 外键约束
-)engine=innodb default charset=utf8mb4;					-- 引擎与编码
+CREATE TABLE t_name(
+    id int(11) PRIMARY KEY AUTO_INCREMENT comment "id", 	-- 自增主键
+    name VARCHAR(10) NOT NULL DEFAULT 'Mike',				-- 默认值
+    card VARCHAR(18) UNIQUE,								-- 唯一约束
+    phONe CHAR(11) NOT NULL,
+    class_id int NOT NULL,
+    INDEX idx_name(name),									-- 创建普通索引			
+    UNIQUE INDEX idx_phONe(phONe),							-- 创建唯一索引
+    														-- 外键约束
+	CONSTRAINT fk_name FOREIGN KEY(class_id) REFERENCES t_class(id) 
+)ENGINE=INNODB DEFAULT CHARSET=utf8mb4;						-- 引擎与编码
 	
 -- 查看表信息、表结构	
-mysql> show tables; 			     					-- 查看所有数据表
-mysql> show create table t_name;						-- 显示创建表的信息
-mysql> show create table t_name \G; 					-- 显示创建表的信息
-mysql> desc t_name; 				 					-- 查看字段信息/表结构,比较常用的
+mysql> SHOW tables; 			     						-- 查看所有数据表
+mysql> SHOW CREATE TABLE t_name;							-- 显示创建表的信息
+mysql> SHOW CREATE TABLE t_name \G; 						-- 显示创建表的信息
+mysql> DESC t_name; 				 						-- 查看字段信息/表结构
 
--- 修改字段
-mysql> alter table t_name add field_name type;	    	-- 增加字段
-mysql> alter table t_name add primary key(id);			-- 增加属性
+-- 修改表结构
+mysql> ALTER TABLE t_name ADD field_name type;	    		-- 增加字段
+mysql> ALTER TABLE t_name ADD primary key(id);				-- 增加属性
 
-mysql> alter table t_name add unique(`field_name`);		-- 增加属性； 唯一约束
-mysql> alter table t_name add unique (`f1`, `f2`);		-- 增加属性； 联合唯一
+mysql> ALTER TABLE t_name ADD UNIQUE(`field_name`);			-- 增加属性； 唯一约束
+mysql> ALTER TABLE t_name ADD UNIQUE (`f1`, `f2`);			-- 增加属性； 联合唯一
 
-mysql> alter table t_name add unique index(`f1`);		-- 增加属性； 唯一索引
-mysql> alter table t_name add unique index(`f1`, `f2`);	-- 增加属性； 联合唯一索引
+mysql> ALTER TABLE t_name ADD UNIQUE INDEX(`f1`);			-- 增加属性； 唯一索引
+mysql> ALTER TABLE t_name ADD UNIQUE INDEX(`f1`, `f2`);		-- 增加属性； 联合唯一索引
 
-mysql> alter table t_name drop field_name;				-- 删除字段
-mysql> alter table t_name modify field_name type;		-- 修改字段类型
-mysql> alter table t_name change old_field_name new_field_name type; -- 修改字段列名
+mysql> ALTER TABLE t_name DROP field_name;					-- 删除字段
+mysql> ALTER TABLE t_name MODIFY field_name type;			-- 修改字段类型
+mysql> ALTER TABLE t_name CHANGE old_field_name new_field_name type; -- 修改字段列名
 
 -- 普通索引
-mysql> create index idx_name_card on t_name (name, card);	-- 创建索引
-mysql> drop index idx_name_card on t_name;					-- 删除索引
-mysql> alter table t_name add index idx_name(name);			-- 添加索引
+mysql> CREATE INDEX idx_name_card ON t_name (name, card);	-- 创建索引
+mysql> DROP INDEX idx_name_card ON t_name;					-- 删除索引
+mysql> ALTER TABLE t_name ADD INDEX idx_name(name);			-- 添加索引
 
 -- 唯一索引
-mysql> create unique index idx_card on t_name (card);		-- 创建唯一索引
-mysql> show index from t_name \G;							-- 查看索引信息
+mysql> CREATE UNIQUE INDEX idx_card ON t_name (card);		-- 创建唯一索引
+mysql> SHOW INDEX from t_name \G;							-- 查看索引信息
 ~~~
 
 #### DML
 
-Data Manipulation Language：操作数据行
+Data ManipulatiON Language：操作数据行
 
 ~~~sql
 SELECT
@@ -229,7 +236,7 @@ WHERE
 			-- in ()  
 			-- not in ()
 			-- is null 
-			-- is not null
+			-- is NOT NULL
 			-- like (%  _)
 			-- 条件连接 and or 
 			
@@ -261,22 +268,22 @@ INSERT INTO T(Field1, Field2, ...) VALUES(v1, v2, ....)
 ##### UPDATE
 
 ~~~sql
-UPDATE T SET Field1=NewValue, Field2=NewValue2 WHERE [conditions]
+UPDATE T SET Field1=NewValue, Field2=NewValue2 WHERE [cONditiONs]
 ~~~
 
 ##### DELETE
 
 ~~~sql
-DELETE FROM T WHERE [conditions]
+DELETE FROM T WHERE [cONditiONs]
 ~~~
 
 #### DCL
 
-Data Control Language
+Data CONtrol Language
 
 ~~~mysql
 BEGIN
-START transaction
+START transactiON
 COMMIT
 SAVEPOINT
 ROLLBACK
