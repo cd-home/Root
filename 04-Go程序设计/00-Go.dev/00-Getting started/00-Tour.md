@@ -56,5 +56,7 @@ Go代码组织imports在括号中, 你也可以import多条; 但是最好的方�
 
 不过我们无须担心, go fmt 会帮助格式化.
 
+#### Exported names
 
+》变量、
 
