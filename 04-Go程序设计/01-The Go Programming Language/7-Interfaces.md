@@ -20,17 +20,17 @@ In this chapter, we’ll start by looking at the basic mechanics[基本机制] o
 
 #### 7.1. Interfaces as Contracts 		接口作为契约
 
-All the types we’ve looked at so far have been concrete types[具体类型]. A concrete type specifies[具体说明, 明确规定] the exact representation[表示] of its values and exposes the intrinsic[内部] operations of that representation, such as arithmetic[算术] for numbers, or indexing[索引], append[追加], and range[遍历] for slices. A concrete type may also provide additional[额外的] behaviors[行为] through its methods. When you have a value of a concrete type, you know exactly what it is and what you can do with it.
+All the types we’ve looked at so far have been concrete types. A concrete type specifies[明确规定] the exact representation[表示] of its values and exposes[暴露出] the intrinsic[内部] operations of that representation, such as arithmetic[算术] for numbers, or indexing[索引], append[追加], and range[遍历] for slices. A concrete type may also provide additional[额外的] behaviors[行为] through its methods. When you have a value of a concrete type, you know exactly what it is and what you can do with it.
 
 PS: [具体类型的属性与行为是明确的]
 
-There is another kind of type in Go called an interface type[接口类型]. An interface is an abstract type[抽象类型]. It doesn’t expose[暴露出、公开] the representation or internal structure[内部结构] of its values, or the set of basic operations they support; it reveals[显示、展示] only some of their methods. When you have a value of an interface type, you know nothing about what it is; you know only what it can do, or more precisely, what behaviors are provided by its methods.
+There is another kind of type in Go called an interface type[接口类型]. An interface is an abstract type[抽象类型]. It doesn’t expose the representation or internal structure[内部结构] of its values, or the set of basic operations they support; it reveals[显示、展示] only some of their methods. When you have a value of an interface type, you know nothing about what it is; you know only what it can do, or more precisely, what behaviors are provided by its methods.
 
 PS: [接口类型没有暴露其值内部结构和支持的操作, 你只能知道其方法提供的行为是什么]
 
-Throughout the book, we’ve been using two similar[相似的] functions for string formatting: `fmt.Printf`, which writes the result to the standard output (a file), and `fmt.Sprintf`, which returns the result as a string. It would be unfortunate if the hard part, formatting the result, had to be duplicated[重复] because of these superficial[表面的] differences in how the result is used. Thanks to interfaces, it does not. Both of these functions are , in effect, wrappers[包裹] around a third function, `fmt.Fprintf`, that is agnostic[不可知的] about what happens to the result it computes.
+Throughout the book, we’ve been using two similar[相似的] functions for string formatting: `fmt.Printf`, which writes the result to the standard output (a file), and `fmt.Sprintf`, which returns the result as a string. It would be unfortunate if the hard part, formatting the result, had to be duplicated[重复] because of these superficial[表面的] differences in how the result is used. Thanks to interfaces, it does not. Both of these functions are , in effect, wrappers[包裹] around a third function, `fmt.Fprintf`, that is agnostic[不可知的] about what happens to the result it computes[计算].
 
-PS：[fmt.Fprintf并不知道运行的结果, 这一切都是由传入的具体类型实现的接口方法决定]
+PS：[fmt.Fprintf并不知道运行的结果, 这一切都是由传入的具体类型实现的方法决定]
 
 ~~~go
 package fmt
@@ -83,7 +83,7 @@ type Writer interface {
 }
 ~~~
 
-The io.Writer interface defines the contract[合约] between Fprintf and its callers[调用者].  On the one hand, the contract requires that the caller[调用者] provide a value of a concrete type like *os.File or *bytes.Buffer that has a method called Write with the appropriate[恰当的] signature[签名] and behavior.  On the other hand, the contract guarantees[保证] that Fprintf will do its job given any value that satisfies[满足] the io.Writer interface. Fprintf may not assume[假定] that it is writing to a file or to memory, only that it can call Write.
+The io.Writer interface defines the **contract**[合约] between Fprintf and its **callers**[调用者].  On the one hand, the contract requires that the caller[调用者] provide a value of a concrete type like *os.File or *bytes.Buffer that has a method called Write with the appropriate[恰当的] signature[签名] and behavior.  On the other hand, the contract guarantees[保证] that Fprintf will do its job given any value that satisfies[满足] the io.Writer interface. Fprintf may not assume[假定] that it is writing to a file or to memory, only that it can call Write.
 
 io.Writer 接口定义了 Fprintf 和它的调用者之间的合约.  一方面, 合约要求调用者提供一个具体类型的值, 如 *os.File 或 *bytes.Buffer, 该值有一个带有恰当签名和行为被叫做 Write 的方法. 另一方面, 合约保证 Fprintf 将在给定任何满足 io.Writer 接口的值的情况下完成其工作. Fprintf 可能不会假设它正在向文件或内存写入, 仅是可以调用Write. 
 
@@ -197,10 +197,12 @@ func TestExercise72(t *testing.T) {
 }
 ~~~
 
-**Exercis e 7.3:** 
+**Exercis e 7.3:**  TODO
 
 Write a String method for the *tree type in gopl.io/ch4/treesort (§4.4) that reveals the sequence of values in the tree.
 
 ~~~go
 ~~~
+
+#### 7.2. Interface Types 						接口类型
 
