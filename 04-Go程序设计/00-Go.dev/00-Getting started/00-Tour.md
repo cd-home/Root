@@ -329,3 +329,94 @@ func main() {
 ~~~
 
 PS: 未指定类型的数值常量通过具体的上下文获取类型
+
+#### For
+
+》Just One Loop Construct => for
+
+The basic `for` loop has three components separated by semicolons[分号]:
+
+1. the init statement: executed before the first iteration
+2. the condition expression: evaluated before every iteration
+3. the post statement[后置语句]: executed at the end of every iteration
+
+~~~go
+// ForLoopBaseControl
+// Basic For-Loop Iter
+func ForLoopBaseControl() {
+	sum := 0
+	for i := 0; i < 10; i++ {
+		fmt.Println(i)
+		sum += i
+	}
+	fmt.Println(sum)
+}
+
+// ForOtherStyleControl
+// Init And Post Can Be Out
+func ForOtherStyleControl() {
+	i := 0
+	for ;i < 10; {
+		i++
+		fmt.Println(i)
+	}
+}
+
+// ForWhileControl
+// For-"While"
+func ForWhileControl() {
+	i := 10
+	for i > 0 {
+		fmt.Println(i)
+		i--
+	}
+}
+
+// ForEverLoopControl
+// ForEver Loop
+func ForEverLoopControl() {
+	for {
+		fmt.Println()
+		time.Sleep(time.Second)
+	}
+}
+~~~
+
+PS: 初始化语句通常是使用短变量方式初始化, 并且其作用域属于for循环;
+
+#### If
+
+the expression need not be surrounded by parentheses `( )` but the braces `{ }` are required
+
+~~~go
+// IFControlSqrt
+// x = v*v
+func IFControlSqrt(x float64) string {
+	if x < 0 {
+		return IFControlSqrt(-x) + "i"
+	}
+	return fmt.Sprint(math.Sqrt(x))
+}
+
+// IFControlPow
+// x^n
+func IFControlPow(x, n, lim float64) float64 {
+	if v := math.Pow(x, n); v < lim {
+		return v
+	}
+	return lim
+}
+
+// IFControlPow2
+// x^n
+func IFControlPow2(x, n, lim float64) float64 {
+	if v := math.Pow(x, n); v < lim {
+		return v
+	} else {
+		fmt.Printf("%f > %f", v, lim)
+	}
+	return lim
+}
+~~~
+
+PS: if的表达式不需要圆括号; 支持简短的变量声明;
