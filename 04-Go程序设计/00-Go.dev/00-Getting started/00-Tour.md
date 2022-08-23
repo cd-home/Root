@@ -49,7 +49,7 @@ PS: Go程序是由Package[包]组织的; 程序在main package中启动运行.
 ~~~go
 import "fmt"
 import "math/rand"
-
+// or
 import (
 	"fmt"
     "math/rand"
@@ -378,7 +378,7 @@ func ForEverLoopControl() {
 	for {
 		fmt.Println()
 		time.Sleep(time.Second)
-	}
+    }
 }
 ~~~
 
@@ -420,3 +420,170 @@ func IFControlPow2(x, n, lim float64) float64 {
 ~~~
 
 PS: if的表达式不需要圆括号; 支持简短的变量声明;
+
+#### Concurency
+
+**Goroutine**
+
+~~~go
+func Say(s string) {
+	for i := 0; i < 5; i++ {
+		fmt.Println(s)
+		time.Sleep(time.Second)
+	}
+}
+func main() {
+    go Say("Hello")
+    Say("World")
+}
+~~~
+
+**channle**
+
+~~~go
+func main() {
+	sum := func(slices []int, res chan int) {
+		sums := 0
+		for _, v := range slices {
+			sums += v
+		}
+		res <- sums
+	}
+	s := []int{7, 2, 8, -9, 4, 0}
+	ch := make(chan int)
+	go sum(s[:3], ch)
+	go sum(s[3:], ch)
+	x, y := <-ch, <-ch
+	fmt.Println(x, y, x+y)
+}
+~~~
+
+**bufferChannel**
+
+~~~go
+func BufferedChannel() {
+	ch := make(chan int, 10)
+	// Not blocked
+	ch <- 1
+	ch <- 2
+	close(ch)
+
+	// Read Until Close
+	for v := range ch {
+		fmt.Println(v)
+	}
+}
+~~~
+
+PS: 缓冲通道不会阻塞在写(除非full)
+
+**Read channel**
+
+~~~go
+func main() {
+    // read channel
+	cds := make(chan string, 1)
+	cds <- "Hello World!"
+    // A sender can close a channel to indicate that no more values will be sent
+	close(cds)
+	for {
+        // ok-mode: check channle close and no more values to receive
+		v, ok := <-cds
+		if !ok {
+			break
+		}
+		fmt.Println(v)
+	}
+}
+~~~
+
+`ok` is `false` if there are no more values to receive and the channel is closed.
+
+PS: ok is false 表示, 通道关闭, 无数据可消费
+
+**for-range channel**
+
+~~~go
+func main() {
+	// close channel and for-range
+	Fibonacci := func(n int) <-chan int {
+		x, y := 0, 1
+		// closure: do not expose ch
+		// only expose read channel
+		ch := make(chan int)
+		go func() {
+			// sender close ch
+			// when is necessary to close a channel
+			defer close(ch)
+			for i := 0; i < n; i++ {
+				ch <- x
+				x, y = y, x+y
+			}
+		}()
+		return ch
+	}
+	// for-range until close channel
+	for v := range Fibonacci(10) {
+		fmt.Println(v)
+	}
+}
+~~~
+
+The loop `for i := range c` receives values from the channel repeatedly until it is closed.
+
+PS: 通常情况下由发送者关闭通道, 关闭的通道不能再次发送数据进去(panic); 如果确实需要通知消费端无数据进入,可以关闭通道.
+
+**select**
+
+~~~go
+func main() {
+    cjs := make(chan int, 1)
+	go func() {
+		time.Sleep(time.Second * 10)
+		cjs <- 1
+		close(cjs)
+	}()
+	select {
+	case v := <-cjs:
+		fmt.Println(v)
+	}
+}
+~~~
+
+PS: select 只会从上到下扫描一次; 如果都没有"数据流动", 就会阻塞直到由数据流动; 如果有多个case需要监听, 那么可以配合forever-loop.
+
+~~~go
+func main() {
+	Fibonacci := func(exit chan struct{}) <-chan int {
+		ch := make(chan int)
+		x, y := 0, 1
+		go func() {
+			defer close(ch)
+			for {
+				// case must be a channel
+				// It chooses one at random if multiple are ready.
+				select {
+				case <-exit:
+					fmt.Println("exit.")
+					return
+				case ch <- x:
+					x, y = y, x+y
+				}
+			}
+		}()
+		return ch
+	}
+
+	exit := make(chan struct{})
+	ch := Fibonacci(exit)
+	for i := 0; i < 10; i++ {
+		v, ok := <-ch
+		if ok {
+			fmt.Println(v)
+		}
+	}
+	// receiver 10 times and close
+	close(exit)
+	time.Sleep(time.Second)
+}
+~~~
