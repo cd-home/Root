@@ -16,13 +16,13 @@ With the network is none a container will not have access to any **external rout
 
 #### Bridge
 
-With the network set to bridge a container will use docker’s default networking setup. A bridge is setup on the host, commonly named docker0, and a pair of veth interfaces will be created for the container. One side of the veth pair will remain on the host attached to the bridge while the other side of the pair will be placed inside the container’s namespaces in addition to the loopback interface. An IP address will be allocated for containers on the bridge’s network and traffic will be routed though this bridge to the container.
+With the network set to bridge a container will use docker’s default networking setup. A bridge is setup on the host, commonly named **docker0**, and **a pair of veth interfaces** will be created for the container. One side of the veth pair will remain[保留] on the host attached to the bridge while the other side of the pair will be placed inside the container’s namespaces in addition to[除了] the loopback interface. An IP address will be allocated for containers on the bridge’s network and traffic will be routed though this bridge to the container. Containers can communicate via their IP addresses by default. To communicate by name, they must be linked.
 
-Containers can communicate via their IP addresses by default. To communicate by name, they must be linked.
-
-将网络设置为桥接容器将使用 docker 的默认网络设置.  在主机上设置了一个桥接器, 通常命名为 docker0, 并且将为容器创建一对 veth 接口.  veth 对的一侧将保留在连接到网桥的主机上, 而另一侧将放置在容器的命名空间内, 除了环回接口.  将为网桥网络上的容器分配一个 IP 地址, 并且流量将通过该网桥路由到容器. 
+网络设置为桥接容器将使用 docker 的默认网络设置.  在主机上设置了一个桥接器, 通常命名为 docker0, 并且将为容器创建一对 veth 接口.  veth 对的一侧将保留在连接到网桥的主机上, 而另一侧将放置在容器的命名空间内, 除了环回接口.  将为桥接网络上的容器分配一个 IP 地址, 并且流量将通过该网桥路由到容器. 
 
 默认情况下, 容器可以通过其 IP 地址进行通信.  要通过名称进行通信, 它们必须被链接--link or --net. 
+
+![docker-network-dridge](./images/docker-network-dridge.svg)
 
 #### Host
 
@@ -47,7 +47,6 @@ $ docker network create [OPTIONS] defx_net
 | option |                 | 说明 |
 | :----: | --------------- | :--: |
 |   -d   | --driver=bridge |      |
-|        |                 |      |
 |        |                 |      |
 
 ##### 查看网络	docker network ls
