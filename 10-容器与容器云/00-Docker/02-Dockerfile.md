@@ -46,7 +46,7 @@ ENV Key=Value Key1=Value1
 
 #### AGR
 
-构建时变量(会有FROM作用域), 第一种形式需要在build的时候传入 --build-arg
+构建时变量(会有FROM作用域), 第一种形式必须在build的时候传入 --build-arg, 第二种可选
 
 ~~~dockerfile
 ARG Key
