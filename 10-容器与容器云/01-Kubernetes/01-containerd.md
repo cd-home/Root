@@ -12,7 +12,7 @@
 
 #### Arch
 
-![architecture](./images/architecture.png)
+TODO
 
 #### install
 

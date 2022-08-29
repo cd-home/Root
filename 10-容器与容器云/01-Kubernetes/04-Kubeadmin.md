@@ -319,23 +319,17 @@ $ ifconfig cni0 down
 $ ip link delete cni0
 ~~~
 
-#### kubelet
-
-常见命令
+#### Kubectl
 
 ~~~bash
 $ kubectl get nodes
-$ kubectl get pods -n [kube-system|default] [-o wide] [要注意命名空间]
-
+# 要注意命名空间
+$ kubectl get pods -n [kube-system|default] [-o wide]
 $ kubectl get pods --watch -n default
-
 $ kubectl apply -f nginx.yaml
 $ kubectl delete -f nginx.yaml
-
 $ kubectl explain x_deployment
-
 $ kubectl get deploy
-
 # 遇到任何问题, 可以查看
 $ kubectl describe pod|deploy 
 ~~~
@@ -411,7 +405,7 @@ spec:
 
 #### Tips
 
-如何重新来过?
+安装过程出现问题如何重新来过?
 
 ~~~bash
 # 会提示删除必要的目录,配置等
@@ -419,4 +413,3 @@ $ kubeadm reset
 $ iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
 $ ipvsadm -C
 ~~~
-
