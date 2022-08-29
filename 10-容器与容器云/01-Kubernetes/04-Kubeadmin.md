@@ -47,15 +47,14 @@ $ systemctl disable firewalld
 ~~~bash
 $ sestatus
 # 临时
-$ f
+$ setenforce 0
 
 # 永久
 $ vim /etc/sysconfig/selinux
-
 SELINUX=disable
-
-# 可选操作
+# 可选sed操作
 $ sudo sed -i 's/^SELINUX=enforcing$/SELINUX=disable/' /etc/selinux/config
+
 # Need reboot
 $ shutdown -r now
 ~~~
@@ -65,8 +64,7 @@ $ shutdown -r now
 ~~~bash
 # 当内存不足时,Linux 会自动使用 swap, 将部分内存数据存放到磁盘中, 这个这样会使性能下降
 $ swapoff -a
-$ vim /etc/fstab
-# 注释
+$ vim /etc/fstab # 注释如下行
 #/dev/mapper/cl_fedora-swap none swap defaults 0 0
 $ free -h
 ~~~
@@ -85,8 +83,8 @@ net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
 vm.swappiness=0
 
-# 重新加载
 $ sysctl -p /etc/sysctl.d/k8s.conf
+# 不要重启[推荐]
 $ sysctl --system
 ~~~
 
