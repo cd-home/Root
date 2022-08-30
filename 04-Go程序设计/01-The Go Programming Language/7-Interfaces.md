@@ -76,7 +76,7 @@ The first parameter of Fprintf is not a file either. It’s an io.Writer, which 
 // and any error encountered that caused the write to stop early.
 // Write must return a non-nil error if it returns n < len(p).
 // Write must not modify the slice data, even temporarily.
-// 写入操作不得修改切片数据，即使是临时修改
+// 写入操作不得修改切片数据, 即使是临时修改
 // Implementations must not retain p.
 type Writer interface {
 	Write(p []byte) (n int, err error)
@@ -108,13 +108,15 @@ func (c *ByteCounter) Write(p []byte) (int, error) {
 Since *ByteCounter satisfies[满足] the io.Writer contract, we can pass it to Fprintf, which does its string formatting oblivious[未察觉] to this change; the ByteCounter correctly accumulates the length of the result.
 
 ~~~go
-var c ByteCounter
-c.Write([]byte("hello"))
-fmt.Println(c)  // "5", = len("hello")
-c = 0 			// reset the counter
-var name = "Dolly"
-fmt.Fprintf(&c, "hello, %s", name)
-fmt.Println(c)  // "12", = len("hello, Dolly")
+func main() {
+    var c ByteCounter
+    c.Write([]byte("hello"))
+    fmt.Println(c)  			// "5", = len("hello")
+    c = 0 						// reset the counter
+    var name = "Dolly"
+    fmt.Fprintf(&c, "hello, %s", name)
+    fmt.Println(c)  			// "12", = len("hello, Dolly")
+}
 ~~~
 
 Besides io.Writer, there is another interface of great importance to the fmt package. Fprintf and Fprintln provide a way for types to control how their values are print ed. In Section 2.5, we defined a String method for the Celsius type so that temperatures would print as "100°C", and in Section 6.5 we equipped *IntSet with a String method so that sets would be rendered using traditional set notation[符号] like "{1 2 3}". Declaring a String method makes a type satisfy on e of the most widely[广泛的] used interfaces of all, fmt.Stringer:
@@ -170,6 +172,8 @@ Write a function CountingWriter with the signature below that, given an io.Write
 func CountingWriter(w io.Writer) (io.Writer, *int64)
 ~~~
 
+Answer
+
 ~~~go
 type WrapperWriter struct {
 	writer  io.Writer
@@ -204,5 +208,5 @@ Write a String method for the *tree type in gopl.io/ch4/treesort (§4.4) that re
 ~~~go
 ~~~
 
-#### 7.2. Interface Types 						接口类型
+#### 7.2 Interface Types 						接口类型
 

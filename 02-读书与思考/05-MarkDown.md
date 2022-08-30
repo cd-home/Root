@@ -1,6 +1,6 @@
 ### TyporaAndMD
 
-> Typora、MarkDown编写文档
+》Typora、MarkDown编写文档
 
 [TOC]
 
@@ -42,7 +42,7 @@
 ##### 代码区块
 
 ~~~
-​~~~ python
+~~~ python
 ~~~
 
 ~~~js
