@@ -18,7 +18,7 @@ netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
 
 ##### 解决办法
 
-> vim /etc/sysctl.conf   /sbin/sysctl -p
+vim /etc/sysctl.conf   /sbin/sysctl -p
 
 ~~~bash
 # SYN Cookies。当出现SYN等待队列溢出时，启用cookies来处理，可防范少量SYN攻击 默认为0
@@ -30,3 +30,13 @@ net.ipv4.tcp_tw_recycle = 1
 # 修改系默认的 TIMEOUT 时间
 net.ipv4.tcp_fin_timeout = 30
 ~~~
+
+补充命令
+
+~~~bash
+ps aux | grep process_name
+netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+lsof -n|awk '{print $2}'|sort|uniq -c |sort -nr|more
+ls /proc/xpid/fd | wc -l
+~~~
+
