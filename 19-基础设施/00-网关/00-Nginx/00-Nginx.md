@@ -22,29 +22,48 @@ Nginx是一款高性能的HTTP服务器和反向代理服务器(负载均衡)
 
 ### Install
 
-Linux
+Linux 
 
 安装(yum管理)
 
 ~~~bash
-$ apt-get install nginx
-$ yum install nginx
-$ nginx -v
+$ yum install nginx -y
+[root@liyao ~]# nginx -h
+nginx version: nginx/1.14.1
+Usage: nginx [-?hvVtTq] [-s signal] [-c filename] [-p prefix] [-g directives]
+Options:
+  -?,-h         : this help
+  -v            : show version and exit
+  -V            : show version and configure options then exit
+  -t            : test configuration and exit
+  -T            : test configuration, dump it and exit
+  -q            : suppress non-error messages during configuration testing
+  -s signal     : send signal to a master process: stop, quit, reopen, reload
+  -p prefix     : set prefix path (default: /usr/share/nginx/)
+  -c filename   : set configuration file (default: /etc/nginx/nginx.conf)
+  -g directives : set global directives out of configuration file
 ~~~
 
-服务管理(systemctl管理)
+Tips: 注意下配置文件地址、静态文件的目录
+
+服务管理(systemctl管理, 详细可见Linux系统)
 
 ~~~bash
-sudo service nginx start
-sudo service nginx restart
-sudo service nginx stop
+$ systemctl start nginx
 ~~~
 
-Docker
+Docker or nerdctl containerd
 
 ~~~bash
 docker pull nginx:latest
 docker run -d -p 80:80 --name ng nginx:latest 
+~~~
+
+检测进程
+
+~~~bash
+$ ps -ef | grep nginx
+$ netstat -anlp | grep nginx
 ~~~
 
 ### command-line parameters
