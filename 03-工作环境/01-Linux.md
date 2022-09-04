@@ -72,348 +72,110 @@ opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 |  unzip  |                解压                 |             unzip dest.zip              |                           |
 |   ln    |                链接                 |          ln [-s]  source dest           |         -s 软链接         |
 
-#### 文件查看
+#### 内容查看
 
-~~~bash
-# ------------------------------------[所有]----------------------------------------
-# 获取所有
-$ cat -n
- 
-# ------------------------------------[局部]----------------------------------------
-# 前 n 行
-$ head -10 testfile
-
-# 后 n 行
-$ tail -5 testfile
-
-# ------------------------------------[动态]----------------------------------------
-# 动态显示文本最新信息
-$ tail -f api.log
-$ tail -n +20 api.log
-
-# 查看差别
-$ diff testfile1 testfile2
-
-# 翻页查看
-$ more testfile
-$ less testfile
-
-# ------------------------------------[匹配]----------------------------------------
-# 匹配查看
-$ egrep "error: auth"  api.log
-
-# ------------------------------------[过滤]----------------------------------------
-# 通常作用在其他命令的管道的结果: ps -ef | grep nginx
-# 显示匹配行、以及行号 -i 忽略大小写
-$ grep -n -i 'error: ' api.log
-# 匹配多个模式:
-$ grep -e "error" -e "info" testfile
-~~~
-
-#### 文件编辑
-
-~~~bash
-# ------------------------------------[vim 查看、编辑]-------------------------------
-$ vim testfile
-
-# ------------------------------------[sed 查看、编辑]-------------------------------
-# 首处替换
-$ sed 's/text/replace_text/' testfile
-
-# 全局替换 输出内容 -g
-$ sed 's/text/replace_text/g' testfile
-
-# 替换文件内容
-$ sed -i 's/text/repalce_text/g' testfile
-
-# 移除空白行
-$ sed '/^$/d' testfile
-
-# 变量替换 []
-$ echo this is en example | sed 's/\w+/[&]/g'
-~~~
+| command | description |               example                |  parameter  |
+| :-----: | :---------: | :----------------------------------: | :---------: |
+|   cat   |  获取全部   |           cat -n testfile            |   -n 行数   |
+|  head   |    前n行    |          head -10 testfile           |             |
+|  tail   |    后n行    |          tail -10 testfile           |             |
+|  tail   |  动态最新   |           tail -f api.log            | -f 动态最新 |
+|  more   |  查看更多   |            more  testfile            |             |
+|  less   |  翻页查看   |            less testfile             |  前后翻页   |
+|  grep   |    过滤     |         ps -ef \| grep nginx         |  模式过滤   |
+|  grep   |    过滤     |           grep -e  x -e y            | 多模式过滤  |
+|   sed   |  首处替换   | sed 's/text/replace_text/' testfile  |             |
+|   sed   |  全局替换   | sed 's/text/replace_text/g' testfile |   g 全局    |
 
 #### 用户管理
 
-组、权限信息 /etc/group /etc/passwd 
+| command  | description  |       example        |     parameter     |
+| :------: | :----------: | :------------------: | :---------------: |
+| groupadd |    添加组    |      groupadd x      |                   |
+| groupdel |    删除组    |      groupdel x      |                   |
+|  groups  |    查看组    |    groups [xuser]    |                   |
+|  groups  |    加入组    |  groups -G g1,g2 u1  | -G 用户加入多个组 |
+| useradd  |   添加用户   |      useradd x       |                   |
+| useradd  | 添加用户加组 | useradd u1 -G g1,g2  |                   |
+| userdel  |   删除用户   |    userdel xuser     |                   |
+| usermod  |  修改用户组  | User mod -G xg xuser |                   |
+|  passwd  | 修改用户密码 |     passwd xuser     |                   |
+|    su    |   切换用户   |       su xuser       |                   |
+|   sudo   | 超级用户执行 |    sudo [command]    |                   |
 
-~~~bash
-# ------------------------------------[用户组管理]-----------------------------------
-# 创建组
-$ groupadd gx
+#### 进程工具
 
-# 删除组
-$ groupdel g1
-
-# 查看组、查看用户的组
-$ groups [user]
-
-# -G 用户加入多个组 -g 用户加入新的组
-$ groups -G g1,g2 u1
-
-# ------------------------------------[用户管理]-------------------------------------
-# 增加用户
-$ useradd ux 
-# 增加用户并且添加到组
-$ useradd u1 -G g1,g2
-
-# 删除用户
-$ userdel [-r] u1
-
-# 修改用户所在组
-$ usermod -G g3 u2
-
-# 修改密码
-$ passwd
-$ passwd u1
-
-# 切换root用户
-$ su  
-# 切换普通用户
-$ su other_user
-
-# root用户执行
-$ sudo command
-~~~
-
-#### 硬件管理
-
-~~~bash
-# 磁盘空间
-$ df -h
-
-# 当前目录所占空间
-$ du -sh
-$ du -sh `ls` | sort
-~~~
-
-#### 进程管理
-
-~~~bash
-# report a snapshot of the current processes.
-# 查找正在运行进程信息
-$ ps -ef
-
-# 以完整的格式显示所有的进程
-$ ps -ajx
-
-# 查找进程
-$ pgrep -l mysql
-$ pidof progress_name
-
-# 使用某个端口的进程
-$ lsof -i :3306
-
-# 杀死
-$ kill -l
-$ kill pid 	   
-
-# display sorted information about processes
-# 进程实时监控 
-$ top
-
-# 分析线程堆栈
-$ pmap pid
-~~~
-
-#### 性能监控
-
-~~~bash
-# ------------------------------------[CPU]-------------------------------------
-# 两个参数表示监控的频率, 比如例子中的1和2, 表示每秒采样一次, 总共采样2次
-$ sar 1 2 
-# 内存使用情况
-$ sar -r 1 2 
-# 页面交换
-$ sar -W 1 2
-
-# ------------------------------------[内存]-------------------------------------
-$ free -m
-~~~
+| command |   description    |       example        |    parameter     |
+| :-----: | :--------------: | :------------------: | :--------------: |
+|   ps    |     进程快照     | ps -ef \| grep nginx | -e全部 -f 格式化 |
+|  lsof   | 打开的文件描述符 |    lost -i :8080     |                  |
+|  pgrep  |     查找进程     |     pgrep nginx      |                  |
+|  pidof  |    查找进程号    |     pidof nginx      |                  |
+|  kill   |     杀死进程     |    kill -9 [pid]     |   -9 强制杀死    |
+|   top   |   进程实时监控   |         top          |     补充htop     |
 
 #### 网络工具
 
-~~~bash
-# ------------------------------------[curl]---------------------------------------
-$ curl url 
+|    command     | description  |          example           |                parameter                |
+| :------------: | :----------: | :------------------------: | :-------------------------------------: |
+|      curl      | 数据传输工具 |          curl url          |                                         |
+|      wget      |   文件下载   |          wget url          |                                         |
+|    netstat     |   网络状态   |       netstat -anlp        |              -t=tcp -u=udp              |
+|      ssh       |   远程连接   |       ssh user@host        |                                         |
+|      scp       |   复制远程   |  scp localpath host:path   |                                         |
+|      scp       |   远程下载   | scp -r site:path localpath |                                         |
+|      sftp      |   文件传输   |         sftp host          | 本机lls lcd、服务器ls cd、put\|get file |
+|       ip       |   网络配置   |          ip addr           |                  ip a                   |
+|     route      |    路由表    |          route -n          |                                         |
+| nslookup\|host |    ip查看    |  nslookup\|host [domain]   |                                         |
+|      ping      |   网络联通   |         ping [ip]          |                                         |
 
-# ------------------------------------[wget]---------------------------------------
-# -c 断点下载 –limit-rate :下载限速 -o：指定日志文件
-$ wget url 
+#### 硬件管理
 
-# ------------------------------------[telnet]-------------------------------------
-# telent xinetd
-$ telnet host 
-
-# ------------------------------------[SSH]----------------------------------------
-# 登陆服务器 ssh-keygen 为 ssh 生成、管理和转换认证密钥，它支持 RSA 和 DSA 两种认证密钥
-$ ssh host
-$ ssh [-p PORT] USER@HOST
-
-# ------------------------------------[ip]-----------------------------------------
-$ ip addr
-$ ifconfig
-$ ip route
-$ ip link
-
-# ------------------------------------[route]--------------------------------------
-# 网络路由表查看与设置
-$ route
-
-# ------------------------------------[host]---------------------------------------
-# 域名测试
-$ host Domain
-$ host IP
-$ nslookup Domain
-
-# ------------------------------------[ping]---------------------------------------
-# 网络联通性测试
-$ ping IP
-# 追踪数据包
-$ traceroute IP
-
-# ------------------------------------[sftp]---------------------------------------
-# 本机   lls lcd
-# 服务器 ls cd
-# put filename 
-# get filename
-$ sftp host
-
-# ------------------------------------[scp]----------------------------------------
-# 复制
-$ scp localpath host:path
-# 下载
-$ scp -r site:path localpath
-
-# ------------------------------------[netstat]------------------------------------
-# 查询网络服务和端口 t=tcp u=udp p=program
-$ netstat -a   # all port
-$ netstat -at  # tcp port 
-$ netstat -au  # tcp port
-$ netstat -l   # running
-$ netstat -lt  # running
-$ netstat -lu  # running
-
-# 协议统计信息
-$ netstat -s
-$ netstat -st
-$ netstat -su
-
-# 网络服务查询端口
-$ netstat -altup | grep 6379
-
-# ------------------------------------[firewalld]----------------------------------
-# ------------------------------------[iptables]-----------------------------------
-~~~
+| command | description |         example         | parameter |
+| :-----: | :---------: | :---------------------: | :-------: |
+|   df    |  磁盘空间   |          df -h          |           |
+|   du    |  目录空间   | du -sh [\`ls\` \| sort] |           |
+|  free   |  内存状态   |         free -m         |   -m MB   |
 
 #### 环境变量
 
-~~~bash
-# 获取环境变量
-$ env
-# 全局 		  
-/etc/profile /etc/bashrc
-
-# 用户目录下私有 
-~/.profile  ~/.bashrc 
-
-# 登陆系统获得shell进程, 加载环境变量过程 
-1. /etc/profile 
-2. ~/.bash_profile 
-3. ~/.bash_login 
-4. ~/.profile 
-5. ~/.bashrc
-~~~
+|          command           |          description           |        example        | parameter |
+| :------------------------: | :----------------------------: | :-------------------: | :-------: |
+|            env             |          获取环境变量          |          env          |           |
+| /etc/profile、 /etc/bashrc | ~/.bash_profile、~/.bash_login | ~/.profile、~/.bashrc |           |
 
 #### 系统管理
 
-~~~bash
-# 开关机
-$ rebbot
-$ shutdown
-# 立即重启
-$ shutdown -r now
-# 立即关机
-$ shutdown -h now 
-
-# 系统版本
-$ uname -a
-
-# CPU信息
-$ cat /proc/cpuinfo
-
-# 内存信息
-$ cat /proc/meminfo
-
-# 系统架构
-$ arch
-
-# 日期
-$ date
-$ date +%Y%m%d%H%M%S
-
-# 系统限制信息
-$ ulimit -a 
-
-# 定时任务
-$ at
-$ crontab
-
-# 文件系统挂载
-$ mount
-$ mount /dev/hda1 /mnt
-$ umount
-
-# 系统服务管理
-$ systemctl [stop | start | restart | status | enable | disable] 
-$ systemctl daemon-reload
-~~~
-
-#### 软件安装
-
-》通常情况下可以更新yum的镜像源(见Linux System)
-
-~~~bash
-$ yum search
-$ yum list
-$ yum install 
-$ yum update
-$ yum remove
-~~~
+|    command    |  description  |                           example                            |    parameter    |
+| :-----------: | :-----------: | :----------------------------------------------------------: | :-------------: |
+|    reboot     |     重启      |                            reboot                            |                 |
+|   shutdown    |     重启      |                       shutdown -r now                        |                 |
+|   shutdown    |     关机      |                       shutdown -h now                        |                 |
+|     uname     |   系统版本    |                           uname -a                           |                 |
+|     arch      |   系统架构    |                             arch                             |                 |
+|     date      |     日期      |                     date  +%Y%m%d%H%M%S                      |                 |
+|    crontab    |   定时任务    |                      crontab [-l] [-e]                       | -l=list -e=edit |
+| mount/unmount | 文件挂载/卸载 |                     mount /dev/hda1 /mnt                     |                 |
+|  timedatectl  |   管理工具    |                   timedatectl set-timezone                   |                 |
+|  hostnamectl  |   主机设置    |                    hostnamectl k8s-master                    |                 |
+|   systemctl   |   服务管理    | systemctl [start\|\|stop\|enable\|disable\| daemon-reload\|status] |     restart     |
+|      yum      |   软件安装    |         yum [list\|install\|update\|remove\|search]          |                 |
 
 #### 补充
 
-重定向
-
-~~~bash
-$ echo "Hello" > 1.txt
-# 追加
-$ echo "Hello" >> 1.txt
-# 清空文件
-$ :> 1.txt
-~~~
-
-多命令
-
-~~~bash
-# 前面成功, 后面才执行
-$ cd .. && pwd
-# 前面失败, 后面才执行
-$ ./app || ls 
-# 串联多命令, 无关联关系
-$ ls ; pwd
-~~~
-
-**管道**
-
-~~~bash
-# 批量命令执行, 前面的结果应用到后面的命令
-$ ls -lh | head -n 2
-~~~
+| command |              description               |         example         |      parameter       |
+| :-----: | :------------------------------------: | :---------------------: | :------------------: |
+|    >    |                清空写入                | echo "Hello" > test.txt | :> test.txt 清空文件 |
+|   >>    |                追加写入                |  echo "Hello" >> 1.txt  |                      |
+|   &&    |            前面成功执行后面            |                         |                      |
+|  \|\|   |            前面失败执行后面            |                         |                      |
+|    ;    |               串联多命令               |         ls;pwd          |                      |
+|   \|    | 管道, 获取前面的结果作为后面命令的输入 |  ps -ef \| grep nginx   |                      |
 
 **文件描述符**
 
-Linux系统预留可三个文件描述符：0、1和2，他们的意义如下所示：
+Linux系统预留可三个文件描述符: 0、1和2, 他们的意义如下所示: 
 
 ~~~bash
 0——标准输入（stdin）
@@ -427,12 +189,6 @@ Linux系统预留可三个文件描述符：0、1和2，他们的意义如下所
 $ 2 > /dev/ull
 $ >/dev/null 2>&1
 $ 2>&1 >/dev/null
-~~~
-
-#### 问题排查
-
-~~~bash
-$ strace -f -o ./strace.out excute_dev
 ~~~
 
 #### zsh
