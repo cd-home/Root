@@ -2,7 +2,7 @@
 
 ### Linux
 
-一切皆文件
+》一切皆文件; 常用命令的集合;
 
 #### 目录系统
 
@@ -24,132 +24,53 @@ opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 
 #### 目录管理
 
-~~~bash
-# ------------------------------------[目录操作]-------------------------------------
-# 创建目录
-$ mkdir testdir
-# 递归创建 
-$ mkdir -p testPdir/testCdir
-# 删除空目录
-$ rmdir EmptyDir
-
-# ------------------------------------[切换目录]-------------------------------------
-# 切换目录(切换当前工作路径)
-# 绝对路径
-$ cd /path/
-# 相对路径
-$ cd ./path 
-$ cd -
-# Home
-$ cd or cd ~
-# 上级目录
-$ cd ..  	 
-# 当前目录路径
-$ pwd
-
-# 显示 yum install tree -y
-$ tree
-~~~
+| command |    description     |          example           | parameter           |
+| :-----: | :----------------: | :------------------------: | ------------------- |
+|  mkdir  |      创建文件      |       mkdir testdir        |                     |
+|  mkdir  |      递归创建      | mkdir -p testPdir/testCdir |                     |
+|  rmdir  |     删除空目录     |       rmdir EmptyDir       |                     |
+|   cd    |      切换目录      |          cd path           |                     |
+|   cd    |       上一级       |           cd ..            |                     |
+|   cd    |        上次        |            cd -            |                     |
+|   cd    |        Home        |         cd ~ [cd]          |                     |
+|   pwd   |      当前目录      |            pwd             |                     |
+|   ls    |   查看路径下文件   |  ls [path] [-a] [-h] [-l]  | -a 隐藏文件 -l 权限 |
+|   ll    | 查看路径下文件详细 |    ll [path] [-a] [-h]     | -h 文件大小         |
 
 #### 文件管理
 
-~~~bash
-# ------------------------------------[查看目录]-------------------------------------
-# 查看目录下子目录、文件信息
-$ ls
-$ ls -l       # 权限
-$ ls -rlt     # 按照时间排序
-$ ls | cat -n # 添加行号
-$ ls -a		  # 隐藏文件
-$ ls -lh      # 文件详细大小等
-$ ll		  # [常用]
+| command |  description   |    example     |  parameter   |
+| :-----: | :------------: | :------------: | :----------: |
+|  touch  |    创建文件    | touch testfile |              |
+|  which  | 查找可执行文件 | which python3  |              |
+|   rm    |    删除文件    |  rm testfile   |   rm *log    |
+|   vim   | 创建、编辑文件 |  vim testfile  | 具体见vim.md |
 
-# ------------------------------------[文件操作]-------------------------------------
-# 创建文件
-$ touch testfile
-# 查找可执行文件类型
-$ which rm
+#### 资源管理
 
-# ----------------------------------[目录、文件通用]----------------------------------
-# 强制递归删除
-$ rm -rf noEmptyDir
-
-# 删除文件
-$ rm testfile
-$ rm *log
-
-# 移动、重命名
-$ mv source_[Dir|file] dest_[Dir|file]
-
-# 复制 -r 递归
-$ cp -r source_[Dir|file] dest_[Dir|file]
-
-# 检测类型
-$ file dir|file
-
-# 查找位置
-$ locate dir|file
-
-# 详细信息
-$ stat dir|file
-
-# 重命名
-$ rename old_name new_name old_name
-
-# ------------------------------------[查找]----------------------------------------
-# 查找 -type d f l  目录、文件、链接
-$ find ./ -name "*.go"
-
-# ------------------------------------[权限]----------------------------------------
-# 数字模式 4 2 1
-$ chmod [-R] 777 Dir|File 
-# 符号模式 [u g o a] [+ - =] [r w x]
-$ chomd [-R] a+x Dir|File
-
-# userMark 			u 用户、g 组、o其他用户、a 所有用户
-# permissionMark	r 读、w 写、x 执行
-# op				+ - =
-# chmod userMark [+-=] permissionMark 
-$ chmod u+x
-
-# 数字方式设置 
-# 三位八进制数字的形式来表示权限, 第一位指定属主的权限, 第二位指定组权限, 第三位指定其他用户的权限
-# 每位通过4(读)、2(写)、1(执行)三种数值的和来确定权限
-$ chomd 660 build.sh
-
-# ------------------------------------[链接]----------------------------------------
-# 硬链接
-$ ln source_file dest_file
-# 软链接
-$ ln -s source_file dest_file
-
-# ------------------------------------[打包]----------------------------------------
-# 打包
-$ tar -cvf target.tar dest_dir
-# 解包
-$ tar -xvf target.tar
-
-# ------------------------------------[压缩]----------------------------------------
-# 打包后 gzip 压缩
-$ tar -zcvf target.tar.gz dest_dir
-# 打包后 bzip2 压缩
-$ tar -zcvf target.tar.bz2 dest_dir
-
-# 查看压缩包内容, 不解压
-$ tar -tf target.tar.gz
-# 解压
-$ tar -zxvf target.tar.gz -C dest_dir
-
-# gzip
-$ gzip -r dest.tar		# dest.tar.gz
-$ gzip -rv /source_dir  # 递归压缩
-$ gzip -dr test/        # 递归地解压目录
-$ gunzip dest.tar.gz    # 解压
-
-# zip
-$ zip dest.zip source_dir
-$ unzip dest.zip
-~~~
+| command |             description             |                 example                 |         parameter         |
+| :-----: | :---------------------------------: | :-------------------------------------: | :-----------------------: |
+|   rm    |                删除                 |     rm testfile、rm -rf noEmptyDir      |      -rf 强制、递归       |
+|   mv    |            移动、重命名             | mv source\_[Dir\|file] dest_[Dir\|file] |                           |
+|   cp    |                复制                 | mv source\_[Dir\|file] dest_[Dir\|file] |        -r 递归复制        |
+|  file   |              类型检测               |             file dir\|file              |                           |
+| locate  |                位置                 |            locate dir\|file             |                           |
+|  stat   |              详细信息               |             stat dir\|file              |                           |
+| rename  |               重命名                |           rename old new old            |                           |
+|  chmod  |                权限                 |        chmod [-R] 777 Dir\|File         | 4 2 1 模式[读、写、执行]  |
+|  chmod  |                权限                 |        chomd [-R] a+x Dir\| File        | [u g o a] [+ - =] [r w x] |
+|         | u 用户、g 组、o其他用户、a 所有用户 |           r 读、w 写、x 执行            |         op + - =          |
+|   tar   |                打包                 |      tar -cvf target.tar dest_dir       |                           |
+|   tar   |                解包                 |           tar -xvf target.tar           |                           |
+|   tar   |                压缩                 |   tar -zcvf target.tar.gz source_dir    |                           |
+|   tar   |                查看                 |          tar -tf target.tar.gz          |                           |
+|   tar   |                解压                 |   tar -zxvf target.tar.gz -C dest_dir   |                           |
+|  gzip   |                压缩                 |          gzip -rv ./source_dir          |         -rv 递归          |
+|  gzip   |                解压                 |             gzip -dr test/              |                           |
+| gunzip  |                解压                 |           gunzip dest.tar.gz            |                           |
+|   zip   |                压缩                 |         zip dest.zip source_dir         |                           |
+|  unzip  |                解压                 |             unzip dest.zip              |                           |
+|   ln    |                链接                 |          ln [-s]  source dest           |         -s 软链接         |
 
 #### 文件查看
 
