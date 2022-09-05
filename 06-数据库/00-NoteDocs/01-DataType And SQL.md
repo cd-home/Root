@@ -2,20 +2,7 @@
 
 ### Tutorial
 
-Install And CONfig
-
-Service
-
-~~~bash
-mysqld
-~~~
-
-~~~bash
-/etc/my.cnf
-/etc/mysql/my.cnf
-~~~
-
-CONnecting And DiscONnecting
+Connecting And Disconnecting
 
 ~~~bash
 $ mysql -h host -u user -p
