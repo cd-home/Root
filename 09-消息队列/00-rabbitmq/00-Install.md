@@ -53,6 +53,28 @@ $ rabbitmqctl list_users
 
 Container(TODO)
 
-~~~bash
-~~~
+#### Notion
+
+》RabbitMQ is a message broker[消息中介]: it accepts and forwards messages[接受和转递消息]
+
+》消息系统(消息中间件)
+
+》消峰、异步、解耦
+
+AMQP
+
+》Advanced Message Queuing Protocol , 提供统一消息服务的应用层标准高级消息队列协议, 实现其协议的客户端都可与消息系统交互.
+
+#### Feature
+
+- [ ] 基于Erlang开发, 性能高, 并发强
+- [ ] 支持持久化
+- [ ] 发布确认、消费确认机制
+- [ ] 多种模式可选择
+- [ ] 高吞吐 [单机吞吐万级别]
+- [ ] 高可用 [支持主从架构]
+
+
+
+
 
