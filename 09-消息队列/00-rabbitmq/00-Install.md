@@ -13,7 +13,8 @@ $ wget https://packages.erlang-solutions.com/erlang-solutions-2.0-1.noarch.rpm
 $ rpm -Uvh erlang-solutions-2.0-1.noarch.rpm 
 $ rpm --import https://packages.erlang-solutions.com/rpm/erlang_solutions.asc
 
-$ yum list | grep erlang
+# 直接去下载rpm包安装
+# https://www.erlang-solutions.com/downloads/
 $ yum install erlang-24.0.4-1.el8.aarch64
 ~~~
 
