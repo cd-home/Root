@@ -1,35 +1,12 @@
 [TOC]
 
-### Standard Go Project Layout
+### Layout Example
 
-参考项目模式
+》常见的目录说明
 
-#### 前言
+#### `/cmd`
 
-下面是 Go 应用程序项目的基本布局注意: **不是核心 Go 开发团队定义的官方标准**
-
-#### 问题
-
-随着项目的增长, 请记住保持代码结构良好非常重要, 否则你最终会得到一个凌乱的代码, 这其中就包含
-
-1. 大量隐藏的依赖项
-2. 全局状态当
-
-#### Go Mod
-
-Go 1.14 [`Go Modules`](https://github.com/golang/go/wiki/Modules) 终于可以投入生产了除非你有特定的理由不使用它们, 否则使用 [`Go Modules`](https://blog.golang.org/using-go-modules) 
-
-如果使用, 就无需担心 $GOPATH 以及项目放置的位置, 存储库中的 `go.mod` 文件基本假定你的项目托管在 Github 上, 但这不是要求
-
-#### 说明
-
-此项目布局是通用的, 并且不会尝试强加一个特定的 Go 包结构
-
-#### Go 目录
-
-##### `/cmd`
-
-本项目的应用入口
+项目的应用入口
 
 每个应用程序的目录名应该与你想要的可执行文件的名称相匹配(例如, `/cmd/myapp`)
 
@@ -39,7 +16,7 @@ Go 1.14 [`Go Modules`](https://github.com/golang/go/wiki/Modules) 终于可以�
 2. 如果你认为代码可以导入并在其他项目中使用, 那么它应该位于 `/pkg` 目录中
 3. 如果代码不是可重用的, 或者你不希望其他人重用它, 请将该代码放到 `/internal` 目录中
 
-##### `/internal`
+#### `/internal`
 
 私有应用程序和库代码
 
@@ -51,7 +28,7 @@ Go 1.14 [`Go Modules`](https://github.com/golang/go/wiki/Modules) 终于可以�
 
 你的实际应用程序代码可以放在 `/internal/app` 目录下(例如 `/internal/app/myapp`), 这些应用程序共享的代码可以放在 `/internal/pkg` 目录下(例如 `/internal/pkg/myprivlib`)
 
-##### `/pkg`
+#### `/pkg`
 
 外部应用程序可以使用的库代码
 
@@ -59,7 +36,7 @@ Go 1.14 [`Go Modules`](https://github.com/golang/go/wiki/Modules) 终于可以�
 
 如果你的应用程序项目真的很小, 并且额外的嵌套并不能增加多少价值(除非你真的想要), 那就不要使用它当它变得足够大时, 你的根目录会变得非常繁琐时(尤其是有很多非 Go 应用组件时), 请考虑一下
 
-##### `/vendor`
+#### `/vendor`
 
 应用程序依赖项(手动管理或使用你喜欢的依赖项管理工具, 如新的内置 [`Go Modules`](https://github.com/golang/go/wiki/Modules) 功能)
 
@@ -69,76 +46,60 @@ Go 1.14 [`Go Modules`](https://github.com/golang/go/wiki/Modules) 终于可以�
 
 国内模块代理功能默认是被墙的, 七牛云有维护专门的的[`模块代理`](https://github.com/goproxy/goproxy.cn/blob/master/README.zh-CN.md) 
 
-#### API 目录
-
-##### `/api`
+#### `/api`
 
 OpenAPI/Swagger 规范, JSON 模式文件, 协议定义文件
 
-#### Web 应用程序目录
-
-##### `/web`
+#### `/web`
 
 特定于 Web 应用程序的组件:静态 Web 资产、服务器端模板和 SPAs
 
-#### 通用应用目录
-
-##### `/configs`
+#### `/configs`
 
 配置文件模板或默认配置
 
-##### `/init`
+#### `/init`
 
 System init（systemd, upstart,sysv）和 process manager/supervisor（runit, supervisor）配置
 
-##### `/scripts`
+#### `/scripts`
 
 执行各种构建、安装、分析等操作的脚本; 这些脚本保持了根级别的 Makefile 变得小而简单
 
-##### `/build`
+#### `/build`
 
 打包和持续集成
 
 1. 容器( Docker )、操作系统(deb、rpm、pkg)包配置和脚本放在 `/build/package` 目录下
 2. 将你的 CI配置和脚本放在 `/build/ci` 目录中请注意
 
-##### `/deployments`
+#### `/deployments`
 
 1. IaaS、PaaS、系统和容器编配部署配置和模板(docker-compose、kubernetes/helm)
 2. 注意, 在一些存储库中(特别是使用 kubernetes 部署的应用程序), 这个目录被称为 `/deploy`
 
-##### `/test`
+#### `/test`
 
 额外的外部测试应用程序和测试数据
 
 你可以随时根据需求构造 `/test` 目录对于较大的项目, 有一个数据子目录是有意义的例如, 你可以使用 `/test/data` 或 `/test/testdata` (如果你需要忽略目录中的内容)请注意, Go 还会忽略以“.”或“_”开头的目录或文件, 因此在如何命名测试数据目录方面有更大的灵活性
 
-#### 其他目录
-
-##### `/docs`
+#### `/docs`
 
 设计和用户文档(除了 godoc 生成的文档之外)
 
-##### `/tools`
+#### `/tools`
 
 这个项目的支持工具注意, 这些工具可以从 `/pkg` 和 `/internal` 目录导入代码
 
-##### `/examples`
+#### `/examples`
 
 你的应用程序和/或公共库的示例
 
-##### `/third_party`
+#### `/third_party`
 
 外部辅助工具, 分叉代码和其他第三方工具(例如 Swagger UI)
 
-##### `/githooks`
-
-Git hooks
-
-##### `/assets`
+#### `/assets`
 
 与存储库一起使用的其他资产(图像、徽标等)
-
-#### 你不应该拥有的目录
-
-##### `/src`
