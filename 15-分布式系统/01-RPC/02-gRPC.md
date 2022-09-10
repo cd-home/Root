@@ -168,6 +168,7 @@ message HelloReply {
 2. Use the protocol buffer compiler. [编译出pb文件] [只要proto文件变动, 就必须重新编译]
 
 ~~~bash
+$ wget protoc-21.5-osx-aarch_64.zip && tar && mv protoc /usr/local/bin
 $ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 $ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 # 移动到PATH或者添加PATH
@@ -200,7 +201,3 @@ func main() {
 	fmt.Println(req.Name)
 }
 ~~~
-
-##### Demo
-
-》见Workspace/grpc
