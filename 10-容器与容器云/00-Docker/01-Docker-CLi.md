@@ -107,10 +107,14 @@ $ docker build [OPTIONS] Context(PATH|URL)
 
 ##### 构建镜像   docker buildx build
 
-构建多系统架构支持的镜像
+ `--platform` 参数可以同时构建支持多种系统架构的镜像
 
 ~~~bash
-$ docker buildx build
+$ docker buildx build --platform linux/arm64,linux/amd64 -t demo .
+~~~
+
+~~~dockerfile
+FROM --platform=$TARGETPLATFORM alpine
 ~~~
 
 Dockerfile 支持变量
