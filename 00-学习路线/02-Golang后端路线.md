@@ -78,20 +78,20 @@
 
 #### 第三方库
 
-|    库     |     作用     |
-| :-------: | :----------: |
-|    Gin    |   路由框架   |
-|    Zap    |     日志     |
-|   Viper   |     配置     |
-|  Testify  |     测试     |
-|  GoMock   |     测试     |
-|    FX     |   依赖注入   |
-|   resty   |  HTTP请求库  |
-|   Cabin   |   权限控制   |
-| machinery | 异步任务队列 |
-|   SQLX    |     SQL      |
-|   Gorm    |   ORM框架    |
-|   gRPC    |   RPC框架    |
+|    库     |     作用      |
+| :-------: | :-----------: |
+|    Gin    |   路由框架    |
+|    Zap    |     日志      |
+|   Viper   |     配置      |
+|  Testify  |     测试      |
+|  GoMock   |     测试      |
+|    FX     |   依赖注入    |
+|   resty   |  HTTP请求库   |
+|   Cabin   |   权限控制    |
+| machinery | 异步任务队列  |
+|   SQLX    |      SQL      |
+|  nhooyr   | WebSocket框架 |
+|   gRPC    |    RPC框架    |
 
 #### 核心组件
 
