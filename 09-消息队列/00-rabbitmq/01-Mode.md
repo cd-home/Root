@@ -4,7 +4,7 @@
 
 》it accepts, stores, and forwards binary blobs of data ‒ messages
 
-#### Notion
+#### notion
 
 - [ ] Producer: Send Message App
 
@@ -23,3 +23,7 @@
 #### work queues
 
 ![worker_queue](./images/worker_queue.svg)
+
+#### publish/subscribe
+
+![ps](./images/ps.svg)
