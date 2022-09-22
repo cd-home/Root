@@ -6,7 +6,7 @@
 
 #### Cgroups
 
-》Linux Control Groups; 限制进程使用资源 [cpu, memory, net, io, devices, pids]
+》Linux Control Groups; 限制进程使用资源上限 [cpu, memory, net, io, devices, pids]
 
 ~~~bash
 [root@g7 ~]# mount -t cgroup
@@ -126,7 +126,7 @@ total 0
 运行个进程测试: 注意记住进程号(可通过top查看)
 
 ~~~python
-while true:
+while True:
     pass
 ~~~
 
@@ -202,11 +202,17 @@ drwxr-xr-x. 2 root root 0 Aug  3 23:18 a388edb818f7e1c96c5c3a0778ad6e6111d266db2
 -rw-r--r--. 1 root root 0 Aug  3 22:29 tasks
 ~~~
 
+总结
+
+cgroup就是通关Linux提供的文件即接口的形式, 来进行资源限制. 在对应子系统(cpu, memery)下建立控制组, 修改子系统下具体文件的配置, 然后将进程号写入tasks即可.
+
 #### NameSpace
 
 Linux 提供用于隔离进程树、网络接口、挂载点、进程见通信等资源的方式; 有如下的命名空间;
 
-|    namespace     |                      dest                       |
+修改了进程对整个系统的视图
+
+|    namespace     |                   description                   |
 | :--------------: | :---------------------------------------------: |
 |  ipc namespace   | IPC资源, 进程间通信(共享内存、消息队列、信号量) |
 |  net namespace   |           网络设备、网络栈、端口隔离            |

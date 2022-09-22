@@ -265,7 +265,7 @@ $ docker rm -v <container-id>
 
 ##### 保存镜像	docker commit
 
-从容器创建新镜像
+从容器创建新镜像, 将容器的读写层转换为可读层
 
 ```bash
 $ docker commit <container-id> <image-name>:tag
