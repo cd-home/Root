@@ -163,22 +163,23 @@ With the `docker run [OPTIONS]` an operator can add to or override the image def
 
 **常用OPTIONS参数详细描述**
 
-|    option    |                    |                         说明                         |
-| :----------: | :----------------: | :--------------------------------------------------: |
-|      -d      |   --detach=true    |                 守护式容器,后台运行                  |
-|      -i      | --interactive=true |                   交互模式运行容器                   |
-|      -t      |     --tty=true     |                分配一个终端, 通常-it                 |
-|    --name    |      --name=       |            为创建的容器命名,标识唯一容器             |
-|      -p      |    --publish=[]    |                       端口映射                       |
-|    --net     |  --network=bridge  |   设置网络模式bridge、host、container、define_net    |
-|    --link    |      --link=       |                      链接到网络                      |
-|      -e      | -e k1=v1 -e k2=v2  |                  为容器设置环境变量                  |
-| --entrypoint |   --entrypoint=    |                    覆盖容器入口点                    |
-|  --env-file  |    ---env-file=    |             通过环境变量文件设置环境变量             |
-|  --restart   |     --restart=     | no、always、on-failure[:max-retries]、unless-stopped |
-|     --rm     |     --rm=true      |           退出删除, 一次性容器. 无重启策略           |
-|      -v      | --volume=src:dest  |              host:container 数据卷挂载               |
-|      -w      |   --workdir="/"    |                 设置工作路径,默认是/                 |
+|    option    |                           |                         说明                         |
+| :----------: | :-----------------------: | :--------------------------------------------------: |
+|      -d      |       --detach=true       |                 守护式容器,后台运行                  |
+|      -i      |    --interactive=true     |                   交互模式运行容器                   |
+|      -t      |        --tty=true         |                分配一个终端, 通常-it                 |
+|    --name    |          --name=          |            为创建的容器命名,标识唯一容器             |
+|      -p      |       --publish=[]        |                       端口映射                       |
+|    --net     |     --network=bridge      |   设置网络模式bridge、host、container、define_net    |
+|    --link    |          --link=          |                      链接到网络                      |
+|      -e      |     -e k1=v1 -e k2=v2     |                  为容器设置环境变量                  |
+| --entrypoint |       --entrypoint=       |                    覆盖容器入口点                    |
+|  --env-file  |       ---env-file=        |             通过环境变量文件设置环境变量             |
+|  --restart   |        --restart=         | no、always、on-failure[:max-retries]、unless-stopped |
+|     --rm     |         --rm=true         |           退出删除, 一次性容器. 无重启策略           |
+|   --mount    | source=bizvol,target=/vol |                        挂载卷                        |
+|      -v      |  --volume=source:target   |                        挂载卷                        |
+|      -w      |       --workdir="/"       |                 设置工作路径,默认是/                 |
 
 **注意：env-file使用key=value解析, 不能使用引号**
 
