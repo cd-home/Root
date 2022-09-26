@@ -85,7 +85,7 @@
 |   Viper   |     配置      |
 |  Testify  |     测试      |
 |  GoMock   |     测试      |
-|    FX     |   依赖注入    |
+|  Fx/Wire  |   依赖注入    |
 |   resty   |  HTTP请求库   |
 |   Cabin   |   权限控制    |
 | machinery | 异步任务队列  |
