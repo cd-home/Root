@@ -24,6 +24,10 @@ With the network set to bridge a container will use docker’s default networkin
 
 ![docker-network-dridge](./images/docker-network-dridge.svg)
 
+~~~bash
+$ yum install bridge-utils
+~~~
+
 #### Host
 
 With the network set to host a container will share the host’s network stack and all interfaces from the host will be available to the container. The container’s hostname will match the hostname on the host system. Note that --mac-address is invalid in host netmode. Even in host network mode a container has its own UTS namespace by default. As such --hostname and --domainname are allowed in host network mode and will only change the hostname and domain name inside the container. Similar to --hostname, the --add-host, --dns, --dns-search, and --dns-option options can be used in host network mode. These options update /etc/hosts or /etc/resolv.conf inside the container. No change are made to /etc/hosts and /etc/resolv.conf on the host.

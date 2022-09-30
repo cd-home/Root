@@ -1,8 +1,6 @@
 [TOC]
 
-### 数据传递
-
-#### 前置知识
+### Transport Data
 
 - [x] HTTP 报文结构
 - [x] 请求方法
@@ -13,7 +11,7 @@
 - [x] Cookie
 - [x] 自定义Header
 
-#### URL?
+#### URL
 
 要求
 
@@ -31,9 +29,9 @@ www.params.com:8080/api/v1?name=mike
 
 #### Body
 
-> 服务端通常是根据首部中的 **Content-Type** 字段来获知请求中的消息主体是用何种方式编码，再对主体进行解析
+服务端通常是根据首部中的 **Content-Type** 字段来获知请求中的消息主体是用何种方式编码，再对主体进行解析
 
-##### URL编码
+##### URL
 
 1. Content-Type类型是如下形式
 
