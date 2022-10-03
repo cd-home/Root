@@ -2,7 +2,7 @@
 
 ### Language Mechanics 
 
-#### 2. 1 Built-in Types																											(内建类型) 
+#### 2.1 Built-in Types																											(内建类型) 
 
 1. Types provide **integrity** and **readability** by asking 2 questions: 
    
@@ -66,7 +66,7 @@ the program:
 
 +++
 
-#### 2. 2 Word Size																													(字大小)
+#### 2.2 Word Size																													(字大小)
 
 The word size represents the amount of memory allocation required to store integers and pointers for a given architecture. 
 
@@ -87,7 +87,7 @@ In Go, the amount of memory allocated for a value of type int, a pointer, or a w
 
 +++
 
-#### 2. 3 Zero Value Concept																								(零值概念)
+#### 2.3 Zero Value Concept																								    (零值概念)
 
 Every single value I **construct** in Go is initialized at least to its **zero value** state unless I specify the initialization value at construction.  The zero value is the setting of every bit in every byte to zero. 
 
@@ -110,7 +110,7 @@ This is done for **data integrity** and it’s not free.  It takes time to push 
 
 +++
 
-#### 2. 4 Declare and Initialize																							(声明和初始化) 
+#### 2.4 Declare and Initialize																							    (声明和初始化) 
 
 The keyword var can be used to construct values for all types to their zero value state.  
 
@@ -186,7 +186,7 @@ func TestShortDeclareType(t *testing.T) {
 
 +++
 
-#### 2. 5 Conversion vs Casting																							(转换 VS 投影) 
+#### 2.5 Conversion vs Casting																						    (转换 VS 投影) 
 
 Go doesn't have **casting**, but **conversion**.  Instead of telling the compiler to map a set of bytes to a different representation, the bytes need to be copied to a new memory location for the new representation.  
 
@@ -203,7 +203,7 @@ func TestConvType(t *testing.T) {
 }
 ~~~
 
-#### 2. 6 Struct and Construction Mechanics																(结构定义)
+#### 2.6 Struct and Construction Mechanics																    (结构定义)
 
 The declaration represents a concrete **user defined type** with a composite of different fields. 
 
@@ -276,7 +276,7 @@ func TestUnamedType(t *testing.T) {
 
 +++
 
-#### 2. 7 Padding and Alignment																						(填充和对齐)
+#### 2.7 Padding and Alignment																						    (填充和对齐)
 
 How much memory is allocated for a value of type example1? 
 
