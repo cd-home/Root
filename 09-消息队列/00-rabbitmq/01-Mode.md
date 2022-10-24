@@ -32,6 +32,8 @@
 
 ![ps](./images/ps.svg)
 
+#### Comfirm
+
 #### Message ACK
 
 - [ ] 自动ACK, 消费者接收到消息,即会删除
