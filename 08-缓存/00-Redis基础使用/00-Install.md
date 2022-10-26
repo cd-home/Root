@@ -2,16 +2,17 @@
 
 ### Redis
 
-### 前言
-
-- [ ] Redis是基于内存的Key-Value数据存储系统
+- [ ] 基于内存的Key-Value数据存储系统
 - [ ] 支持持久化、过期
-- [ ] 事务、发布订阅、管道
+- [ ] 发布订阅
+- [ ] 管道
 - [ ] 支持Lua脚本
+- [ ] 事务
 - [ ] 分布式锁
 - [ ] 哨兵、主从部署
+- [ ] 集群
 
-#### install
+#### How install
 
 》Linux ARM64
 
@@ -20,13 +21,13 @@ $ yum install redis
 $ systemctl enable redis --now
 ~~~
 
-conf
+配置文件地址conf
 
 ~~~bash
 /etc/redis.conf
 ~~~
 
-#### redis-cli
+#### Redis-cli
 
 ~~~bash
 $ redis-cli -h 127.0.0.1 -p 6379
