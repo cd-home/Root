@@ -2,19 +2,19 @@
 
 ### Redis
 
-- [ ] 基于内存的Key-Value数据存储系统
-- [ ] 支持持久化、过期
-- [ ] 发布订阅
-- [ ] 管道
+基于内存的高性能kv数据存储系统, 支持多种数据结构.
+
+- [ ] 支持持久化、过期策略
+- [ ] 发布订阅模式
+- [ ] 管道、事务
 - [ ] 支持Lua脚本
-- [ ] 事务
 - [ ] 分布式锁
 - [ ] 哨兵、主从部署
-- [ ] 集群
+- [ ] 集群分片
 
 #### How install
 
-》Linux ARM64
+》Linux ARM64 单机版安装
 
 ~~~bash
 $ yum install redis
@@ -27,7 +27,7 @@ $ systemctl enable redis --now
 /etc/redis.conf
 ~~~
 
-或者可通过
+或者可通过启动服务
 
 ~~~bash
 $ redis-server /etc/redis.conf
@@ -35,19 +35,8 @@ $ redis-server /etc/redis.conf
 
 #### Redis-cli
 
+客户端连接
+
 ~~~bash
 $ redis-cli -h 127.0.0.1 -p 6379
 ~~~
-
-#### Common
-
-|    command    |        description        |
-| :-----------: | :-----------------------: |
-|   select 0    | 选择数据库, 0-15个数据库  |
-|   flushdb 0   | 清空某个数据库 [危险操作] |
-|    keys *     |        获取所有key        |
-|   del xkey    |        删除某个key        |
-|  exists xkey  |         是否存在          |
-|   type xkey   |        value的类型        |
-|   ttl xkey    |       剩余存活时间        |
-| expire xkey 5 |       设置过期时间        |
