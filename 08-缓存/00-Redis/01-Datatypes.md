@@ -1,16 +1,12 @@
 [TOC]
 
-## DataTypes
+### DataTypes
 
-### Key
-
-key通常是字符串(二进制安全),是业务相关的,并且不建议使用太长、或者太短的Key;
+key通常是字符串(二进制安全),是业务相关的,并且不建议使用太长、或者太短的key;
 
 当我们向一个聚合数据类型中添加元素时, 如果目标键不存在, 就在添加元素前创建空的聚合数据类型. 当我们从聚合数据类型中移除元素时, 如果值仍然是空的, 键自动被销毁. [没有元素key就会被清除]
 
-### Value
-
-Value可以是string 、list 、hash (哈希) 、set和 zset (有序集合)等类型. 
+value可以是string 、list 、hash (哈希) 、set和 zset (有序集合)等类型. 
 
 #### String
 
@@ -170,7 +166,7 @@ sdiff k1 k2
 sdiffstore destkey k1 k2
 ~~~
 
-#### zset
+#### Zset
 
 一方面它是一个 set, 保证了内部 value 的唯一性, 另一方面它可以给每个 value 赋予一个 score, 代表这个 value 的排序权重
 
@@ -194,3 +190,42 @@ zrem k v3        		 # 删除
 zremrangebyscore		 # 通过分数删除
 zincrby k xscore v		 # 增加分数
 ```
+
+#### Bitmap
+
+位图, 二进制位字符串, 位置从0开始; 可认为是个bit数组
+
+~~~sql
+# 设置
+setbit key offset value
+setbit k 2 1
+# 获取
+getbit key offset
+getbit k 2
+
+# 范围计数
+bitcount key start end
+bitcount k
+~~~
+
+位运算
+
+~~~sql
+bitop [operations] [result] [key1] [keyn…] # op = or | and | not 
+setbit b1 0 1
+setbit b1 1 0
+bitop or b3 b1 b2	
+~~~
+
+#### HyperLogLog
+
+是一种用于统计基数的数据集合类型, 基数统计就是指统计一个集合中不重复的元素个数; 注意不是精确统计的;
+
+~~~bash
+pfadd k v1 v2 v3 v4
+pfcount k
+~~~
+
+#### Geo
+
+存储地理位置信息, 并对存储的信息进行操作

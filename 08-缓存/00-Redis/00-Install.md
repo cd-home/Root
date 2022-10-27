@@ -27,11 +27,19 @@ $ systemctl enable redis --now
 /etc/redis.conf
 ~~~
 
+或者可通过
+
+~~~bash
+$ redis-server /etc/redis.conf
+~~~
+
 #### Redis-cli
 
 ~~~bash
 $ redis-cli -h 127.0.0.1 -p 6379
 ~~~
+
+#### Common
 
 |    command    |        description        |
 | :-----------: | :-----------------------: |
