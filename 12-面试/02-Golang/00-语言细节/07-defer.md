@@ -119,14 +119,14 @@ func foo() (ret int) {
 2.  无法操作匿名的返回值
 
 ~~~go
-func foo() int { //  还是返回1
+func foo() int { //  返回1
     var i int
     defer func() {
         i++
     }()
     return 1
 }
-func foo() int { //  还是返回1
+func foo() int { //  返回0
     var i int
     defer func() {
         i++
