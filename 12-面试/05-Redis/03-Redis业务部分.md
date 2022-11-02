@@ -154,3 +154,38 @@ Redis 内存数据集大小上升到一定大小的时候，就会施行数据�
 
 1.  热度+时间作为排序字段， 这种特点的场景，解决方法是组装一个浮点数，整数部分 是热度的值，小数部分是时间
 2.  redis 里面精度应该是小数 6 位，所以不 能把整个日期作为小数部分
+
+#### big key
+
+1.  例如：string长度大于10K，list长度大于10240认为是big bigkeys
+2.  以hash类型举例来说，对于field过多的场景，可以根据field进行hash取模，生成一个新的key
+
+~~~
+hash_key:{filed1:value, filed2:value, filed3:value ...}，可以hash取模后形成如下key:value形式
+hash_key:mod1:{filed1:value}
+hash_key:mod2:{filed2:value}
+hash_key:mod3:{filed3:value}
+~~~
+
+3.  string类型的big key，如文章正文，建议不要存入redis，用文档型数据库MongoDB代替或者直接缓存到CDN上
+
+**拓展**
+通常来说找到redis中的big key有如下几种方法
+
+1.  redis-cli自带--bigkeys，例如：redis-cli -h -a --bigkeys
+2.  获取生产Redis的rdb文件，通过rdbtools分析rdb生成csv文件，再导入MySQL或其他数据库中进行分析统计，根据size_in_bytes统计bigkey
+3.  通过python脚本，迭代scan key，每次scan 1000，对扫描出来的key进行类型判断，例如：string长度大于10K，list长度大于10240认为是big bigkeys
+4.  其他第三方工具，例如：redis-rdb-cli
+    地址：https://github.com/leonchen83/redis-rdb-cli
+
+#### 问题9：key如何设置
+
+1.  避免bigkey
+
+2.  分级设置key
+
+3.  加上项目前缀
+
+4.  设置过期时间
+
+5.  见明知意 
