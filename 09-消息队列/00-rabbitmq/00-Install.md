@@ -18,7 +18,7 @@ $ rpm --import https://packages.erlang-solutions.com/rpm/erlang_solutions.asc
 $ yum install erlang-24.0.4-1.el8.aarch64
 ~~~
 
-#### Rabbitmq
+#### RabbitMQ
 
 ~~~bash
 $ yum install -y socat
@@ -28,7 +28,11 @@ $ rpm -Uvh rabbitmq-server-3.8.35-1.el8.noarch.rpm
 $ yum install -y rabbitmq-server
 ~~~
 
-systemclt 配置启动
+systemctl  服务管理
+
+~~~bash
+$ systemctl enable rabbitmq-server.service --now
+~~~
 
 Dash界面
 
@@ -41,14 +45,14 @@ $ rabbitmqctl set_permissions -p / [username] ".*" ".*" ".*"
 
 四种角色
 
-1. administrator：可以登录控制台、查看所有信息、并对rabbitmq进行管理
-2. monToring：监控者；登录控制台，查看所有信息
-3. policymaker：策略制定者；登录控制台指定策略
-4. managment：普通管理员；登录控制
+1. administrator: 可以登录控制台、查看所有信息、并对rabbitmq进行管理
+2. monToring: 监控者；登录控制台，查看所有信息
+3. policymaker: 策略制定者；登录控制台指定策略
+4. managment: 普通管理员；登录控制
 
 ~~~bash
-$ rabbitmqctl change_ password 用户名 新密码
-$ rabbitmqctl delete_user 用户名
+$ rabbitmqctl change_ password username newpassword
+$ rabbitmqctl delete_user username
 $ rabbitmqctl list_users
 ~~~
 
@@ -56,8 +60,8 @@ Container(TODO)
 
 #### Feature
 
-- [ ] 基于Erlang开发, 性能高, 并发强
-- [ ] 支持持久化
+- [ ] 基于Erlang开发, 性能高, 并发强, 延迟低
+- [ ] 支持消息持久化
 - [ ] 发布确认、消费确认机制
 - [ ] 多种模式可选择
 - [ ] 高吞吐 [单机吞吐万级别]
@@ -78,10 +82,3 @@ Advanced Message Queuing Protocol , 提供统一消息服务的应用层标准�
 Virtual Host
 
 通常与用户绑定, 来隔离不同的环境, 不同的业务 (可以简单的理解为MySQL创建的数据库)
-
-
-
-
-
-
-
