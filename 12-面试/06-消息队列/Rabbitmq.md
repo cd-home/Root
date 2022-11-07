@@ -18,9 +18,11 @@
 
 #### 主流的消息队列有哪些, 如何选型?
 
-主流的消息队列有Kafka、RabbitMQ、ActiveMQ、RocktMQ. 吞吐量方面ActiveMQ=RabbitMQ<RocktMQ=Kafka. 可用性方面ActiveMQ=RabbitMQ采用主从架构, RocktMQ=Kafka采用分布式架构.  时效性方面, RabbitMQ在us级别, 其他在ms级别. 通常来说如果业务吞吐量不大, 采用RabbitMQ合适. 如果需要做日志采集等, 采用Kafka较为合适. 
+主流的消息队列有Kafka、RabbitMQ、ActiveMQ、RocktMQ. 吞吐量方面ActiveMQ=RabbitMQ<RocktMQ=Kafka. 可用性方面ActiveMQ=RabbitMQ采用主从架构, RocktMQ=Kafka采用分布式架构.  时效性方面, RabbitMQ在us级别, 其他在ms级别.  社区活跃度来看RabbitMQ与RocketMQ较好. 通常来说如果业务吞吐量不大, 采用RabbitMQ合适. 如果需要做日志采集等, 采用Kafka较为合适. 
 
 #### Rabbitmq有几种模式, 你常用那种?
+
+普通的生产-消费模式(queue模式), worker模式, 发布-订阅模式, Topic模式, Routing模式. 最常用的是worker模式和发布订阅的模式. worker模式就是多个消费者消费同一个queue, 发布订阅模式就是每个消费者订阅独立的queue, 交换机会发送消息到queue. 
 
 #### Rabbitmq内部实现机制?
 
