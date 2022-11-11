@@ -425,13 +425,7 @@ flag2:      min(8, 1) => 1,        偏移为1       [flag x counter counter flag
 
 pi: min(8, 4) => 偏移为4, 但是已经存在5位, 所以大于5并且是4的倍数的就是8, 那么偏移就是8, 结果即是
 
-[flag x counter counter flag2 x x x pi pi pi pi] => 12  按照理论来说是12Bytes
-
-实际上呢？经过**Go编译器优化**, 重排字段顺序只需要8Bytes
-
-~~~go
-unsafe.Sizeof(example2{}) ==> 8
-~~~
+[flag x counter counter flag2 x x x pi pi pi pi] => 12 
 
 注意如下问题, 空结构体不占内存空间, 那是否该S结构分配32Bytes?
 
