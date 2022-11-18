@@ -1,8 +1,8 @@
 [TOC]
 
-### Git协作规范
+### Git Flow Spec
 
-#### 分支
+#### Branch
 
 |  分支   |     名称     | 描述                             | 环境可访问 | 权限 |
 | :-----: | :----------: | -------------------------------- | :--------: | :--: |
@@ -12,7 +12,7 @@
 | develop |   测试分支   | 次稳定的开发分支, 线上测试       |     是     |      |
 | feature | 需求开发分支 |                                  |     否     |      |
 
-#### 分支说明
+#### Description
 
 ##### master
 
@@ -78,21 +78,12 @@ type 用于说明提交的类型, 共有 8 个候选值
 |  chore   |  构建过程或辅助工具的变动  |
 |  revert  |       撤销以前的提交       |
 
-#### 提交代码
-
-**前提**
-
-1.  不要提交非代码以及配置外的文件
-2.  不要提交未编译成功的代码
-3.  提交之前需要认真检查整个流程无错误
-4.  提交之前需要更新
-
 #### 开发流程
 
 ##### 个人配置
 
-- [x] gitlab (或其他服务器) Account
-- [x] SSH 本地生成以及gitlab配置
+- [x] gitlab (或其他) Account
+- [x] SSH本地生成、添加到gitlab
 
 ##### 开发流程
 
@@ -123,61 +114,48 @@ $ git branch -a
 
 ~~~bash
 # 新建并且切换
-$ git checkout -b feature-xx 	
+$ git checkout -b feat-xx 	
 ~~~
 
-3.  切换分支
+3.  预准备推送
 
 ~~~bash
 $ git checkout dev 
+# 获取最新的dev代码
+$ git pull dev
 ~~~
 
-4.  合并分支
+4. rebase
 
 ~~~bash
-# 通常情况下, 是没有权限合并master分支的, 只能进行CR后合并dev分支
-$ git checkout dev	
-
-# 合并feature to dev本地分支
-$ git merge feature-xx		
+$ git checkout feat-xx
+$ git rebase dev
+#如果出现冲突, 解决冲突
+$ git add .
+$ git commit -m "message"
+$ git rebase --continue
 ~~~
 
-6.  删除分支
-
-~~~bash
-# 删除本地分支
-$ git branch -d feature-xx	
-
-# 强行删除没有合并的分支
-$ git branch -D feature-xx	 	
-
-# 删除远程分支
-$ git push origin --delete serverfix  
-~~~
-
-7. 推送到远程分支
+5. 推送分支, 并且提起合并请求
 
 ~~~bash
 $ git push origin <本地分支>:<远程分支>
 ~~~
 
-8. 查看分支
+6. 需求完成可删除特性分支
 
 ~~~bash
-$ git log
-$ git log --graph
-$ git log --graph --pretty=oneline --abbrev-commit
+# 删除本地分支
+$ git branch -d feat-xx	
+
+# 强行删除没有合并的分支
+$ git branch -D feat-xx	 	
+
+# 删除远程分支
+$ git push origin --delete feat-xx	  
 ~~~
 
-9. 更新
-
-
-~~~bash
-# 默认拉去当前分支, 并且尝试合并
-$ git pull 
-~~~
-
-10. 临时任务
+7. 临时任务
 
 ~~~bash
 # 当正在编写代码时, 突然需要解决一个BUG, 此时又不想提交代码, 那么可以将工作区暂存
@@ -194,24 +172,6 @@ $ git stash drop
 
 # 方式二
 $ git stash pop
-~~~
-
-##### 解决冲突
-
-> 在merge合并的时候, 可能会出现修改同一个地方导致冲突
-
-1. 查看冲突
-
-
-~~~bash
-$ git status  
-~~~
-
-2. 解决冲突, 然后再次提交流程
-
-~~~bash
-$ git add .
-$ git commit -m "message"
 ~~~
 
 ##### 常见问题
