@@ -2,12 +2,14 @@
 
 ### MySQL
 
-#### Install
+#### Install On Linux
 
 》Linux Centos ARM64
 
 ~~~bash
 $ yum install -y mysql mysql-server mysql-devel
+# or download rpm package
+$ sudo yum localinstall mysql80-community-release-el8-{version-number}.noarch.rpm
 ~~~
 
 查看版本信息
@@ -85,8 +87,8 @@ $ mysqladmin -u root password 'mysql8'
 $ mysql -u root -p
 $ mysql -h127.0.0.1 -uroot -P3306 -p
 
-# 退出
->quit; or exit;
+# 退出 or exit;
+>quit; 
 ~~~
 
 #### cnf
@@ -123,65 +125,9 @@ mysql> show variables like "datadir";
 1 row in set (0.00 sec)
 ~~~
 
-#### Engine
-
-》默认为InnoDB
-
-~~~mysql
-mysql> show engines;
-| Engine | Support | Comment | Transactions |XA | Savepoints |
-| InnoDB | DEFAULT | Supports transactions, row-level locking, and foreign keys| YES | YES  | YES |
-~~~
-
-事务、分布式事务、回滚
-
-~~~mysql
-CREATE TABLE test(
-	
-)ENGINE=InnoDB;
-~~~
-
-~~~mysql
-ALTER TABLE test ENGINE=InnoDB
-~~~
-
-#### Variables
-
 》支持like模糊查询
 
 ~~~mysql
 mysql> show variables like 'max_connections';
 mysql> show variables like 'default_storage_engine';
 ~~~
-
-#### Charset
-
-~~~mysql
-mysql> show CHARSET;
-| utf8mb4  | UTF-8 Unicode | utf8mb4_0900_ai_ci | 4 |
-~~~
-
-注意排序规则: ai 不区分重音  ci 不区分大小写
-
-~~~mysql
-mysql> show variables  like 'character_set_server';
-+----------------------+---------+
-| Variable_name        | Value   |
-+----------------------+---------+
-| character_set_server | utf8mb4 |
-+----------------------+---------+
-1 row in set (0.00 sec)
-
-mysql> show variables like 'collation_server';
-+------------------+--------------------+
-| Variable_name    | Value              |
-+------------------+--------------------+
-| collation_server | utf8mb4_0900_ai_ci |
-+------------------+--------------------+
-1 row in set (0.00 sec)
-
-# 查看支持的排序规则
-mysql> show COLLATION like 'utf8%';
-~~~
-
-注意: 可在服务器级别、数据库级别、表级别设置、列级别(字符串列)
