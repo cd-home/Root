@@ -2,26 +2,6 @@
 
 ### Tutorial
 
-Connecting And Disconnecting
-
-~~~bash
-$ mysql -h host -u user -p
-
-> QUIT;
-~~~
-
-Entering Queries
-
-~~~bash
-$ SELECT VERSION(), CURRENT_DATE;
-~~~
-
-mysql determines where your statement ends by looking for the **terminating semicolON**, not by looking for the end of the input line. 
-
-PS: [分号作为完整SQL的结束]
-
-PS: [大小写不敏感，推荐关键词大些，其他(字段名、表名)小写]
-
 #### 术语
 
 |      术语      |              说明              |
@@ -32,6 +12,207 @@ PS: [大小写不敏感，推荐关键词大些，其他(字段名、表名)小�
 |  数据行(记录)  |          rows, record          |
 |  数据列(字段)  |        columns,  field         |
 |    存储引擎    |         storage engine         |
+
+Connecting And Disconnecting
+
+~~~bash
+$ mysql -h host -u user -p
+
+> QUIT;
+~~~
+
+Entering Queries
+
+~~~mysql
+$ SELECT USER(), VERSION(), CURRENT_DATE;
+~~~
+
+Tips: 分号作为完整SQL的结束; 大小写不敏感, 推荐关键词大些, 其他(字段名、表名)小写; \c 结尾表示不想执行当前SQL.
+
+#### 创建选择数据库
+
+查看Databases
+
+~~~mysql
+$ SHOW DATABASES;
+~~~
+
+创建数据库
+
+~~~mysql
+$ CREATE DATABASE test;
+~~~
+
+选择数据库
+
+~~~mysql
+$ USE test;
+~~~
+
+#### 创建数据表
+
+查看数据表
+
+~~~mysql
+$ SHOW TABLES:
+~~~
+
+创建数据表
+
+~~~mysql
+$ CREATE TABLE pet (
+	name VARCHAR(20),
+	owner VARCHAR(20),
+	species VARCHAR(20),
+	sex CHAR(1),
+	birth DATE,
+	death DATE
+);
+~~~
+
+VARCHAR 动态长度的字符, CHAR固定长度字符. 
+
+查看表的列信息
+
+~~~mysql
+$ DESCRIBE pet;
+~~~
+
+#### 导入数据
+
+VALUES 可以导入多条数据.
+
+~~~mysql
+$ INSERT INTO pet VALUES 
+	('Puffball','Diane','hamster','f','1999-03-30',NULL), 
+	('luffy','Harold','cat','f','1993-02-04', NULL), 
+	('Bowser','Diane','dog','m','1979-08-31','1995-07-29');
+~~~
+
+#### 查询所有数据
+
+\* 获取所有的列
+
+~~~mysql
+$ SELECT * FROM pet;
+~~~
+
+#### 获取特定行
+
+WHERE 筛选满足条件的行.  
+
+~~~mysql
+$ SELECT * FROM pet WHERE name = 'luffy';
+~~~
+
+常见条件有: =, !=, >, <, <=, >=, in, not in, between and, like, is null, is not null; 条件连接有 and, or;
+
+注意: NULL 值需要使用is, is not; NULL ASC排序是在前,DESC 排序在后. 
+
+对于复杂的筛选, 可以加括号
+
+~~~mysql
+$ SELECT * FROM pet WHERE (species = 'cat' AND sex = 'm') OR (species = 'dog' AND sex = 'f');
+~~~
+
+#### 获取特定列
+
+不采用*, 直接采用需要获取的列名即可.
+
+~~~mysql
+$ SELECT name, birth FROM pet;
+$ SELECT owner FROM pet;
+# 去重
+$ SELECT DISTINCT owner FROM pet;
+~~~
+
+#### 排序
+
+默认的排序是升序 ASC, DESC表示降序
+
+~~~mysql
+$ SELECT name, birth FROM pet ORDER BY birth;
+$ SELECT name, birth FROM pet ORDER BY birth DESC;
+# 可以排序多个列
+$ SELECT name, birth FROM pet ORDER BY birth ASC, death DESC;
+~~~
+
+#### 日期计算
+
+~~~mysql
+$ SELECT name, birth, TIMESTAMPDIFF(YEAR, birth, CURDATE()) AS age FROM pet;
+$ SELECT name, birth, TIMESTAMPDIFF(YEAR, birth, CURDATE()) AS age FROM pet ORDER BY age DESC;
+$ SELECT name, birth, YEAR(birth), MONTH(birth), DAY(birth) FROM pet;
+~~~
+
+主要需要知道一些日期函数的使用即可.  例如还有DAYOFMONTH(), WEEK(), DATE_ADD()
+
+时间+- 计算
+
+~~~mysql
+$ SELECT '2022-11-20' + INTERVAL 1 DAY;
+~~~
+
+可选 +-, 可选SECOND, MINUTE, HOUR, DAY, YEAR
+
+####  模式匹配
+
+like模糊匹配, 支持%多个字符, _ 单个字符. 
+
+~~~mysql
+SELECT * FROM pet WHERE name LIKE 'b%';
+~~~
+
+亦可以采用支持正则函数, 支持perl正则语法
+
+~~~mysql
+SELECT * FROM pet WHERE REGEXP_LIKE(name, '^b');
+~~~
+
+#### 计算行数
+
+统计行数, 或者统计分组后每组行数.
+
+~~~mysql
+$ SELECT COUNT(*) FROM pet;
+$ SELECT owner, COUNT(*) FROM pet GROUP BY owner;
+~~~
+
+#### 分组
+
+#### 连表
+
+#### 总结
+
+~~~mysql
+SELECT 
+	col1,
+	col2 as another_name
+FROM　T　　　　  
+
+LEFT JOIN 	-- JOIN 、RIGHT JOIN
+
+WHERE     	
+			-- 条件筛选 = != > >= < <= 
+			-- in ()  
+			-- not in ()
+			-- is null 
+			-- is NOT NULL
+			-- like (%  _)
+			-- 条件连接 and or 
+			
+GROUP BY    -- 分组 (SUM、AVG等) 
+
+HAVING　　   -- 分组后条件筛选　  
+
+ORDER BY　　 -- 排序
+
+LIMIT 		-- 限制条数 LIMIT offset, size | LIMIT size
+
+-- 连接其他的SELECT 结果集
+UNION 		-- 去重
+UNION ALL   -- 不去重
+~~~
 
 #### 数据(列类型)
 
@@ -112,175 +293,3 @@ NULL;  NOT NULL
 |  非空  |              非空(NOT NULL)              |
 | 默认值 |              默认值 default              |
 |  外键  |                 引用关系                 |
-
-#### DDL
-
-Data DefinitiON Language: 操作数据库、表
-
-##### Database
-
-~~~sql
--- 显示所有数据库
-mysql> SHOW DATABASES;
-
--- 创建数据库
-mysql> CREATE DATABASE dbname CHARSET utf8mb4;
-
--- 显示数据库创建信息
-mysql> SHOW CREATE DATABASE \G;
-
--- 修改数据库的元信息
-mysql> ALTER DATABASE dbname CHARSET utf8mb4;
-
--- 使用数据库
--- Under Unix, database names are case-sensitive (unlike SQL keywords)
--- 数据库、以及表是 区分大小写的 (SQL 关键词是不区分大小写的, 通常使用大写)
--- 推荐 非SQL关键词小写
-mysql> USE dbname;
-mysql> SHOW STATUS;
-mysql> SHOW GRANTS;
-
--- 删除数据库【危险操作, 所有的删除库、表操作都应该授权】
-mysql> DROP DATABASE dbname;
-~~~
-
-##### Table
-
-~~~sql
--- 创建表：列名 类型 约束1 约束2 约束3【列之间逗号隔开】
-CREATE TABLE t_class(
-	 id int(11) PRIMARY KEY AUTO_INCREMENT,
-	 name VARCHAR(10) NOT NULL
-)ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE t_name(
-    id int(11) PRIMARY KEY AUTO_INCREMENT comment "id", 	-- 自增主键
-    name VARCHAR(10) NOT NULL DEFAULT 'Mike',				-- 默认值
-    card VARCHAR(18) UNIQUE,								-- 唯一约束
-    phONe CHAR(11) NOT NULL,
-    class_id int NOT NULL,
-    INDEX idx_name(name),									-- 创建普通索引			
-    UNIQUE INDEX idx_phONe(phONe),							-- 创建唯一索引
-    														-- 外键约束
-	CONSTRAINT fk_name FOREIGN KEY(class_id) REFERENCES t_class(id) 
-)ENGINE=INNODB DEFAULT CHARSET=utf8mb4;						-- 引擎与编码
-	
--- 查看表信息、表结构	
-mysql> SHOW tables; 			     						-- 查看所有数据表
-mysql> SHOW CREATE TABLE t_name;							-- 显示创建表的信息
-mysql> SHOW CREATE TABLE t_name \G; 						-- 显示创建表的信息
-mysql> DESC t_name; 				 						-- 查看字段信息/表结构
-
--- 修改表结构
-mysql> ALTER TABLE t_name ADD field_name type;	    		-- 增加字段
-mysql> ALTER TABLE t_name ADD primary key(id);				-- 增加属性
-
-mysql> ALTER TABLE t_name ADD UNIQUE(`field_name`);			-- 增加属性； 唯一约束
-mysql> ALTER TABLE t_name ADD UNIQUE (`f1`, `f2`);			-- 增加属性； 联合唯一
-
-mysql> ALTER TABLE t_name ADD UNIQUE INDEX(`f1`);			-- 增加属性； 唯一索引
-mysql> ALTER TABLE t_name ADD UNIQUE INDEX(`f1`, `f2`);		-- 增加属性； 联合唯一索引
-
-mysql> ALTER TABLE t_name DROP field_name;					-- 删除字段
-mysql> ALTER TABLE t_name MODIFY field_name type;			-- 修改字段类型
-mysql> ALTER TABLE t_name CHANGE old_field_name new_field_name type; -- 修改字段列名
-
--- 普通索引
-mysql> CREATE INDEX idx_name_card ON t_name (name, card);	-- 创建索引
-mysql> DROP INDEX idx_name_card ON t_name;					-- 删除索引
-mysql> ALTER TABLE t_name ADD INDEX idx_name(name);			-- 添加索引
-
--- 唯一索引
-mysql> CREATE UNIQUE INDEX idx_card ON t_name (card);		-- 创建唯一索引
-mysql> SHOW INDEX from t_name \G;							-- 查看索引信息
-~~~
-
-#### DML
-
-Data ManipulatiON Language：操作数据行
-
-~~~sql
-SELECT
-INSERT
-UPDATE
-DELETE
-EXPLAIN # SQL执行计划
-LOCK
-~~~
-
-##### SELECT
-
-~~~sql
-SELECT 
-	col1,
-	col2
-FROM　T　　　　  
-
-LEFT JOIN 	-- JOIN 、RIGHT JOIN
-
-WHERE     	
-			-- 条件筛选 = != > >= < <= 
-			-- in ()  
-			-- not in ()
-			-- is null 
-			-- is NOT NULL
-			-- like (%  _)
-			-- 条件连接 and or 
-			
-GROUP BY    -- 分组 (SUM、AVG等) 
-
-HAVING　　   -- 分组后条件筛选　  
-
-ORDER BY　　 -- 排序
-
-LIMIT 		-- 限制条数 LIMIT offset, size | LIMIT size
-
--- 连接其他的SELECT 结果集
-UNION 		-- 去重
-UNION ALL   -- 不去重
-~~~
-
-特殊的, * 可以查询所有的字段数据， 通常线上不要这样使用
-
-~~~sql
-SELECT * FROM 
-~~~
-
-##### INSERT
-
-~~~sql
-INSERT INTO T(Field1, Field2, ...) VALUES(v1, v2, ....)
-~~~
-
-##### UPDATE
-
-~~~sql
-UPDATE T SET Field1=NewValue, Field2=NewValue2 WHERE [cONditiONs]
-~~~
-
-##### DELETE
-
-~~~sql
-DELETE FROM T WHERE [cONditiONs]
-~~~
-
-#### DCL
-
-Data CONtrol Language
-
-~~~mysql
-BEGIN
-START transactiON
-COMMIT
-SAVEPOINT
-ROLLBACK
-SET TRANSACTION
-~~~
-
-Examples: 事务
-
-~~~mysql
-mysql> BEGIN;
-mysql> ...
-mysql> COMMIT;
-~~~
