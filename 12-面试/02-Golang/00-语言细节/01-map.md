@@ -10,8 +10,7 @@
 
 ##### 定义
 
-> 1. 通过Key访问Value的数据结构
-> 2. Hash函数将key转化为数组的索引, 然后将Value存储在对应索引位置
+通过Key访问Value的数据结构; Hash函数将key转化为数组的索引, 然后将Value存储在对应索引位置
 
 ~~~go
 hash(key) ==> (index) ==> value 
@@ -69,7 +68,7 @@ m := make(map[string]int, 16)
 
 ##### 核心函数
 
-> runtime.makemap()
+runtime.makemap()
 
 ~~~go
 // makemap implements Go map creation for make(map[k]v, hint).
@@ -113,7 +112,7 @@ func makemap(t *maptype, hint int, h *hmap) *hmap {
 
 ##### 计算B
 
-> B的计算和map的元素可以hint有关、并且和负载因子有关
+B的计算和map的元素可以hint有关、并且和负载因子有关
 
 ~~~go
 // overLoadFactor reports whether count items placed in 1<<B buckets is over loadFactor.
@@ -339,7 +338,7 @@ func mapdelete(t *maptype, h *hmap, key unsafe.Pointer)
 
 ##### 扩容
 
-> TODO
+TODO
 
 ##### 不可寻址
 

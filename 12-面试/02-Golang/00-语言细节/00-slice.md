@@ -17,8 +17,6 @@ type slice struct {
 
 #### make
 
-1.  make
-
 ~~~go
 s := make([]int, len, cap)
 ~~~
@@ -50,7 +48,7 @@ if cap > doublecap {
 
 根据append的元素进行预估扩容: cap
 
-如果预估的容量cap大于两倍的原始容量，那么新的容量就是预估容量
+如果预估的容量cap大于两倍的原始容量, 那么新的容量就是预估容量
 
 ~~~go
 if cap > doublecap {
@@ -76,5 +74,3 @@ if old.cap < 1024 {
     }
 }
 ~~~
-
-#### copy

@@ -1,8 +1,6 @@
 [TOC]
 
-### 问题2: Goroutine调度器原理？【GPM设计】
-
-> GodYao
+### Goroutine调度器原理
 
 #### 调度器的由来？
 
@@ -140,4 +138,3 @@ GODEBUG=schedtrace=1000 ./trace
 ###### 场景11: 阻塞调用结束
 
 <img src="./images/GMP 全面分析-G阻塞取消后.svg" alt="GMP 全面分析-G阻塞取消后" style="zoom:150%;" />
-
