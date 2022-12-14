@@ -56,17 +56,12 @@ API
 ~~~c
 int create_epoll(int size);    // 监听数目
 int epfd = create_epoll(1000); // epfd 作为红黑树的根节点
-~~~
-
-控制
-
-~~~c
 int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
-~~~
-
-等待epoll
-
-~~~c
 int epoll_wait(int epfd, struct epoll_event *event, int maxevents, int timeout);
 ~~~
 
+epoll默认是水平触发. epoll_ctl把connfd放到epollfd并拷贝到内核态, 有数据时对应connfd复制到readylist; epoll_wait系统调用, 会判断readylist是否为空, 不为空则把fd信息从内核态复制到用户态数组里. 
+
+水平触发: 没有把数据(元素)一次性全部读写完, 那么下次调用epoll_wait()时, 它还会通知你在没读写完的文件描述符上继续读写, 如果你一直不去读写, 会一直通知你. 耗费性能, 但是水平触发相对安全, 最起码事件不会丢掉. 监听端口listenfd产生connfd时要用这个, 不能把产生的connfd丢掉. 
+
+边缘触发：没有把数据(元素)全部读写完, 那么下次调用epoll_wait()时, 它不会通知你, 也就是它只会通知你一次, 直到该文件描述符上出现第二次可读写事件才会通知, 减少了拷贝过程, 增加了性能, 相对来说, 将会产生事件丢的情况. 
