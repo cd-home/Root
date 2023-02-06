@@ -108,7 +108,7 @@ opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 | command |   description    |       example        |    parameter     |
 | :-----: | :--------------: | :------------------: | :--------------: |
 |   ps    |     进程快照     | ps -ef \| grep nginx | -e全部 -f 格式化 |
-|  lsof   | 打开的文件描述符 |    lost -i :8080     |                  |
+|  lsof   | 打开的文件描述符 |    lsof -i :8080     |                  |
 |  pgrep  |     查找进程     |     pgrep nginx      |                  |
 |  pidof  |    查找进程号    |     pidof nginx      |                  |
 |  kill   |     杀死进程     |    kill -9 [pid]     |   -9 强制杀死    |
