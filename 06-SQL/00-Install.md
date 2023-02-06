@@ -128,6 +128,6 @@ mysql> show variables like "datadir";
 》支持like模糊查询
 
 ~~~mysql
-mysql> show variables like 'max_connections';
+\mysql> show variables like 'max_connections';
 mysql> show variables like 'default_storage_engine';
 ~~~
