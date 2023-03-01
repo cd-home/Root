@@ -1,16 +1,33 @@
 [TOC]
 
-## Go开发易错点
-
-### 初级篇
+### Go开发易错点
 
 #### 左括号问题
 
->   左括号必须严格放置在函数参数列表括号后面
+左括号必须严格放置在函数参数列表括号后面
 
 ~~~go
 func main() {  
     fmt.Println("Hello World")
+}
+~~~
+
+#### 切片容量问题
+
+子切片初始化的方法，如果没有指定容量，那就是起始位置start后一个到原始切片、数组的最后
+
+如果指定max，那么容量就是max-start
+
+~~~go
+func main() {
+	s := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	s1 := s[2:3:4]
+	s2 := s[2:3]
+	fmt.Println(len(s1))  // 2 3  === 1
+	fmt.Println(cap(s1))  // 2 -- 4  == 2
+
+	fmt.Println(len(s2))
+	fmt.Println(cap(s2))
 }
 ~~~
 
@@ -39,7 +56,7 @@ func main() {
 
 #### 未使用的变量
 
->   不允许出现未使用的局部变量
+不允许出现未使用的局部变量
 
 ~~~go
 var gV int  // 全局变量未使用可以不使用
@@ -53,8 +70,9 @@ func main() {
 
 #### 未使用import
 
->   1.  未使用的import会报错，可以使用 _ 或者 删除import的包
->   2.   _ 会执行包里的init方法
+未使用的import会报错, 可以使用 _ 或者 删除import的包
+
+_ 会执行包里的init方法
 
 ~~~go
 import (
@@ -101,7 +119,7 @@ func main() {
 
 #### nil声明
 
->   显式类型的变量无法使用nil来初始化
+显式类型的变量无法使用nil来初始化
 
 ~~~go
 func main() {
@@ -112,22 +130,22 @@ func main() {
 
 #### nil的slice和map
 
->   1.  map必须初始化才能使用
->   2.  slice必须初始化才能使用，但是可以append
+map必须初始化才能使用
+
+slice必须初始化才能使用, 但是可以append
 
 ~~~go
 func main() {
     var m map[string]int
     m["one"] = 1      //报错
     var s []int  
-    s = append(s, 1)  // 正确，nil的slice可以append 
+    s = append(s, 1)  // 正确, nil的slice可以append 
 }
 ~~~
 
 #### map容量
 
->   1.  创建map可以指定容量
->   2.  map的容量是动态增长的，无法使用cap()
+创建map可以指定容量; map的容量是动态增长的, 无法使用cap()
 
 ~~~go
 func main() {
@@ -137,8 +155,7 @@ func main() {
 
 #### string类型零值
 
->   1.  string的零值是""
->   2.  string不允许修改
+string的零值是""; string不允许修改
 
 ~~~go
 func main() {
@@ -146,15 +163,13 @@ func main() {
     if s == "" {
         fmt.Println(" string的零值是"" ")
     }
-    // 注意并且 string类型是常量，不允许修改
+    // 注意并且 string类型是常量, 不允许修改
 }
 ~~~
 
 #### 数组作为函数参数
 
->   1.  函数参数是值传递
->   2.  数组是值类型
->   3.  如想修改原函数，可以传递数组指针，或者使用切片
+函数参数是值传递; 数组是值类型; 如想修改原函数, 可以传递数组指针, 或者使用切片
 
 ~~~go
 func main() {
@@ -169,8 +184,7 @@ func main() {
 
 #### range遍历集合返回两个值
 
->   1.  返回索引和值
->   2.  返回的值是复制
+返回索引和值;返回的值是复制
 
 ~~~go
 func main() {
@@ -189,7 +203,7 @@ func main() {
         "one": 1,
         "two": 2,
     }
-    // map取值不会报错，采用ok模式来判断
+    // map取值不会报错, 采用ok模式来判断
     if v, ok := m["one"]; ok {
         fmt.Println(v)
     }
@@ -201,10 +215,10 @@ func main() {
 ~~~go
 func main() {
     s := "liyao"
-    subs := s[0]               // 返回的是byte值，uint8类型
+    subs := s[0]               // 返回的是byte值, uint8类型
     fmt.Printf("%T", subs)
     for i, v := range s {
-        fmt.Printf("%T\n", v)  // v 是一个rune，uint32类型
+        fmt.Printf("%T\n", v)  // v 是一个rune, uint32类型
         break
     }
 }
@@ -255,7 +269,7 @@ func main() {
 func main() {
     for i:= 0; i < 10; i++ {
         // ++ -- 
-        // 只有后置，并且属于运算符而非表达式
+        // 只有后置, 并且属于运算符而非表达式
     }
 }
 ~~~
@@ -273,7 +287,7 @@ Precedence   Operator
 
 #### 导出字段
 
->   导出字段才能被encode
+导出字段才能被encode
 
 ~~~go
 type User struct {
@@ -301,22 +315,19 @@ func main() {
 		}(i) 
     }
 	fmt.Println(<-ch)  
-    close(ch)  // 关闭后，但是还向chan里面写数据，就会panic
+    close(ch)  // 关闭后, 但是还向chan里面写数据, 就会panic
     time.Sleep(2 * time.Second) 
 }
 ~~~
 
 #### string和byte slice之间转换
 
->   1.  参与转换的是拷贝的原始值
->   2.  如下两个方面的优化
+参与转换的是拷贝的原始值; 如下两个方面的优化
 
 ~~~go
 map[string]中查找key采用了[]byte, 避免了m[string(key)]内存分配
 for range 迭代string转换为[]byte迭代 
 ~~~
-
-### 中级篇
 
 #### 关闭HTTP响应体
 
@@ -334,8 +345,9 @@ func main() {
 
 #### 关闭HTTP连接
 
->   1.  标准库的默认服务端主动要求关闭才断开链接
->   2.  如果需要向同一服务器发起大量请求，使用长连接
+标准库的默认服务端主动要求关闭才断开链接
+
+如果需要向同一服务器发起大量请求, 使用长连接
 
 ~~~go
 func main() {
@@ -356,7 +368,7 @@ func main() {
 
 #### JSON解码为interface{}
 
->   1.  解码数字默认为float64
+解码数字默认为float64
 
 ~~~go
 func main() {
@@ -384,10 +396,13 @@ func main() {
 
 #### == 
 
->   1.  同struct 当成员可以比较时才能比较
->   2.  同数组 当成员可以比较时才能比较
->   3.  slice 无法比较
->   4.  map无法比较
+同struct 当成员可以比较时才能比较
+
+同数组 当成员可以比较时才能比较
+
+slice 无法比较
+
+map无法比较
 
 ~~~go
 reflect.DeepEqual()  // nil和空slice不相等
@@ -423,14 +438,13 @@ func main() {
 
 #### slice隐藏数据
 
->   1.  通过旧slice创建新slice公用底层数组
->   2.  注意旧slice的数据
+通过旧slice创建新slice公用底层数组; 注意旧slice的数据
 
 ~~~go
 func Get() (res []byte) {
     raw := make([]byte, 10000)
     res = make([]byte, 5)
-    copy(res, raw[:5])   // 采用copy的方式，最好不要用共享的形式
+    copy(res, raw[:5])   // 采用copy的方式, 最好不要用共享的形式
     return
 }
 ~~~
@@ -491,7 +505,7 @@ func main() {
 
 #### defer函数的参数
 
->   defer函数的参数会在声明时就会执行
+defer函数的参数会在声明时就会执行
 
 ~~~go
 func main() {
@@ -504,11 +518,11 @@ func main() {
 
 #### defer执行时机
 
->   调用defer的函数执行结束时执行
+调用defer的函数执行结束时执行
 
 #### 断言
 
->   避免断言数据与接口变量名一样，引起错误
+避免断言数据与接口变量名一样, 引起错误
 
 ~~~go
 func main() {
@@ -523,36 +537,13 @@ func main() {
 
 #### goroutine资源泄漏
 
->   1.  避免开启大量的g，而不知道他们什么时候停止
->   2.  开启的g需要知道他的生命周期，避免资源泄漏
+避免开启大量的g, 而不知道他们什么时候停止
 
-### 高级篇
-
-#### 指针接收者
-
-~~~go
-type User struct {
-    Name string
-}
-type IUser interface {
-    SayName()
-}
-func (u *User) SayName() {
-    fmt.Println(u.Name)
-}
-func main() {
-    user := User{Name: "liyao"}
-    user.SayName()
-    
-    var iu Iuser = user
-    iu.SayName()  // error, recevie是指针类型，是指针类型实现了该方法
-}
-~~~
+开启的g需要知道他的生命周期, 避免资源泄漏
 
 #### 更新map的值
 
->   1.  map的值是一个结构体必须整体更新
->   2.  map的元素是不可寻址的
+map的值是一个结构体必须整体更新; map的元素是不可寻址的
 
 ~~~go
 type User struct {
@@ -580,17 +571,15 @@ func main() {
 
 #### 堆栈分配
 
->   1.  new make创建的变量，内存分配由编译器决定
->   2.  逃逸分析
+new make创建的变量, 内存分配由编译器决定; 逃逸分析
 
 #### 并发
 
->   1.  Go默认执行使用的CPU核心数为系统CPU最大核心
->   2.  P的数目=CPU核心数目
+Go默认执行使用的CPU核心数为系统CPU最大核心; P的数目=CPU核心数目
 
 ~~~go
 runtime.NumCPU()      // 返回CPU核心数
-runtime.GOMAXPROCS(n) // 设置P的数目，默认P的数目是CPU核心数目
+runtime.GOMAXPROCS(n) // 设置P的数目, 默认P的数目是CPU核心数目
 n = 1
 n < 1
 n > 1

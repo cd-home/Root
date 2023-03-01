@@ -1,11 +1,10 @@
 [TOC]
 
-### slice
+### DataTypes
 
-1.  动态数组、依靠底层数组实现
-2.  自动扩容、轻量
+#### slice
 
-#### 底层结构
+动态数组、依靠底层数组实现; 自动扩容、轻量
 
 ~~~go
 type slice struct {
@@ -15,13 +14,13 @@ type slice struct {
 }
 ~~~
 
-#### make
+make初始化
 
 ~~~go
 s := make([]int, len, cap)
 ~~~
 
-#### 扩容
+扩容
 
 ~~~go
 newcap := old.cap
@@ -74,3 +73,4 @@ if old.cap < 1024 {
     }
 }
 ~~~
+

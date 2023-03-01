@@ -4,7 +4,7 @@
 
 #### SubSlice
 
->   考点：切片的扩容，切片共享底层数组
+考点：切片的扩容，切片共享底层数组
 
 ~~~go
 func main() {
@@ -27,7 +27,7 @@ func main() {
 
 #### Short Declairation
 
->   考点：短声明，重复声明；短变量声明左边必须要有一个没有声明过的
+考点：短声明，重复声明；短变量声明左边必须要有一个没有声明过的
 
 ~~~go
 // 前提 x 已经声明过，下面表达式是否正确？
@@ -39,10 +39,9 @@ x, y = f()   // 错误
 
 #### Nil Interface
 
->   考点：接口赋值；接口类型
->
->   1.  实现接口的实例可以赋值给接口类型，空接口可以接受任意类型
->   2.  接口类型可以和nil类型比较
+考点：接口赋值；接口类型
+
+实现接口的实例可以赋值给接口类型, 空接口可以接受任意类型接口类型可以和nil类型比较
 
 ~~~go
 package main
@@ -97,7 +96,7 @@ func main() {
 
 #### Map Ok-ldiom
 
->   考点：Map的OK模式；Map必须Make初始化才可以使用
+考点：Map的OK模式；Map必须Make初始化才可以使用
 
 ~~~go
 func main() {
@@ -113,7 +112,7 @@ func main() {
 
 #### Pointers
 
->   考点：函数返回指针
+考点：函数返回指针
 
 ~~~go
 type S1 struct {
@@ -132,7 +131,7 @@ func main() {
 
 #### Interface{} Pointers
 
->   考点：空接口与空接口指针
+考点：空接口与空接口指针
 
 ~~~go
 type S2 struct {}
@@ -157,7 +156,7 @@ func main() {
 
 #### Temporary Pointer
 
->   考点：临时指针
+考点：临时指针
 
 ~~~go
 const N  = 3
@@ -178,7 +177,7 @@ func main() {
 
 #### Break Outer Loop
 
->   考点：label强制跳出
+考点：label强制跳出
 
 ~~~go
 func main() {
@@ -195,7 +194,7 @@ outer:
 
 #### Global Varibles
 
->   考点：全局变量声明
+考点：全局变量声明
 
 ~~~go
 var g
@@ -206,7 +205,7 @@ g := G{}
 
 #### Defer Stack
 
->   考点：Defer延迟调用
+考点：Defer延迟调用
 
 ~~~go
 import (
@@ -229,7 +228,7 @@ func main() {
 
 #### Panic Stack
 
->   考点：defer延迟调用函数；panic中断
+考点：defer延迟调用函数；panic中断
 
 ~~~go
 func f4() {
@@ -261,7 +260,7 @@ func main() {
 
 #### Recover
 
->   考点：panic；recover从panic恢复
+考点：panic；recover从panic恢复
 
 ~~~go
 func bar()  {
@@ -280,7 +279,7 @@ func main() {
 
 #### Goroutine Closure
 
->   考点：闭包
+考点：闭包
 
 ~~~go
 const M  = 10
@@ -309,7 +308,7 @@ func main() {
 
 #### Type Shadowing
 
->   考点：匿名（内嵌）结构体；方法、接口会被提升
+考点：匿名（内嵌）结构体；方法、接口会被提升
 
 ~~~go
 type S1 struct{}
@@ -348,7 +347,7 @@ func main() {
 
 #### String to Bytes
 
->   考点：字符串与bytes
+考点：字符串与bytes
 
 ~~~go
 func main() {
@@ -370,7 +369,7 @@ func main() {
 
 #### Map Mutex
 
->   考点：Map不是并发安全的
+考点：Map不是并发安全的
 
 ~~~go
 
@@ -407,7 +406,7 @@ func main() {
 
 #### DeepEqual
 
->   考点：类型相同
+考点：类型相同
 
 ~~~go
 type S3 struct {
@@ -426,7 +425,7 @@ func main() {
 
 #### Gosched
 
->   考点：P执行器个数设置; 让出执行权限
+考点：P执行器个数设置; 让出执行权限
 
 ~~~go
 const N1 = 26
@@ -455,7 +454,7 @@ func main() {
 
 #### Map Immutability
 
->   考点：映射不变形；map的value必须整体修改
+考点：映射不变形；map的value必须整体修改
 
 ~~~go
 type S struct {
@@ -471,7 +470,7 @@ func main() {
 
 #### Slice Sorting
 
->   考点： 切片排序
+考点： 切片排序
 
 ~~~go
 type S4 struct {

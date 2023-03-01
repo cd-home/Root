@@ -4,11 +4,7 @@
 
 #### Init()
 
->   考点：特殊函数init；
->
->   1.  无参数、无返回值；
->   2.  一个包可以有多个init函数
->   3.  初始化顺序由依赖包的顺序决定
+考点：特殊函数init；无参数、无返回值; 一个包可以有多个init函数; 初始化顺序由依赖包的顺序决定
 
 ~~~go
 func init() {
@@ -16,9 +12,9 @@ func init() {
 }
 ~~~
 
-#### Json unmarshalling
+#### JSON unmarshalling
 
->   考点：JSON序列化与反序列化; 结构体成员对外可见性；json-tag的配合
+考点：JSON序列化与反序列化; 结构体成员对外可见性；json-tag的配合
 
 ~~~go
 type Result struct {
@@ -38,7 +34,7 @@ func main() {
 
 #### Utf8 length
 
->   考点：utf8长度；英文、中文
+考点：utf8长度；英文、中文
 
 ~~~go
 func main() {
@@ -50,7 +46,7 @@ func main() {
 
 #### Context.WithTimeout
 
->   考点：contex包超时控制
+考点：contex包超时控制
 
 ~~~go
 func main() {
@@ -74,7 +70,7 @@ func main() {
 
 #### Flag
 
->   考点：命令行参数的获取
+考点：命令行参数的获取
 
 ~~~go
 var ip string
@@ -93,7 +89,7 @@ func main() {
 
 #### Http Server
 
->   考点：HTTP服务器搭建
+考点：HTTP服务器搭建
 
 ~~~go
 func Hello(w http.ResponseWriter, r *http.Request) {
@@ -108,7 +104,7 @@ func main() {
 
 #### Sql query
 
->   database包的适用
+database包的适用
 
 ~~~go
 import (

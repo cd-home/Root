@@ -4,7 +4,7 @@
 
 #### String Internals
 
->   考点： convert b from []byte to string without causing memory copy
+考点： convert b from []byte to string without causing memory copy
 
 ~~~go
 func main() {
@@ -18,7 +18,7 @@ func main() {
 
 #### Slice Internals
 
->   考点：通过子切片获取原始切片
+考点：通过子切片获取原始切片
 
 ~~~go
 const MM = 10
@@ -42,7 +42,7 @@ func main() {
 
 #### Defer overhead
 
->   考点：defer的开销 
+考点：defer的开销 
 
 ~~~
 runtime.deferproc and runtime.deferreturn cause context copy and retrieval on stack memory
@@ -50,7 +50,7 @@ runtime.deferproc and runtime.deferreturn cause context copy and retrieval on st
 
 #### Map malloc Threshold
 
->   考点：Map的malloc阈值
+考点：Map的malloc阈值
 
 ~~~
 The default limit is 128.
@@ -59,7 +59,7 @@ It can be modified by changing the value of maxKeySize and maxValueSize in runti
 
 #### runtime.newobject()
 
->   考点：runtime.newobject() 是做什么的？make与new是否总是调用runtime.newobject()
+考点：runtime.newobject() 是做什么的？make与new是否总是调用runtime.newobject()
 
 ~~~
 1. runtime.newobject() 用于分配堆内存
@@ -68,7 +68,7 @@ It can be modified by changing the value of maxKeySize and maxValueSize in runti
 
 #### Go Bootstrapping
 
->   考点：简要描述go可执行文件的过程
+考点：简要描述go可执行文件的过程
 
 ~~~
 1. 运行位于runtime下特定平台的程序集
@@ -81,7 +81,7 @@ It can be modified by changing the value of maxKeySize and maxValueSize in runti
 
 #### Unbuffered and Buffered Channels
 
->   考点：有缓冲与无缓冲通道
+考点：有缓冲与无缓冲通道
 
 ~~~
 For unbuffered channel, the sender will block on the channel until the receiver receives the data from the channel, whilst the receiver will also block on the channel until sender sends data into the channel. 
@@ -90,7 +90,7 @@ Compared with unbuffered counterpart, the sender of buffered channel will block 
 
 #### Destructor
 
->   考点：析构函数
+考点：析构函数
 
 ~~~
 There is no destructor in go. But runtime.SetFinalizer() can set a callback function for a pointer.
@@ -99,7 +99,7 @@ There is no destructor in go. But runtime.SetFinalizer() can set a callback func
 
 #### Garbage Collection
 
->   考点：垃圾回收
+考点：垃圾回收
 
 ~~~
 1. MarkWorker goroutine recursively scan all the objects and colors them into white(inaccessible), gray(pending), black(accessible). But finally they will only be black and white objcts.
@@ -126,7 +126,7 @@ There is no destructor in go. But runtime.SetFinalizer() can set a callback func
 
 #### Goroutine Sleep
 
->   考点：goroutine sleep
+考点：goroutine sleep
 
 ~~~
 1. C.sleep() 调用系统sleep 导致线程空闲
@@ -135,7 +135,7 @@ There is no destructor in go. But runtime.SetFinalizer() can set a callback func
 
 #### Memory Allocation
 
->   考点：内存分配 go运行时如何分配内存的策略
+考点：内存分配 go运行时如何分配内存的策略
 
 ~~~
 For small objects(<=32KB), go runtime starts with cache firstly, then central, and finally heap.
@@ -147,7 +147,7 @@ For big objects(>32KB), directly from heap.
 
 #### Stack vs Heap
 
->   考点：运行时何时从堆分配内存，何时从堆栈分配内存？
+考点：运行时何时从堆分配内存，何时从堆栈分配内存？
 
 ~~~
 1. For small objects whose life cycle is only within the stack frame, 	
@@ -166,7 +166,7 @@ For big objects(>32KB), directly from heap.
 
 #### Goroutine Pause or Halt
 
->   考点：暂停或者停止goroutine的函数
+考点：暂停或者停止goroutine的函数
 
 ~~~
 1. runtime.Gosched: give up CPU core and join the queue, thus will be executed automatically. 放弃当前CPU核心，加入队列，等待下次调度执行
@@ -177,4 +177,3 @@ For big objects(>32KB), directly from heap.
 
 4. runtime.Goexit: stop the execution of goroutine immediately and call defer, but it will not cause panic. 立即停止并且调用defer，但是不会panic
 ~~~
-

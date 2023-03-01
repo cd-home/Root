@@ -4,10 +4,10 @@
 
 #### Gcflags
 
->   考点：逃逸分析
+考点：逃逸分析
 
 ~~~go
-apple-liyao@MacBook-Air Go-Interview % go build -gcflags "-m -l -N" 20-http.go
+% go build -gcflags "-m -l -N" http.go
 # command-line-arguments
 ./20-http.go:16:12: leaking param: w
 ./20-http.go:16:35: leaking param content: r
@@ -19,7 +19,7 @@ apple-liyao@MacBook-Air Go-Interview % go build -gcflags "-m -l -N" 20-http.go
 
 #### Benchmark
 
->   考点：基准测试
+考点：基准测试
 
 ~~~go
 func Fib(n int) int {
@@ -38,17 +38,13 @@ func BenchmarkFib10(b *testing.B) {
 }
 ~~~
 
-#### package management
+#### Package management
 
->   考点：包管理
-
-1.  vender
-2.  GOPATH
-3.  Go MOD
+考点：包管理 Go MOD
 
 #### GOMAXPROCS
 
->   考点：设置P的数量; 执行核心的数量；
+考点：设置P的数量; 执行核心的数量；
 
 ~~~go
 func main() {
@@ -78,12 +74,14 @@ func main() {
 
 #### Shared object
 
->   考点：打包源码包为插件使用
+考点：打包源码包为插件使用
 
 ~~~go
 // str.go
 package main
+
 import "strings"
+
 func UpperCase(s string) string {
 	return strings.ToUpper(s)
 }
@@ -115,19 +113,15 @@ func main() {
 
 #### GODEBUG
 
->   考点：开启GODEBUG模式
+考点：开启GODEBUG模式
 
 ~~~bash
 GODEBUG='gctrace=1' ./test
 ~~~
 
-#### GOROOT GOPATH
-
->   考点：GOROOT、GOAPTH
-
 #### Pprof
 
->   考点：http server的pprof
+考点：http server的pprof
 
 ~~~go
 // http://127.0.0.1:8080/debug/pprof
@@ -151,4 +145,3 @@ go tool pprof http://localhost:6060/debug/pprof/heap
 goroutine blocking profile:
 go tool pprof http://localhost:6060/debug/pprof/block
 ~~~
-
