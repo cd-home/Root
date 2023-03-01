@@ -191,10 +191,3 @@ $ >/dev/null 2>&1
 $ 2>&1 >/dev/null
 ~~~
 
-#### zsh
-
-》Oh My Zsh 安装与使用即可
-
-#### Vim
-
-![Vim](./images/Vim.svg)

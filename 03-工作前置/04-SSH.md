@@ -21,9 +21,9 @@ authorized_keys id_rsa id_rsa.pub known_hosts
 
 ~~~bash
 $ vim ~/.ssh/config # 添加以下内容
-Host https://github.com/GodYao1995
+Host https://github.com/cd-home
 HostName github.com
-User GodYao1995
+User cd-home
 IdentityFile ~/.ssh/id_rsa
 ~~~
 
