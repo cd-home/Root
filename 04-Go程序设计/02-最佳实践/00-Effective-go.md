@@ -16,7 +16,7 @@ This document gives tips for writing clear, idiomatic Go code. It augments the [
 
 Note added January, 2022: This document was written for Go's release in 2009, and has not been updated significantly since. Although it is a good guide to understand how to use the language itself, thanks to the **stability of the language**, it says little about the libraries and nothing about significant changes to the Go ecosystem since it was written, such as the build system, testing, modules, and polymorphism. There are no plans to update it, as so much has happened and a large and growing set of documents, blogs, and books do a fine job of describing modern Go usage. Effective Go continues to be useful, but the reader should understand it is far from a complete guide. See [issue 28782](https://github.com/golang/go/issues/28782) for context.
 
-2022 年 1 月添加的注释: 本文档是为 2009 年的 Go 版本编写的, 此后没有进行重大更新. 尽管它是理解如何使用语言本身的一个很好的指南,  多亏**语言的稳定性**, 它很少提及标准库, 也没有提及自编写以来对 Go 生态系统的重大变化, 例如构建系统、测试 、模块和多态性.  目前没有更新它的计划, 因为已经发生了很多事情，而且越来越多的文档、博客和书籍很好地描述了现代 Go 的使用.  Effective Go 仍然有用, 但读者应该明白它远非完整的指南. 有关上下文, 请参见问题 28782. 
+2022 年 1 月添加的注释: 本文档是为 2009 年的 Go 版本编写的, 此后没有进行重大更新. 尽管它是理解如何使用语言本身的一个很好的指南,  多亏**语言的稳定性**, 它很少提及标准库, 也没有提及自编写以来对 Go 生态系统的重大变化, 例如构建系统、测试 、模块和多态性.  目前没有更新它的计划, 因为已经发生了很多事情, 而且越来越多的文档、博客和书籍很好地描述了现代 Go 的使用.  Effective Go 仍然有用, 但读者应该明白它远非完整的指南. 有关上下文, 请参见问题 28782. 
 
 #### Examples
 
@@ -24,7 +24,7 @@ The Go package sources (https://go.dev/src/) are intended to serve not only as t
 
 Go 源码包 (https://go.dev/src) 不仅用作核心库, 而且用作如何使用该语言的示例.  此外, 许多包都包含有效的、独立的可执行示例, 您可以直接从 http://go.dev/ 网站运行, 例如这个(https://pkg.go.dev/strings)(如有必要,单击“示例”一词打开它) 如果您对如何解决问题或如何实现有疑问, 库中的文档、代码和示例可以提供答案、想法和背景. 
 
-#### Formatting 	格式化
+#### Formatting 																	格式化
 
 Formatting issues [问题] are the most contentious [争议] but the least consequential [影响]. People can adapt to [适应] different formatting styles but it's better if they don't have to, and less time is devoted to the topic if everyone adheres to the same style. The problem is how to approach this Utopia without a long prescriptive style guide.
 
@@ -48,7 +48,7 @@ go fmt
 
 **建议: 使用 go fmt, 使得代码规范统一.** 
 
-#### Commentary 注释
+#### Commentary 																注释
 
 Go provides C-style /* */ block comments and C++-style // line comments. Line comments are the norm; block comments appear mostly as package comments, but are useful within an expression or to disable large swaths of code.
 
@@ -66,7 +66,7 @@ Go提供C风格的/**/块注释和C++风格的//行注释. 行注释是标准; �
 
 **建议: 对包、结构体、函数、方法、枚举类型、核心逻辑做注释. 并且注释需要完整简洁.** 
 
-#### Name 				命名
+#### Name 																				命名
 
 Names are as important in Go as in any other language. They even have semantic [语义] effect: the visibility [可见性] of a name outside a package is determined [决定, 取决于] by whether its first character is upper case. It's therefore worth spending a little time talking about naming conventions in Go programs.
 
@@ -74,7 +74,7 @@ Names are as important in Go as in any other language. They even have semantic [
 
 - [x] 名称首字母大写, 包外可见
 
-##### Package names 	包名称
+##### Package names 							        
 
 When a package is imported, the package name becomes an accessor [访问器] for the contents
 
@@ -111,14 +111,14 @@ Another short example is `once.Do`; `once.Do(setup)` reads well and would not be
 
 - [x] **简短名字配合文档注释常常会更好**
 
-##### Getters 						 获取
+##### Getters 		
 
 Go doesn't provide automatic [自动] support for getters and setters. There's nothing wrong with providing getters and setters yourself, and it's often appropriate to do so, but it's neither idiomatic nor necessary to put `Get` into the getter's name. If you have a field called `owner` (lower case, unexported), the getter method should be called `Owner` (upper case, exported), not `GetOwner`. The use of upper-case names for export provides the hook to discriminate [区分] the field from the method. A setter function, if needed, will likely be called `SetOwner`. Both names read well in practice:
 
 - [x] 获取 owner 采用 Owner 作为 Getter 更好
 - [x] 设置 owner 采用 SetOwner  作为 Setter 更好
 
-##### Interface names 	接口名字
+##### Interface names
 
 By convention, one-method interfaces are named by the method name plus an -er suffix or similar modification to construct an agent noun: `Reader`, `Writer`, `Formatter`, `CloseNotifier` etc.
 
@@ -127,13 +127,13 @@ There are a number of such names and it's productive to honor them and the funct
 - [x] 只包含一个方法的接口应当以该方法的名称加上-er 后缀来命名
 - [x] 接口与方法尽量不要使用标准库等常用的名称. [如果确实需要的话, 命名方式可参考标准库的方式]
 
-##### MixedCaps    驼峰命名
+##### MixedCaps   
 
 Finally, the convention in Go is to use `MixedCaps` or `mixedCaps` rather than underscores to write multiword names.
 
 Go中约定使用大驼峰或者小驼峰
 
-#### Semicolons 分号
+#### Semicolons 																	分号
 
 Like C, Go's formal grammar uses semicolons to terminate statements, but unlike in C, those semicolons do not appear in the source. Instead the lexer uses a simple rule to insert semicolons automatically as it scans, so the input text is mostly free of them.
 
@@ -149,7 +149,7 @@ break continue fallthrough return ++ -- ) }
 
 the lexer always inserts a semicolon after the token. This could be summarized as, "if the newline comes after a token that could end a statement, insert a semicolon".
 
-词法分析器总是在标记后插入一个分号.  这可以概括为"如果换行符出现在可以结束语句的标记之后，则插入分号".
+词法分析器总是在标记后插入一个分号.  这可以概括为"如果换行符出现在可以结束语句的标记之后, 则插入分号".
 
 - [x] 正式语法使用分号来结束语句, 词法分析器会使用一条简单的规则来自动插入分号, **源码中不用分号**
 
@@ -169,7 +169,7 @@ One consequence [后果] of the semicolon insertion rules is that you cannot put
 
 - [x] 不能将一个控制结构（`if`、`for`、`switch` 或 `select`）的左大括号放在下一行
 
-#### Control structures 控制
+#### Control structures 														控制结构
 
 The control structures of Go are related to those of C but differ in important ways. There is no `do` or `while` loop, only a slightly generalized `for`; `switch` is more flexible; `if` and `switch` accept an optional initialization statement like that of `for`; `break` and `continue` statements take an optional label to identify what to break or continue; and there are new control structures including a type switch and a multiway communications multiplexer, `select`. The syntax is also slightly different: there are no parentheses and the bodies must always be brace-delimited.
 
@@ -206,7 +206,7 @@ if err := file.Chmod(0664); err != nil {
 
 In the Go libraries, you'll find that when an `if` statement doesn't flow into the next statement—that is, the body ends in `break`, `continue`, `goto`, or `return`—the unnecessary `else` is omitted.
 
-在 Go 库中, 您会发现当 if 语句没有进入下一条语句时(即主体以 break、continue、goto 或 return 结尾)时, 省略了不必要的 else
+在 Go 库中, 您会发现当 if 语句没有进入下一条语句时(即主体以 break、continue、goto 或 return 结尾)时, 省略了不必要的 else.
 
 ~~~go
 f, err := os.Open(name)
@@ -261,44 +261,113 @@ this declaration is in the same scope as the existing declaration of `v` (if `v`
 
 该声明与现有声明的范围相同(如果在外部范围中已声明v,则该声明将创建一个新的变量), 初始化中的相应值可分配给 v, 并且声明创建了至少一个其他变量.  [例如, 上述的 d, err := ]
 
+This unusual property is pure pragmatism, making it easy to use a single `err` value, for example, in a long `if-else` chain. You'll see it used often.
 
+这种不寻常的特性是纯粹的实用主义, 例如, 在一个长if-else链中很容易使用一个错误值. 你会看到它经常被使用. 
+
+§ It's worth noting here that in Go the scope of function parameters and return values is the same as the function body, even though they appear lexically outside the braces that enclose the body.
+
+这里值得注意的是, 在Go中, 函数参数和返回值的作用域与函数体相同, 即使它们在词汇上出现在包围函数体的大括号之外. 
+
+##### For
+
+The Go `for` loop is similar to—but not the same as—C's. It unifies `for` and `while` and there is no `do-while`. There are three forms, only one of which has semicolons.
+
+Go for循环与C类似, 但不相同. 它统一了for和while, 没有do while. 有三种形式, 其中只有一种带有分号. 
 
 ~~~go
+// Like a C for
+for init; condition; post { }
 
-// 注意 for中的局部变量
-for init; cond; ins {
-    // code
+// Like a C while
+for condition { }
+
+// Like a C for(;;)
+for { }
+~~~
+
+Short declarations make it easy to declare the index variable right in the loop.
+
+简短的声明可以很容易地在循环中声明索引变量. 
+
+~~~go
+sum := 0
+for i := 0; i < 10; i++ {
+    sum += i
 }
+~~~
 
-for condition {
- 	// code   
+If you're looping over an array, slice, string, or map, or reading from a channel, a `range` clause can manage the loop. [range 用于数组、切片、映射、通道、字符串]
+
+~~~go
+for key, value := range oldMap {
+    newMap[key] = value
 }
+~~~
 
-for {
-   // code 
+If you only need the first item in the range (the key or index), drop the second:
+
+~~~go
+for key := range m {
+    if key.expired() {
+        delete(m, key)
+    }
 }
+~~~
 
-// 遍历数组、切片、字符串或者映射, 或从信道中读取消息
-for index, value := range collection {
-    // code
+If you only need the second item in the range (the value), use the *blank identifier* [空白标识符], an underscore[下划线], to discard[丢弃] the first: 
+
+~~~go
+sum := 0
+for _, value := range array {
+    sum += value
 }
+~~~
 
+For strings, the `range` does more work for you, breaking out individual Unicode code points by parsing the UTF-8. Erroneous encodings consume one byte and produce the replacement rune U+FFFD. (The name (with associated builtin type) `rune` is Go terminology for a single Unicode code point. See [the language specification](https://go.dev/ref/spec#Rune_literals) for details.) The loop
+
+对于字符串, range更适合你, 通过解析UTF-8来分解单个Unicode代码点. 错误编码消耗一个字节并产生替换符文U+FFFD. (内建类型)rune是单个Unicode代码点的Go术语. 有关详细信息, 请参见语言规范. 如下: 
+
+~~~go
+for pos, char := range "中国\x80话" { // \x80 is an illegal UTF-8 encoding
+    fmt.Printf("character %#U starts at byte position %d\n", char, pos)
+}
+~~~
+
+Finally, Go has no comma operator and `++` and `--` are statements not expressions. Thus if you want to run multiple variables in a `for` you should use parallel assignment (although that precludes `++` and `--`).
+
+最后, Go没有逗号运算符, ++和--是语句而不是表达式(单独一行出现). 因此, 如果您想在for中运行多个变量, 应该使用并行赋值（尽管这排除了++和--）. 
+
+~~~go
+// Reverse a
 for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
     a[i], a[j] = a[j], a[i]
 }
+~~~
 
+##### Switch
+
+Go's `switch` is more general than C's. The expressions need not be constants or even integers, the cases are evaluated top to bottom until a match is found, and if the `switch` has no expression it switches on `true`. It's therefore possible—and idiomatic—to write an `if`-`else`-`if`-`else` chain as a `switch`.
+
+Go的switch比C的更通用。表达式不需要是常量或甚至整数，从上到下对大小写进行求值，直到找到匹配为止，如果switch没有表达式，则选择为true。因此，编写if-else-if-else链作为switch是可能的，也是惯用的。
+
+~~~go
 func unhex(c byte) byte {
-	switch {
-	case '0' <= c && c <= '9':
-		return c - '0'
-	case 'a' <= c && c <= 'f':
-		return c - 'a' + 10
-	case 'A' <= c && c <= 'F':
-		return c - 'A' + 10
-	}
-	return 0
+    switch {
+    case '0' <= c && c <= '9':
+        return c - '0'
+    case 'a' <= c && c <= 'f':
+        return c - 'a' + 10
+    case 'A' <= c && c <= 'F':
+        return c - 'A' + 10
+    }
+    return 0
 }
+~~~
 
+There is no automatic fall through, but cases can be presented in comma-separated lists.
+
+~~~go
 func shouldEscape(c byte) bool {
     switch c {
     case ' ', '?', '&', '=', '#', '+', '%':
@@ -306,18 +375,80 @@ func shouldEscape(c byte) bool {
     }
     return false
 }
+~~~
 
+Although they are not nearly as common in Go as some other C-like languages, `break` statements can be used to terminate a `switch` early. Sometimes, though, it's necessary to break out of a surrounding loop, not the switch, and in Go that can be accomplished by putting a label on the loop and "breaking" to that label. This example shows both uses.
+
+~~~go
+Loop:
+    for n := 0; n < len(src); n += size {
+        switch {
+        case src[n] < sizeOne:
+            if validateOnly {
+                break
+            }
+            size = 1
+            update(src[n])
+
+        case src[n] < sizeTwo:
+            if n+1 >= len(src) {
+                err = errShortInput
+                break Loop
+            }
+            if validateOnly {
+                break
+            }
+            size = 2
+            update(src[n] + src[n+1]<<shift)
+        }
+    }
+~~~
+
+Of course, the `continue` statement also accepts an optional label but it applies only to loops.
+
+To close this section, here's a comparison routine for byte slices that uses two `switch` statements:
+
+~~~go
+// Compare returns an integer comparing the two byte slices,
+// lexicographically.
+// The result will be 0 if a == b, -1 if a < b, and +1 if a > b
+func Compare(a, b []byte) int {
+    for i := 0; i < len(a) && i < len(b); i++ {
+        switch {
+        case a[i] > b[i]:
+            return 1
+        case a[i] < b[i]:
+            return -1
+        }
+    }
+    switch {
+    case len(a) > len(b):
+        return 1
+    case len(a) < len(b):
+        return -1
+    }
+    return 0
+}
+~~~
+
+##### Type switch
+
+A switch can also be used to discover the dynamic type of an interface variable. Such a *type switch* uses the syntax of a type assertion with the keyword `type` inside the parentheses. If the switch declares a variable in the expression, the variable will have the corresponding type in each clause. It's also idiomatic to reuse the name in such cases, in effect declaring a new variable with the same name but a different type in each case.
+
+~~~go
+var t interface{}
+t = functionOfSomeType()
 switch t := t.(type) {
-case bool:
-	fmt.Printf("boolean %t\n", t)            
-case int:
-	fmt.Printf("integer %d\n", t)             
-case *bool:
-	fmt.Printf("pointer to boolean %t\n", *t) 
-case *int:
-	fmt.Printf("pointer to integer %d\n", *t) 
 default:
-	fmt.Printf("unexpected type %T", t)       
+    fmt.Printf("unexpected type %T\n", t)     // %T prints whatever type t has
+case bool:
+    fmt.Printf("boolean %t\n", t)             // t has type bool
+case int:
+    fmt.Printf("integer %d\n", t)             // t has type int
+case *bool:
+    fmt.Printf("pointer to boolean %t\n", *t) // t has type *bool
+case *int:
+    fmt.Printf("pointer to integer %d\n", *t) // t has type *int
 }
 ~~~
 
@@ -351,7 +482,7 @@ func Bar(nums ...int) int {
 
 **defer**
 
-> 1.  Go的 `defer` 语句用于预设一个函数调用，该函数会在执行 `defer` 的函数返回之前立即执行
+> 1.  Go的 `defer` 语句用于预设一个函数调用, 该函数会在执行 `defer` 的函数返回之前立即执行
 > 2.  被推迟的函数按照后进先出（LIFO）的顺序执行
 > 3.  常被用作资源关闭或者配合Recover()
 
@@ -424,7 +555,7 @@ const (
 #### init
 
 1.  每个源文件都可以通过定义自己的无参数 `init` 函数来设置一些必要的状态
-2.  `init` 函数还常被用在程序真正开始执行前，检验或校正程序的状态
+2.  `init` 函数还常被用在程序真正开始执行前, 检验或校正程序的状态
 3.  只有该包中的所有变量声明都通过它们的初始化器求值后 `init` 才会被调用
 
 #### 方法
@@ -490,13 +621,13 @@ import _ "net/http/pprof"
 
 #### 并发
 
-> 不要通过共享内存来通信，而应该通过通信来共享内存
+不要通过共享内存来通信, 而应该通过通信来共享内存
 
 **goroutine**
 
-1.  它是与其它Go程并发运行在同一地址空间的函数，它是轻量级的,  所有消耗几乎就只有栈空间的分配，而且栈最开始是非常小的, 所以它们很廉价,  仅在需要时才会随着堆空间的分配（和释放）而变化
+它是与其它Go程并发运行在同一地址空间的函数, 它是轻量级的,  所有消耗几乎就只有栈空间的分配, 而且栈最开始是非常小的, 所以它们很廉价,  仅在需要时才会随着堆空间的分配(和释放)而变化
 
-3.  Go程在多线程操作系统上可实现多路复用, 因此若一个线程阻塞,  那么其它的线程就会运行
+Go程在多线程操作系统上可实现多路复用, 因此若一个线程阻塞,  那么其它的线程就会运行
 
 **通道**
 
@@ -510,14 +641,14 @@ cs := make(chan *os.File, 100)  // 指向文件指针的带缓冲信道
 
 2.  无缓冲信道在通信时会同步交换数据, 它能确保（两个Go程的）计算处于确定状态
 
-3.  若信道是带缓冲的, 则发送者仅在值被复制到缓冲区前阻塞，若缓冲区已满, 发送者会一直等待直到某个接收者取出一个值为止
+3.  若信道是带缓冲的, 则发送者仅在值被复制到缓冲区前阻塞, 若缓冲区已满, 发送者会一直等待直到某个接收者取出一个值为止
 
 
 #### 错误
 
 error
 
-> 按照约定, 错误的类型通常为 `error`, 这是一个内建的简单接口. 
+按照约定, 错误的类型通常为 `error`, 这是一个内建的简单接口. 
 
 ```go
 type error interface {
@@ -527,7 +658,7 @@ type error interface {
 
 panic
 
-> 不可恢复的错误
+不可恢复的错误
 
 ~~~go
 panic("something wrong")
@@ -535,7 +666,7 @@ panic("something wrong")
 
 recover
 
-当 `panic` 被调用后（包括不明确的运行时错误, 例如切片检索越界或类型断言失败）,  程序将立刻终止当前函数的执行, 并开始回溯Go程的栈, 运行任何被推迟的函数.  若回溯到达Go程栈的顶端, 程序就会终止. 不过我们可以用内建的 `recover` 函数来重新或来取回Go程的控制权限并使其恢复正常执行
+当 `panic` 被调用后(包括不明确的运行时错误, 例如切片检索越界或类型断言失败),  程序将立刻终止当前函数的执行, 并开始回溯Go程的栈, 运行任何被推迟的函数.  若回溯到达Go程栈的顶端, 程序就会终止. 不过我们可以用内建的 `recover` 函数来重新或来取回Go程的控制权限并使其恢复正常执行. 
 
 ~~~go
 defer func() {

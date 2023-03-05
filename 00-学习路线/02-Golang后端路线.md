@@ -87,7 +87,7 @@
 |  GoMock   |     测试      |
 |  Fx/Wire  |   依赖注入    |
 |   resty   |  HTTP请求库   |
-|   Cabin   |   权限控制    |
+|  Casbin   |   权限控制    |
 | machinery | 异步任务队列  |
 |   SQLX    |      SQL      |
 |  nhooyr   | WebSocket框架 |
