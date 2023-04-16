@@ -97,7 +97,7 @@ $ tar -C / -zxvf cri-containerd-cni-1.6.6-linux-arm64.tar.gz
 配置文件
 
 ~~~bash
-$ containerd cinfig default > /etc/containerd/config.toml
+$ containerd config default > /etc/containerd/config.toml
 ~~~
 
 解压的文件包含了systemd配置, 所以可以通过systemctl管理
@@ -270,6 +270,7 @@ Example
 
 ~~~bash
 $ buildctl build \
+
 	--output type=image,name=ng  \
 	--frontend=dockerfile.v0 \
 	--local context=. \

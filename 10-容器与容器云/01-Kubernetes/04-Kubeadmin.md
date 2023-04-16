@@ -59,20 +59,22 @@ $ sudo sed -i 's/^SELINUX=enforcing$/SELINUX=disable/' /etc/selinux/config
 $ shutdown -r now
 ~~~
 
-- [x] 关闭swap分区, 保证kubelet正常工作 [并且需要后续添加配置到k8s.conf]
+- [ ] 关闭swap分区, 保证kubelet正常工作 [并且需要后续添加配置到k8s.conf]
 
 ~~~bash
 # 当内存不足时,Linux 会自动使用 swap, 将部分内存数据存放到磁盘中, 这个这样会使性能下降
 $ swapoff -a
-$ vim /etc/fstab # 注释如下行
+
+$ vim /etc/fstab # 注释如下行  (注意每台机器都要改)
 #/dev/mapper/cl_fedora-swap none swap defaults 0 0
+$ systemctl daemon-reload
 $ free -h
 ~~~
 
 - [x] 允许 iptables 检查桥接流量
 
 ~~~bash
-# 开启 br_netfilter
+# 开启 br_netfilter, 重启无效, 需要加入到开机启动
 $ modprobe br_netfilter
 
 $ vim /etc/sysctl.d/k8s.conf
@@ -200,8 +202,6 @@ networking:
   podSubnet: 10.244.0.0/16  # flannel插件的网段
   serviceSubnet: 10.96.0.0/12
 scheduler: {}
-# 新增的
-co
 # 新增的, 配置 cgroupDriver 为 systemd
 # 注意同样需要去containerd配置文件修改 SystemdCgroup = true
 ---
@@ -210,7 +210,7 @@ kind: KubeletConfiguration
 cgroupDriver: systemd
 ~~~
 
-\>=1.22 版本情况下:
+\>=1.22 版本情况下: 目前安装的就是1.24.3版本, 干掉新增的配置
 
 如果用户没有在 `KubeletConfiguration` 中设置 `cgroupDriver` 字段,  `kubeadm init` 会将它设置为默认值 `systemd`,所以上述的配置文件亦可不必手动填写. 
 
@@ -222,7 +222,7 @@ $ kubeadm config images pull --config kubeadm.yaml
 
 # 注意: coredns 无法拉取, 手动拉取后打tag [imagePullPolicy: IfNotPresent] 不会重复拉取
 $ ctr -n k8s.io i pull docker.io/coredns/coredns:1.8.6
-$ ctr -n k8s.io i tag docker.io/coredns/coredns:1.8.6 \   registry.aliyuncs.com/k8sxio/coredns:v1.8.6
+$ ctr -n k8s.io i tag docker.io/coredns/coredns:1.8.6 registry.aliyuncs.com/k8sxio/coredns:v1.8.6
 ~~~
 
 - [x] 初始化
@@ -231,7 +231,7 @@ $ ctr -n k8s.io i tag docker.io/coredns/coredns:1.8.6 \   registry.aliyuncs.com/
 $ kubeadm init --config kubeadm.yaml
 ~~~
 
-过程中出现如下问题
+过程中出现如下问题(如果有问题)
 
 1. 缺少 tc [每台节点]
 
@@ -243,7 +243,7 @@ $ yum install iproute-tc.aarch64
 
 ~~~bash
 $ modprobe br_netfilter
-
+# linux桥下的报文会经过ip层的netfilter框架处理。即可以通过iptables命令来对桥下的报文进行处理
 $ echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 $ echo 1 > /proc/sys/net/ipv4/ip_forward
 ~~~
@@ -320,16 +320,25 @@ $ ip link delete cni0
 #### Kubectl
 
 ~~~bash
+$ yum install bash-completion
+$ source <(kubectl completion bash)
+
 $ kubectl get nodes
+$ kubectl get nodes -o yaml
+
 # 要注意命名空间
-$ kubectl get pods -n [kube-system|default] [-o wide]
+$ kubectl get pods -n[namespace] [kube-system|default] [-o wide]
 $ kubectl get pods --watch -n default
 $ kubectl apply -f nginx.yaml
 $ kubectl delete -f nginx.yaml
-$ kubectl explain x_deployment
 $ kubectl get deploy
 # 遇到任何问题, 可以查看
 $ kubectl describe pod|deploy 
+$ kubectl get srv
+$ kubectl get rs
+$ kubectl get ns
+# 查看配置
+$ kubectl explain pod.spec.containers 
 ~~~
 
 部署nginx, 了解yaml
@@ -411,3 +420,4 @@ $ kubeadm reset
 $ iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
 $ ipvsadm -C
 ~~~
+
