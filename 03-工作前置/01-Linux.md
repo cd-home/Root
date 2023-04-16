@@ -122,7 +122,7 @@ opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 |      wget      |   文件下载   |          wget url          |                                         |
 |    netstat     |   网络状态   |       netstat -anlp        |              -t=tcp -u=udp              |
 |      ssh       |   远程连接   |       ssh user@host        |                                         |
-|      scp       |   复制远程   |  scp localpath host:path   |                                         |
+|      scp       |   复制远程   | scp -r localpath host:path |                                         |
 |      scp       |   远程下载   | scp -r site:path localpath |                                         |
 |      sftp      |   文件传输   |         sftp host          | 本机lls lcd、服务器ls cd、put\|get file |
 |       ip       |   网络配置   |          ip addr           |                  ip a                   |
