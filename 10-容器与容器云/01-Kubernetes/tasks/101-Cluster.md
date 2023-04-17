@@ -188,6 +188,13 @@ EOF
 
 # 默认安装 kubeadm、kubelet、kubectl 配套最新版 注意版本偏差
 $ yum install kubeadmin
+
+# 安装命令行补全
+$ yum install bash-completion
+$ echo 'source <(kubectl completion bash)' >>~/.bashrc
+$ echo 'alias k=kubectl' >>~/.bashrc
+$ echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
+$ source ~/.bashrc
 ~~~
 
 2. 配置kubeadm引导文件, 注意新增或者修改的部分
@@ -258,7 +265,7 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: ipvs  
 ---
-apiVersion: kubelet.config.k8s.io/v1beta1					# 新增cgroup采用systemd
+apiVersion: kubelet.config.k8s.io/v1beta1					# 新增cgroup采用systemd, 并且kubelet是以服务启动的
 kind: KubeletConfiguration
 cgroupDriver: systemd
 ~~~
@@ -366,6 +373,9 @@ $ kube-vip manifest pod \
 $ kubeadm init --help
 $ kubeadm init phase preflight --config kubeadm.yaml
 $ kubeadm init --upload-certs  --config kubeadm.yaml
+
+# 引导完成, 检测集群状态
+$ kubectl cluster-info
 ~~~
 
 可选参数参考
@@ -526,27 +536,6 @@ kubeadm init phase upload-config [all,kubeadm,kubelet]
 
 ~~~
 kubeadm init phase addon [coredns,kube-proxy]
-~~~
-
-
-
-由上可知, kubeadm就是在帮我们简化配置等流程, 如果后续需要修改集群的配置; 同样kubelet的cm也在其中. 
-
-~~~bash
-$ kubectl get cm -nkube-system
-
-NAME                                                   DATA   AGE
-coredns                                                1      46h
-extension-apiserver-authentication                     6      46h
-kube-apiserver-legacy-service-account-token-tracking   1      46h
-kube-flannel-cfg                                       2      46h
-kube-proxy                                             2      46h
-kube-root-ca.crt                                       1      46h
-kubeadm-config                                         1      46h
-kubelet-config                                         1      46h
-
-$ kubectl get cm -nkube-system kubelet-config -o yaml
-$ kubectl edit cm -nkube-system kubeadm-config
 ~~~
 
 #### kubeadm reset?

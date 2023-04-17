@@ -283,3 +283,14 @@ $ buildctl build \
 $ ctr -n buildkit i ls
 ~~~
 
+#### 套件
+
+nerdctl + buildit + containerd. 注意名称空间
+
+~~~bash
+$ nerdctl -n k8s.io build -t myapp:v1 -f Dockerfile .
+$ nerdctl -n k8s.io image save myapp:v1 -o myapp.tar
+
+$ ctr -n k8s.io images import myapp.tar
+~~~
+

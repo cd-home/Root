@@ -9,10 +9,16 @@ $ curl -X PUT --data-binary @<(kubectl get namespace $ns -o json | sed 's/"kuber
 -H "Content-Type: application/json"     http://127.0.0.1:8009/api/v1/namespaces/$ns/finalize
 ~~~
 
+清理无用镜像
+
+~~~bash
+$ crictl images | grep none | awk '{print$3}' | xargs crictl rmi
+~~~
+
 网络调试
 
 ~~~bash
-kubectl run tmp-shell --rm -i --tty --image nicolaka/netshoot -- /bin/bash
+$ kubectl run tmp-shell --rm -i --tty --image nicolaka/netshoot -- /bin/bash
 ~~~
 
 禁用ipv6
@@ -148,4 +154,3 @@ kubectl logs
 kubectl api-versions
 kubectl api-resources
 ~~~
-
