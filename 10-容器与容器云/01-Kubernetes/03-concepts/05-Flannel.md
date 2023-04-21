@@ -8,8 +8,8 @@
 
 ##### Pod To Pod IN Node
 
-![Flannel-Pod-to-Pod](../install/images/Flannel-Pod-to-Pod.svg)
+![Flannel-Pod-to-Pod](./images/Flannel-Pod-to-Pod.svg)
 
 ##### Pod To Pod From Node
 
-![Flannel-Pod-to-Pod2](../install/images/Flannel-Pod-to-Pod2.svg)
+![Flannel-Pod-to-Pod2](./images/Flannel-Pod-to-Pod2.svg)

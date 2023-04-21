@@ -34,8 +34,6 @@ grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
 ip a | grep inet6
 ~~~
 
-<img src="/Users/liyao/WorkSpace/Root/10-容器与容器云/01-Kubernetes/images/kubectl.png" alt="kubectl" style="zoom:100%;" />
-
 命令
 
 ~~~
@@ -154,3 +152,8 @@ kubectl logs
 kubectl api-versions
 kubectl api-resources
 ~~~
+
+~~~bahs
+$ kubectl get pods --watch
+~~~
+

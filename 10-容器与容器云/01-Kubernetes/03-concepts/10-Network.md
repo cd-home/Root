@@ -4,8 +4,6 @@
 
 ![k8s-network-service](./images/k8s-network-service.svg)
 
-
-
 #### Service
 
 A/AAAA
