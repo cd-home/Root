@@ -48,3 +48,17 @@ $ ssh -T git@github.com
 ~~~bash
 $ ssh-copy-id -i id_rsa.pub root@10.211.55.102
 ~~~
+
+#### Item2
+
+~~~bash
+$ ctrl + L
+$ cmd + d
+$ cmd + shift + d
+$ cmd + f  tab 选中
+$ option + cmd + left|right｜top|down 切换tab
+$ ctrl + e/a
+
+$ ctrl + w 往前删单词
+~~~
+
