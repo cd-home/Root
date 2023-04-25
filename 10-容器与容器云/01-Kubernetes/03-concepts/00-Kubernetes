@@ -14,6 +14,8 @@ Kubernetes 为你提供了一个可弹性运行分布式系统的框架.  Kubern
 
 #### Arch
 
+Master节点、工作节点Node、工作负载Pod
+
 ![k8s-arch](./images/k8s-arch.svg)
 
 #### Control Plane
@@ -30,6 +32,76 @@ Kubernetes 为你提供了一个可弹性运行分布式系统的框架.  Kubern
 
 ##### kube-scheduler
 
+负责监视新创建的、未指定运行节点node的Pods,并选择节点来让 Pod 在上面运行. 调度决策考虑的因素包括单个 Pod 及 Pods 集合的资源需求、软硬件及策略约束、 亲和性及反亲和性规范、数据位置、工作负载间的干扰及最后时限等. 
+
+主要用于收集和分析当前集群中所有节点的资源 (包括内存、CPU 等) 负载情况, 然后依据资源占用情况分发新建的 Pod 到 集群中可用的节点; 实时监测集群中未分发和已分发的所有运行的 Pod; 实时监测节点信息, 由于会频繁查找 Node 节点,所以 Scheduler 同时会缓存一份最新的信息在本地; 在分发 Pod 到指定的 Node 节点后,会把 Pod 相关的 Binding 信息写回 API Server.
+
 ##### kube-controller-manager
 
+用于实现 Kubernetes 集群故障检测和恢复的自动化工作. 主要有以下的控制器:
+
+**节点控制器**(Node Controller): 负责在节点出现故障时进行通知和响应. Kubelet 在启动时会通过 API Server 注册自身的节点信息, 并定时向 API Server 汇报状态信息. API Server 在接收到信息后将信息更新到 Etcd 中. Node Controller 通过 API Server 实时获取 Node 的相关信息, 实现管理和监控集群中的各个 Node 节点的相关控制功能. 
+
+**命名空间**(Namespace Controller): 通过 API Server 可以创建新的 Namespace 并保存在 Etcd 中, Namespace Controller 定时通过 API Server 读取这些 Namespace 信息来操作 Namespace. 比如: Namespace 被 API 标记为优雅删除, 则将该 Namespace 状态设置为 Terminating 并保存到 Etcd 中. 同时 Namespace Controller 删除该 Namespace 下Service、Deployment、Pod 等资源对象. 
+
+**副本控制器**(Replication Controller): 主要是定期关联 Replication Controller (RC) 和 Pod, 以保证集群中一个 RC (一种资源对象) 所关联的 Pod 副本数始终保持为与预设值一致. 
+
+**服务控制器**(Service Controller): 服务控制器主要用作监听 Service 的变化. 与kube-proxy组件配合, 更新ipvs等. 
+
+**任务控制器**(Job Controller): 监测代表一次性任务的 Job 对象，然后创建 Pods 来运行这些任务直至完成
+
+**端点分片控制器**(EndpointSlice controller): 填充端点分片(EndpointSlice)对象以提供 Service 和 Pod 之间的链接
+
+**服务账号控制器**(ServiceAccount controller): 为新的命名空间创建默认的服务账号
+
+**资源控制器**(ResourceQuota Controller): 资源配额管理控制器用于确保指定的资源对象在任何时候都不会超量占用系统上物理资源
+
+**令牌控制器**(Token Controller): 主要用作监听 serviceAccount 的创建和删除动作以及监听 secret 的添加、删除动作
+
+一个控制器至少追踪一种类型的 Kubernetes 资源. 这些对象有一个代表期望状态的 `spec` 字段. 该资源的控制器负责确保其当前状态接近期望状态.
+
 #### Node
+
+节点是执行工作负载Pod
+
+~~~bash
+$ kubectl get node 
+$ kubectl get node master -o yaml|wide
+$ kubectl describe node <node name>
+
+# 标记不可调度, 已经存在的Pod不受影响
+$ kubectl cordon <node name>
+
+# 驱逐
+$ kubectl drain --ignore-daemonsets <节点名称>
+# 恢复调度
+$ kubectl uncordon <node name>
+~~~
+
+##### kubelet
+
+kubelet 接收一组通过各类机制提供给它的 Pod Specs, 确保这些 Pod Specs 中描述的容器处于运行状态且健康.  kubelet 不会管理不是由 Kubernetes 创建的容器.
+
+负责节点上 Pod 的创建、修改、监控、删除等全生命周期的管理; 定时上报本地节点的状态信息给 API Server; kubelet接收API Server 分配给它的任务并执行; kubelet 通过 API Server 间接与 Etcd 集群交互来读取集群配置信息. 
+
+kubelet 在 Node 上做的主要工作具体如下: 
+
+设置容器的环境变量、给容器绑定 Volume、给容器绑定Port、调用CNI创建网络、调用CSI配置存储. 
+
+同步 Pod 的状态; 在容器中运行命令、杀死容器、删除 Pod 的所有容器.
+
+##### kube-proxy
+
+kube-proxy是集群中每个node上所运行的网络代理,实现 Kubernetes 服务Service概念的一部分. 
+
+kube-proxy 维护节点上的一些网络规则, 网络规则会允许从集群内部或外部的网络会话与 Pod 进行网络通信. 
+
+每创建一个 Service, kube-proxy 就会从 API Server 获取 Services 和 Endpoints 的配置信息, 然后根据其配置信息在 Node 上启动一个 Proxy 的进程并监听相应的服务端口. 当接收到外部请求时, kube-proxy 会根据 Load Balancer 将请求分发到后端正确的容器处理.支持、轮训、随机等策略. 
+
+##### Container Runtime
+
+容器运行时,目前默认支持containerd为容器运行时. 
+
+##### addons
+
+coredns 为集群默认的DNS服务器

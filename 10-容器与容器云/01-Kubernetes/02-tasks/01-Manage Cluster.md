@@ -64,6 +64,18 @@ $ vim rq.yaml
     spec:
       hard:
         pods: "2"
+        
+$ vim rq2.yaml
+	apiVersion: v1
+    kind: ResourceQuota
+    metadata:
+      name: mem-cpu-demo
+    spec:
+      hard:
+        requests.cpu: "1"
+        requests.memory: 1Gi
+        limits.cpu: "2"
+        limits.memory: 2Gi
 ~~~
 
 #### 清空Node, 维护升级

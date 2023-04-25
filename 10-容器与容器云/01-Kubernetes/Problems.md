@@ -13,6 +13,7 @@ $ curl -X PUT --data-binary @<(kubectl get namespace $ns -o json | sed 's/"kuber
 
 ~~~bash
 $ crictl images | grep none | awk '{print$3}' | xargs crictl rmi
+$ nerdctl -n k8s.io image prune -f --all
 ~~~
 
 网络调试
@@ -28,34 +29,36 @@ vim /etc/default/grub
 
 GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX ipv6.disable=1"
 
-grub2-mkconfig -o /boot/grub2/grub.cfg
-grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+$ grub2-mkconfig -o /boot/grub2/grub.cfg
+$ grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
 
-ip a | grep inet6
+$ ip a | grep inet6
 ~~~
 
 命令
 
-~~~
-kubectl rollout restart daemonset kube-proxy -n kube-system
-kubectl scale deployment coredns --replicas=2 -n kube-system
+~~~bash
+$ kubectl rollout restart daemonset kube-proxy -n kube-system
+$ kubectl scale deployment coredns --replicas=2 -n kube-system
 
-kubectl edit cm coredns -nkube-system
-kubectl exec -it --rm xx -- /bin/bash
+$ kubectl edit cm coredns -nkube-system
+$ kubectl exec -it --rm xx -- /bin/bash
+
+$ kubectl delete xx --force --grace-period=0
 ~~~
 
 抓包
 
-~~~
-ip a
-tcpdump -i flannel.1 -vnn host xxx.xxx.xx.xx
-tcpdump -i cni0 -vnn host xxx.xxx.xx.xx
+~~~bash
+$ ip a
+$ tcpdump -i flannel.1 -vnn host xxx.xxx.xx.xx
+$ tcpdump -i cni0 -vnn host xxx.xxx.xx.xx
 ~~~
 
 常用命令
 
 ~~~
-ip route show
+$ ip route show
 ~~~
 
 DNS A/AAAA
@@ -102,58 +105,57 @@ podtemplates
 查看信息
 
 ~~~bash
-kubectl get -n xxnamespace xxtype -l k=v -o wide/yaml/json
+$ kubectl get -n xxnamespace xxtype -l k=v -o wide/yaml/json
 ~~~
 
 版本发布
 
-~~~
+~~~bash
 # 修改后 通过set或者apply 目前只是测试镜像改变有版本记录 nginx-deploy是资源的名字
-kubectl set image deploy/nginx-deploy nginx=nginx:1.21.7
-kubectl annotate deploy/nginx-deploy kubernetes.io/change-cause='update image to 1.21.7'
+$ kubectl set image deploy/nginx-deploy nginx=nginx:1.21.7
+$ kubectl annotate deploy/nginx-deploy kubernetes.io/change-cause='update image to 1.21.7'
 
-kubectl rollout history deploy nginx-deploy
-kubectl rollout history deploy nginx-deploy --revision=2
-kubectl rollout undo deploy nginx-deploy --to-revision=1
+$ kubectl rollout history deploy nginx-deploy
+$ kubectl rollout history deploy nginx-deploy --revision=2
+$ kubectl rollout undo deploy nginx-deploy --to-revision=1
 
-kubectl rollout restart deploy --selector=app=nginx
-kubectl rollout restart deploy/nginx-deploy
+$ kubectl rollout restart deploy --selector=app=nginx
+$ kubectl rollout restart deploy/nginx-deploy
 ~~~
 
 修改yaml, kubectl set 的信息比较有限
 
-~~~
-kubectl edit deploy nginx-deploy -o --save-config [保存到annotation]
+~~~bash
+$ kubectl edit deploy nginx-deploy -o --save-config [保存到annotation]
 ~~~
 
 动态伸缩
 
-~~~
-kubectl scale deploy nginx-deploy --replicas=3
+~~~bash
+$ kubectl scale deploy nginx-deploy --replicas=3
 ~~~
 
 暴露服务
 
-~~~
-kubectl expose deploy nginx-deploy --port=8080 --target-port=80
+~~~bash
+$ kubectl expose deploy nginx-deploy --port=8080 --target-port=80
 ~~~
 
 通过声明的yaml文件更新应用(版本), 尽量不要使用命令行
 
 查看日志
 
-~~~
-kubectl logs
+~~~bash
+$ kubectl logs
 ~~~
 
 查看系统支持
 
-~~~
-kubectl api-versions
-kubectl api-resources
+~~~bash
+$ kubectl api-versions
+$ kubectl api-resources
 ~~~
 
-~~~bahs
+~~~bash
 $ kubectl get pods --watch
 ~~~
-

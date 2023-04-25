@@ -128,6 +128,6 @@ spec:
 删除应用, 卷资源还需要管理员手动删除
 
 ~~~bash
-$ kubectl delete -f mysql-pv.yaml
 $ kubectl delete -f mysql.yaml
+$ kubectl delete -f mysql-pv.yaml
 ~~~
