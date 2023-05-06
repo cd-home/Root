@@ -1,3 +1,5 @@
+[TOC]
+
 ### Storage
 
 内存资源的基本单位是字节(byte); 常用  Mi, Gi
@@ -63,11 +65,9 @@ spec:
 
 问题有两点: 本地目录的存储行为是完全不可控的. 并且Pod使用该PV, 就必须绑定到该PV所在节点上. 
 
-#### Local
+#### Local PV
 
-`local` 卷所代表的是某个被挂载的本地存储设备, 例如磁盘、分区或者目录.  并且只能用作静态创建的持久卷, 不支持动态配置. 
-
-与 `hostPath` 卷相比, `local` 卷能够以持久和可移植的方式使用, 而无需手动将 Pod 调度到节点. 
+`local` 卷所代表的是某个被挂载的本地存储设备, 例如磁盘、分区或者目录.  并且只能用作静态创建的持久卷, 不支持动态配置. 与 `hostPath` 卷相比, `local` 卷能够以持久和可移植的方式使用, 而无需手动将 Pod 调度到节点. 
 
 ~~~yaml
 apiVersion: v1
@@ -83,9 +83,9 @@ spec:
   persistentVolumeReclaimPolicy: Retain  # Retain 保留 Recycle 回收 Delete 删除
   # 指定存储类
   storageClassName: local-storage
-  # 磁盘、分区或者目录
+  # 磁盘、分区或者目录; 管理员先创建;
   local:
-    path: /mnt/disks/ssd1
+    path: /mnt/disks/ssd1 
   # 节点亲和性
   nodeAffinity:
     required:
@@ -111,8 +111,3 @@ metadata:
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 ~~~
-
-
-
-
-

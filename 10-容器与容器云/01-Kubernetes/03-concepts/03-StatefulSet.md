@@ -69,7 +69,7 @@ spec:
           - node2
 ~~~
 
-注意这里只是演示使用PV: LocalPath存储模式, 正式环境不会如此使用. 
+注意这里只是演示使用PV: LocalPath存储模式, 正式环境不会使用HostPath. 
 
 ##### StatefulSet
 

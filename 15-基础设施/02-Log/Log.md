@@ -44,3 +44,27 @@ scrape_configs:
       __path__: /var/log/apps/*log
 ~~~
 
+#### prometheus
+
+~~~bash
+wget https://github.com/prometheus/prometheus/releases/download/v2.43.1%2Bstringlabels/prometheus-2.43.1+stringlabels.linux-arm64.tar.gz
+
+$ vim /etc/systemd/system/prometheus.service
+~~~
+
+~~~bash
+[Unit]
+Description=Prometheus
+Documentation=https://prometheus.io/
+After=network.target
+
+[Service]
+Type=simple
+User=prometheus
+ExecStart=/usr/local/prometheus/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+~~~
+
