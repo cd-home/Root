@@ -23,3 +23,36 @@
 Ping 超时 主观下线-> 询问其他哨兵, 客观下线->Leader 选举(Raft) 健康、备份完整度、稳定性(启动周期、心跳检测) ->设置为新的主节点 Slave No one ->其他从节点设置为新节点的从节点 Slavaof
 
 #### Cluster
+
+三主三从
+
+采用systemctl管理
+
+~~~bash
+$ redis-cli --cluster create 10.211.55.61:6379 10.211.55.62:6379 10.211.55.63:6379 10.211.55.61:6380 10.211.55.62:6380 10.211.55.63:6380 --cluster-replicas 1
+~~~
+
+主要的配置修改, 三台机器
+
+master
+
+~~~
+dir /var/lib/redis/master
+port 6379
+bind * -::*
+cluster-enabled yes
+cluster-config-file nodes-6379.conf
+cluster-node-timeout 15000
+~~~
+
+slave
+
+~~~
+dir /var/lib/redis/slave
+port 6380
+bind * -::*
+cluster-enabled yes
+cluster-config-file nodes-6379.conf
+cluster-node-timeout 15000
+~~~
+
