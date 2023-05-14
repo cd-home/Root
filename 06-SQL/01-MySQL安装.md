@@ -6,7 +6,12 @@
 
 ~~~bash
 $ yum install -y mysql mysql-server mysql-devel
+
 # or download rpm package
+$ wget https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
+$ yum install mysql-community-server
+
+# or
 $ sudo yum localinstall mysql80-community-release-el8-{version-number}.noarch.rpm
 ~~~
 
@@ -41,9 +46,9 @@ the MySQL server and some accompanying files and directories.
 启动
 
 ~~~bash
-$ systemctl start mysql
+$ systemctl start mysqld
 # 查看下服务启动顺序, 以及启动前做的准备, 停止后做的收尾
-$ systemctl status mysql
+$ systemctl status mysqld
 ~~~
 
 命令工具
@@ -73,11 +78,7 @@ mysql_upgrade
 /usr/sbin/mysqld
 ~~~
 
-设置密码
-
-~~~bash
-$ mysqladmin -u root password 'mysql8'
-~~~
+设置密码, 初始密码在 /var/log/mysqld.log
 
 登陆
 
@@ -87,6 +88,11 @@ $ mysql -h127.0.0.1 -uroot -P3306 -p
 
 # 退出 or exit;
 >quit; 
+
+# 必须重制密码(长度、大小写、特殊字符)
+> ALTER USER USER() IDENTIFIED BY 'Mysql8-primary@2023';
+> ALTER USER USER() IDENTIFIED BY 'Mysql8-secondary1@2023';
+> ALTER USER USER() IDENTIFIED BY 'Mysql8-secondary2@2023';
 ~~~
 
 配置文件 cnf
@@ -140,3 +146,48 @@ mysql> show variables like 'default_storage_engine';
 |  数据行(记录)  |          rows, record          |
 |  数据列(字段)  |        columns,  field         |
 |    存储引擎    |         storage engine         |
+
+#### 主从复制
+
+修改配置(修改了配置重启)
+
+~~~bash
+# primary
+server-id=1
+log-bin=mysql-bin
+
+# secondary1
+server-id=2
+
+# secondary2
+server-id=3
+~~~
+
+创建复制用户
+
+~~~bash
+> create user 'replicator'@'%' identified by 'Mysql8-replicator@2023';
+> grant all privileges on *.* to 'replicator'@'%' with grant option;
+> flush privileges;
+~~~
+
+master节点
+
+~~~
+> reset master;	
+> show master status;
+~~~
+
+slave
+
+复制节点需要登陆一次复制用户.
+
+~~~bash
+> stop slave;
+> reset slave;
+> change master to master_host='10.211.55.61',master_user='replicator',master_port=3306,master_password='Mysql8-replicator@2023',master_log_file='mysql-bin.000001',master_log_pos=157;
+
+> set global read_only=1;
+> show global variables like '%read_only%';
+~~~
+
